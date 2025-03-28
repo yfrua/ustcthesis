@@ -9,7 +9,7 @@
 % fontset     = windows | mac | ubuntu | fandol
 
 % 加载宏包、全部的配置
-\input{ustcsetup.tex}
+\input{ustcsetup}
 
 
 \begin{document}
@@ -18,30 +18,34 @@
 \copyrightpage
 
 \frontmatter
-% \input{chapters/innovations.tex}  % 博士学位论文的创新性说明
-\input{chapters/abstract.tex}
+\include{chapters/innovations}  % 博士学位论文的创新性说明
+\include{chapters/abstract}
 \tableofcontents
 % \listoffigures
 % \listoftables
 \listoffiguresandtables
-% \input{chapters/notation.tex}
+% \include{chapters/notation}
 
 \mainmatter
-\input{chapters/introduction.tex}
-\input{chapters/LLP.tex}
-\input{chapters/detector.tex}
-\input{chapters/data.tex}
-\input{chapters/NN.tex}
-\input{chapters/result.tex}
+\include{chapters/intro}
+\include{chapters/floats}
+\include{chapters/math}
+\include{chapters/citations}
+\include{chapters/introduction.tex}
+\include{chapters/LLP.tex}
+\include{chapters/detector.tex}
+\include{chapters/data.tex}
+\include{chapters/NN.tex}
+\include{chapters/result.tex}
 
 \bibliography{bib/main}  % 参考文献使用 BibTeX 编译
 % \printbibliography       % 参考文献使用 BibLaTeX 编译
 
 \appendix
-\input{chapters/complementary.tex}
+\include{chapters/complementary}
 
 \backmatter
-\input{chapters/acknowledgements.tex}
-% \input{chapters/achievements.tex}
+\include{chapters/acknowledgements}
+\include{chapters/achievements}
 
 \end{document}

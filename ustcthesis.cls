@@ -647,14 +647,16 @@
 %   \end{tabular}
 % \end{table}
 %
+% 表达式的行距根据需要采用，段前6磅、段后6磅。
+%
 % 注意重定义 \normalsize 应在 \pkg{unicode-math} 的 \cs{setmathfont} 前。
 \newcommand\ustc@set@font@size{%
   \ifustc@degree@graduate
     \renewcommand\normalsize{%
       \@setfontsize\normalsize{12bp}{20bp}%
-      \abovedisplayskip 12bp \@plus3bp \@minus7bp%
-      \abovedisplayshortskip 0bp \@plus3bp%
-      \belowdisplayshortskip 6.5bp \@plus3.5bp \@minus3bp%
+      \abovedisplayskip 6bp \@plus3bp \@minus3bp%
+      \abovedisplayshortskip 6bp \@plus3bp \@minus3bp%
+      \belowdisplayshortskip \abovedisplayshortskip
       \belowdisplayskip \abovedisplayskip
       \let\@listi\@listI}%
     %
@@ -662,9 +664,9 @@
   \else
     \renewcommand\normalsize{%
       \@setfontsize\normalsize{12bp}{22bp}%
-      \abovedisplayskip 12bp \@plus3bp \@minus7bp%
-      \abovedisplayshortskip 0bp \@plus3bp%
-      \belowdisplayshortskip 6.5bp \@plus3.5bp \@minus3bp%
+      \abovedisplayskip 6bp \@plus3bp \@minus3bp%
+      \abovedisplayshortskip 6bp \@plus3bp \@minus3bp%
+      \belowdisplayshortskip \abovedisplayshortskip
       \belowdisplayskip \abovedisplayskip
       \let\@listi\@listI}%
   \fi
@@ -1317,12 +1319,15 @@
   \ustc@set@xits@names
   \setmathfont{\ustc@font@name@xits@math}[
     Extension    = .otf,
+    Scale        = MatchLowercase,
     StylisticSet = \ustc@xits@integral@stylistic@set,
   ]%
-  \setmathfont{\ustc@font@name@xits@math}[
+  % 使用 STIX Two Math 的 `\mathcal` 字形
+  \ustc@set@stix@names
+  \setmathfont{\ustc@font@name@stix@math}[
     Extension    = .otf,
-    StylisticSet = 1,
-    range        = {cal,bfcal},
+    Scale        = MatchLowercase,
+    range        = {cal, bfcal},
   ]%
 }
 
@@ -1565,7 +1570,7 @@
 % \cs{sectionmark}。
 \pagestyle{fancy}
 \let\sectionmark\@gobble
-\renewcommand\headrulewidth{0.4\p@}
+\renewcommand\headrulewidth{0.75bp}
 
 % 重定义默认的 |plain| page style，会显示页眉和页脚。
 \fancypagestyle{plain}{%
@@ -1906,67 +1911,71 @@
 % 密级仿宋 14 磅；
 % 论文类型黑体 56 磅；
 % 论文题目黑体 26 磅加粗居中，单倍行距；
-% 作者姓名宋体 16 磅，单倍行距；
-% 注意这里的“单倍行距”的地方开启了“对齐到网格”，所以实际行距有所偏差，
-% 所以只能使用直尺测量。
+% 作者姓名宋体 16 磅，1.5 倍行距；
 \newcommand\ustc@title@page@graduate@zh{%
   \ustcsetup{language=chinese}%
   \begin{titlepage}%
     \ustc@pdfbookmark{封面}%
     \centering
-    \parbox[t][0.6cm][t]{\textwidth}{%
+    \parbox[t][0bp][t]{\textwidth}{%
       \raggedleft\fangsong\fontsize{14bp}{14bp}\selectfont
-      \null\ustc@secret@level\par}\par
-    \vskip 0.5cm%
-    \includegraphics[height=1.3cm]{figures/ustc-name.pdf}\par
-    \vskip 0.6cm%
-    {\sffamily\fontsize{56bp}{56bp}\selectfont
-      \ifustc@degree@type@academic\else
-        \ziju{-0.1}%
+      \null\ustc@secret@level
+    }\par
+    \vspace{11bp}%
+    \includegraphics[height=1.3cm]{figures/ustc-name-stxingkai.pdf}\par
+    \vspace{-7bp}%
+    \begingroup
+      \sffamily\fontsize{54bp}{70.2bp}\selectfont
+      \renewcommand\CJKglue{\hspace{-5.2bp}}%
+      \ustc@thesis@name\par
+    \endgroup
+    \parbox[t][0bp][t]{\textwidth}{%
+      \fontsize{26bp}{33.8bp}\selectfont
+      \ifx\ustc@professional@type\@empty
+        \null
+      \else
+        \lishu （\ustc@professional@type ）%
       \fi
-      \ustc@thesis@name\par}%
-    \ifustc@degree@type@academic
-      \vskip 2.0cm%
-    \else
-      \vskip 0.8cm%
-      \begingroup
-        \fontsize{26bp}{26bp}\selectfont
-        \ifx\ustc@professional@type\@empty
-          \null
-        \else
-          \lishu （\ustc@professional@type ）%
-        \fi
-        \par
-      \endgroup
-      \vskip 1.0cm%
-    \fi
-    \ifustc@badge@color@blue
-      \textcolor{ustcblue}{%
-        \includegraphics[height=4.1cm]{figures/ustc-badge.pdf}}%
-    \else
-      \includegraphics[height=4.1cm]{figures/ustc-badge.pdf}%
-    \fi\par
-    \vskip 0.9cm%
-    \parbox[t][3.5cm][c]{\textwidth}{%
-      \centering\sffamily\bfseries\fontsize{26bp}{50bp}\selectfont
-      \ustc@title\par}\par
-    \vskip 0.6cm%
-    {\fontsize{16bp}{31bp}\selectfont
-      \begin{tabular}{@{}l@{\quad}l@{}}%
-        \textsf{作者姓名：} & \ustc@author \\
+    }\par
+    \vspace{37bp}%
+    \begingroup
+      \ifustc@badge@color@blue
+        \color{ustcblue}%
+      \fi
+      % \hspace{3bp}%
+      \includegraphics[height=123bp]{figures/ustc-badge.pdf}\par
+    \endgroup
+    \vspace{2.8bp}%
+    \parbox[t][101.3bp][c]{\textwidth}{%
+      \centering\sffamily\bfseries\fontsize{26bp}{33.8bp}\selectfont
+      \ustc@title
+    }\par
+    \vspace{37bp}%
+    \parbox[t]{\textwidth}{%
+      \hspace{45bp}%
+      \parbox[t]{368bp}{%
+        % 1.5 行 = 16bp * 1.3 * 1.5
+        \fontsize{16bp}{31.2bp}\selectfont
+        \textsf{作者姓名：}\quad\ustc@author \par
         \ifustc@degree@type@engineering
-          \textsf{类别领域：} & \ustc@speciality \\
+          % 工程硕士的封面是“类别领域”，而工程博士的是“学科专业”
+          \ifustc@degree@master
+            \textsf{类别领域：}\quad\ustc@speciality\par
+          \else
+            \textsf{学科专业：}\quad\ustc@speciality\par
+          \fi
         \else
-          \textsf{学科专业：} & \ustc@speciality \\
+          \textsf{学科专业：}\quad\ustc@speciality\par
         \fi
         \ifx\ustc@practice@supervisor\@empty
-          \textsf{导\hspace{2em}师：} & \ustc@supervisor@names \\
+          \textsf{导\hspace{2em}师：}\quad\ustc@supervisor@names \par
         \else
-          \textsf{校内导师：} & \ustc@supervisor@names \\
-          \textsf{实践导师：} & \ustc@practice@supervisor@names \\
+          \textsf{校内导师：}\quad\ustc@supervisor@names \par
+          \textsf{实践导师：}\quad\ustc@practice@supervisor@names \par
         \fi
-        \textsf{完成时间：} & \ustc@date@zh@big
-      \end{tabular}\par}%
+        \textsf{完成时间：}\quad\ustc@date@zh@big\par
+      }%
+    }%
   \end{titlepage}%
   \ustc@reset@main@language
 }
@@ -1977,48 +1986,47 @@
   \begin{titlepage}%
     \ustc@pdfbookmark{Title page}%
     \centering
-    \parbox[t][0.4cm][t]{\textwidth}{%
-      \raggedleft\fontsize{14bp}{14bp}\selectfont
-      \null\ustc@secret@level@en\par}\par
-    \vskip 0.5cm%
-    {\fontsize{20bp}{30bp}\selectfont
-      University of Science and Technology of China\par\null\par}%
-    {\fontsize{26bp}{30bp}\selectfont
-      \ustc@thesis@name@en\par}%
-    \ifustc@degree@type@academic\else
-      \begingroup
-        \fontsize{16bp}{32bp}\selectfont
-        \ifx\ustc@professional@type@en\@empty
-          \null
-        \else
-          (\ustc@professional@type@en)
-        \fi
-        \par
-      \endgroup
-    \fi
-    \vskip 2.5cm%
-    \ifustc@badge@color@blue
-      \textcolor{ustcblue}{%
-        \includegraphics[height=4.5cm]{figures/ustc-badge.pdf}}%
-    \else
-      \includegraphics[height=4.5cm]{figures/ustc-badge.pdf}%
-    \fi\par
-    \vskip 0.5cm%
-    \parbox[t][2.5cm][c]{\textwidth}{%
+    \parbox[t][0bp][t]{\textwidth}{%
+      \raggedleft\fangsong\fontsize{14bp}{14bp}\selectfont
+      \null\ustc@secret@level@en
+    }\par
+    \vspace{5bp}%
+    \begingroup
+      \fontsize{20bp}{30bp}\selectfont
+      University of Science and Technology of China\par
+    \endgroup
+    \vspace{30bp}%
+    \begingroup
+      \fontsize{26bp}{30bp}\selectfont
+      \ustc@thesis@name@en\par
+    \endgroup
+    \vspace{68bp}%
+    \begingroup
+      \ifustc@badge@color@blue
+        \color{ustcblue}%
+      \fi
+      % \hspace{3bp}%
+      \includegraphics[height=123bp]{figures/ustc-badge.pdf}\par
+    \endgroup
+    \vspace{10bp}%
+    \parbox[t][90bp][c]{\textwidth}{%
       \centering\sffamily\bfseries\fontsize{26bp}{30bp}\selectfont
-      \ustc@title@en\par}\par
-    \vskip 1.6cm%
-    {\fontsize{16bp}{30bp}\selectfont
-      \begin{tabular}{@{}l@{}}%
-        Author:        \ustc@author@en \\
-        Speciality:    \ustc@speciality@en \\
-        \ustc@supervisor@en@line \\
-        \ifx\ustc@practice@supervisor@en\@empty
-        \else
-          \ustc@practice@supervisor@en@line \\
+      \ustc@title@en
+    }\par
+    \vspace{48bp}%
+    \parbox[t]{\textwidth}{%
+      \hspace{61.5bp}%
+      \parbox[t]{352bp}{%
+        \fontsize{16bp}{30bp}\selectfont
+        Author:        \ustc@author@en\par
+        Speciality:    \ustc@speciality@en\par
+        \ustc@supervisor@en@line\par
+        \ifx\ustc@practice@supervisor@en\@empty\else
+          \ustc@practice@supervisor@en@line\par
         \fi
-        Completion date: \ustc@date@en
-      \end{tabular}\par}%
+        Completion date: \ustc@date@en\par
+      }%
+    }\par
   \end{titlepage}%
   \ustc@reset@main@language
 }
@@ -2178,10 +2186,10 @@
   允许论文被查阅和借阅，可以将学位论文编入《中国学位论文全文数据库》等%
   有关数据库进行检索，可以采用影印、缩印或扫描等复制手段保存、汇编学位论文。%
   本人提交的电子文档的内容和纸质论文的内容相一致。\par
-  控阅的学位论文在解密后也遵守此规定。}
-  %
-  % 生成空的下划线
-\newcommand\ustc@underline[2][3.2cm]{\underline{\hb@xt@ #1{\hss#2\hss}}}
+  控阅的学位论文在解除后也遵守此规定。}
+
+% 生成空的下划线
+\newcommand\ustc@underline[2][8em]{\underline{\hb@xt@ #1{\hss#2\hss}}}
 
 \newcommand\ustc@checkbox{%
   \makebox[0bp][l]{$\square$}%
@@ -2191,37 +2199,45 @@
 \newcommand\copyrightpage{%
   \begin{titlepage}%
     \ustc@pdfbookmark{原创性和授权使用声明}%
-    \null
-    \vskip 0.3cm%
+    \vspace*{21bp}%
     {\centering\sffamily\fontsize{16bp}{32bp}\selectfont
       中国科学技术大学学位论文原创性声明\par}%
-    \vskip 0.7cm%
-    \ustc@originality\par
-    \vskip 1.3cm%
-    作者签名：\ustc@underline{}\hspace{2.7cm}%
+    \vspace{13bp}%
+    \begingroup
+      \renewcommand\CJKglue{\hspace{0bp plus .1pt minus .1pt}}%
+      \ustc@originality\par
+    \endgroup
+    \vspace{37bp}%
+    \noindent
+    作者签名：\ustc@underline{}\hspace{8em}%
     签字日期：\ustc@underline{}\par
-    \vskip 1.9cm%
+    \vspace{69bp}%
     {\centering\sffamily\fontsize{16bp}{32bp}\selectfont
       中国科学技术大学学位论文授权使用声明\par}%
-    \vskip 0.7cm%
-    \ustc@authorization\par
-    \vskip 0.6cm%
+    \vspace{13bp}%
+    \begingroup
+      \renewcommand\CJKglue{\hspace{0bp plus .1pt minus .1pt}}%
+      \ustc@authorization\par
+    \endgroup
+    \vspace{12bp}%
     \ifx\ustc@secret@level\@empty
-      \ustc@checkbox{} 公开\quad
+      \ustc@checkbox{}公开\quad
       $\square$ 控阅（\ustc@underline[0.85cm]{}年）\par
     \else
-      $\square$ 公开\quad
-      \ustc@checkbox{} 控阅（\ustc@underline[0.8cm]{\ustc@secret@year}年）\par
+      $\square$公开\quad
+      \ustc@checkbox{} 控阅（\ustc@underline[2em]{\ustc@secret@year}年）\par
     \fi
-    \vskip 0.5cm%
-    作者签名：\ustc@underline{}\hspace{2.7cm}%
-    导师签名：\ustc@underline{}\par
-    \vskip 0.5cm%
-    签字日期：\ustc@underline{}\hspace{2.7cm}%
-    签字日期：\ustc@underline{}\par
+    \vspace{29bp}%
+    \noindent
+    作者签名：\ustc@underline[7.5em]{}\hspace{8.5em}%
+    导师签名：\ustc@underline[7.5em]{}\par
+    \vspace{1em}%
+    \noindent
+    签字日期：\ustc@underline[7.5em]{}\hspace{8.5em}%
+    签字日期：\ustc@underline[7.5em]{}\par
     \ifustc@reviewer@true
-      \vskip 1.5cm%
-      \hskip -1em%
+      \vspace{1.5cm}%
+      \hspace{-1em}%
       评审专家签名：\ustc@underline{}\hspace{4.5em}%
       评审专家签名：\ustc@underline{}\par
     \fi
@@ -2449,7 +2465,7 @@
     \fi
     #1\par
   \fi
-}
+}{}
 
 
 % \subsection{摘要}
@@ -2788,6 +2804,18 @@
 \ifustc@degree@graduate
   \captionsetup{font+=bf}
 \fi
+
+% 若有英文图题，另起一行置于中文图题下方。
+\AtEndOfPackageFile*{bicaption}{
+  \captionsetup[bi-first]{lang = chinese}
+  \captionsetup[bi-second]{
+    lang = english,
+    list = off,
+  }
+  \renewcommand\selectcaptionlanguage[2]{%
+    \ustcsetup{language = #2}%
+  }
+}
 
 % 表单元格中的文字采用 11pt 宋体字，单倍行距，段前3磅，段后3磅。
 % 对于中文，`\arraystretch` 需要设为 1 + (3pt + 3pt) / (11pt * 1.3) ~= 1.42。
@@ -3308,9 +3336,12 @@
 }
 
 % 科研成果环境：
-\newenvironment{achievements}{%
-  \@mainmatterfalse
-  \chapter{\ustc@achievements@name}%
+\NewDocumentEnvironment{achievements}{+b}{%
+  \ifustc@degree@graduate
+    \@mainmatterfalse
+    \chapter{\ustc@achievements@name}%
+    #1\par
+  \fi
 }{}
 
 % 兼容旧的接口
