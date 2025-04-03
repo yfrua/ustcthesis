@@ -2,9 +2,6 @@
 
 \chapter{长寿命粒子模型}
 
-\section{标准模型}
-
-
 \section{物理背景}
 长寿命粒子（Long Lived Particle, LLP）是指在探测器内衰变的时间尺度远大于标准模型粒子的寿命的粒子，它的存在是许多新物理模型的预言。
 LLP长寿命的物理机制一般是由于它的衰变被禁戒或是被压低，其中压低可能出于衰变末态粒子的近退简并质量态（nearly-degenerate mass states）或是沟通LLP与末态粒子的相互作用强度微弱。
@@ -59,11 +56,14 @@ LLP长寿命的物理机制一般是由于它的衰变被禁戒或是被压低�
 
 \section{具体模型}
 
-\subsection{Hidden Sector 模型}
+\subsection{隐藏区域模型}
+隐藏区域（Hidden Sector）模型
+\cite{hidden_sector}
+
 
 \subsection{超对称模型}
 标准模型为夸克、轻子、规范玻色子被规范群$SU(3)\times SU(2) \times U(1)$控制的可重整理论。
-为了解释等级问题（hierarchy problem），也即引力在 \num{e16} 到 \SI{e18}{GeV} 之间的某个能量与其他四种相互作用的统一，
+为了解释等级问题（hierarchy problem），也即引力在 \num{e16} 到 \SI{e18}{GeV} 之间的某个能量与强力、电磁力、弱力统一，
 我们需要引入超对称性（supersymmetry）来将费米子与玻色子结合在一起。
 
 超对称模型引入两个左手征超场的$SU(2)$二重态
@@ -72,7 +72,7 @@ $$H_1 = \mqty(H_1^0 \\ H_1^-) \qc H_2 = \mqty(H_2^+ \\ H_2^0) $$
 同时每个费米子都有一个玻色子伴侣、每个玻色子都有一个费米子伴侣。
 \cite{QFT_Weinberg}
 
-为了防止质子在超对称模型中衰变得太快，通常需要引入R宇称并要求它守恒，它定义为
+为了防止质子在超对称模型中衰变得太快，通常需要引入R宇称并要求它守恒，R宇称定义为
 \begin{equation}
     R = (-1)^{3(B-L)+2S}
 \end{equation}
@@ -81,7 +81,12 @@ $$H_1 = \mqty(H_1^0 \\ H_1^-) \qc H_2 = \mqty(H_2^+ \\ H_2^0) $$
 \cite{SUSY_ATLAS}
 
 当R宇称守恒时，最轻的超对称粒子（lightest supersymmetry particle, LSP）是稳定的，因此LSP是暗物质的优秀候选者。
-超对称粒子也有是LLP的候选者。
+超对称粒子同时也是LLP的候选者，在近最小超对称（Next-to-Minimal supersymmetry）模型中，
+引入了规范单重态手征超场，它的费米子伴侣singlino因为衰变产物质量近简并而被压低衰变，因此成为长寿命粒子。
+\cite{singlino}
+在分析中，由对产生的质量介于\SI{250}{GeV}至\SI{2}{TeV}的胶微子（gluino）发生衰变，
+产生质量\SI{100}{GeV}的singlino，singlino继续衰变成标准模型粒子被探测器探测。
+
 
 \subsection{Higgs-portal baryogenesis models}
 
