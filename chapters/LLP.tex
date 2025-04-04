@@ -4,14 +4,17 @@
 
 \section{物理背景}
 长寿命粒子（Long Lived Particle, LLP）是指在探测器内衰变的时间尺度远大于标准模型粒子的寿命的粒子，它的存在是许多新物理模型的预言。
-LLP长寿命的物理机制一般是由于它的衰变被禁戒或是被压低，其中压低可能出于衰变末态粒子的近退简并质量态（nearly-degenerate mass states）或是沟通LLP与末态粒子的相互作用强度微弱。
+LLP长寿命的物理机制一般是由于它的衰变被禁戒或是被压低，
+其中压低可能出于衰变末态粒子的近退简并质量态（nearly-degenerate mass states）或是沟通LLP与末态粒子的相互作用强度微弱。
 由于LLP具有较长的寿命、与标准模型粒子仅存在微弱的相互作用，因此它常被认为是暗物质的候选者。
 
-由于LLP能在衰变前行进一定的宏观距离，其衰变产物不会从原始碰撞点（Primary Vertices）产生，而是在远离大多数标准模型粒子产生的初级顶点处形成一个次级顶点（Secondary Vertices），
+由于LLP能在衰变前行进一定的宏观距离，其衰变产物不会从原始碰撞点（Primary Vertices）产生，
+而是在远离大多数标准模型粒子产生的初级顶点处形成一个次级顶点（Secondary Vertices），
 该顶点也被称为偏离对撞顶点（Displaced Vertices）。
 进一步，当LLP的衰变位置在电磁量能器之后时，其衰变产物会在电磁量能器内沉积少量能量，并且在其后的强子量能器内沉积绝大部分能量。
 通过定义喷注在两类量能器中沉积的能量比值$$\text{CalRatio}=E_{\text{H}}/E_{\text{EM}}$$
-其中$E_{\text{H}}$为强子量能器内沉积的能量、$E_{\text{EM}}$电磁量能器内沉积的能量，可以作为鉴别LLP的衰变的重要参数。\cite{calratio}
+其中$E_{\text{H}}$为强子量能器内沉积的能量、$E_{\text{EM}}$电磁量能器内沉积的能量，可以作为鉴别LLP的衰变的重要参数。
+\cite{calratio}
 
 尽管目标LLP是在强子量能器中才发生衰变，但我们仍预期在电磁量能器中会有少量的能量沉积，原因有二。
 其一是本分析对于在电磁量能器的后端发生衰变的LLP仍然敏感，该情况同样会导致较高的 CalRatio 值。
@@ -57,8 +60,32 @@ LLP长寿命的物理机制一般是由于它的衰变被禁戒或是被压低�
 \section{具体模型}
 
 \subsection{隐藏区域模型}
-隐藏区域（Hidden Sector）模型
+隐藏区域（Hidden Sector）模型假设了一个由非阿贝尔规范群$SU(3)\times SU(2) \times U(1)$的单重态粒子组成的隐藏区域，
+单重态意味着隐藏区域粒子并不携带色荷、同位旋与超荷，因此该隐藏区域粒子与标准模型粒子不发生直接的相互作用，
+而是通过希格斯场产生间接相互作用或引力场产生微弱的相互作用。
 \cite{hidden_sector}
+
+对于拥有非零真空期望值的隐藏区域的标量场$\phi_p, \ev{\phi_p}=v_p \neq 0$，
+它会与标准模型希格斯场$\phi_s$发生耦合并形成混合态，其相互作用拉氏量为
+\begin{equation}
+    \mathcal{L}_\text{link} = \eta \phi^\dagger_s \phi_s \phi^\dagger_p \phi_p
+\end{equation}
+在各自的真空期望值附近展开（$\phi_s = v_s + h_s$，$\phi_p = v_p + h_p$），得到质量混合项
+\begin{equation}
+    \mathcal{L}_\text{mixing} = 4 \eta v_s v_p h_s h_p
+\end{equation}
+由此产生的质量本征态$h_1, h_2$为标准模型希格斯粒子$h_s$与隐藏区域的类希格斯粒子（Higgs-like）$h_p$的线性组合。
+
+所以这两个拥有确定质量的粒子既可以通过标准模型希格斯粒子耦合到标准模型粒子上，
+又可以通过隐藏区域的类希格斯粒子耦合到隐藏区域的粒子上。
+而分析中感兴趣的过程为质量介于 \SI{60}{GeV} 至 \SI{1000}{GeV} 类希格斯粒子$h_p$衰变为一对
+隐藏区域中质量介于 \SI{5}{GeV} 至 \SI{475}{GeV} 长寿命的中性标量粒子$s$，
+之后中性标量粒子$s$通过汤川相互作用（Yukawa coupling）衰变为标准模型正反费米子对。
+也即考虑衰变过程$h_p \rightarrow ss \rightarrow f \bar{f} f' \bar{f}'$。
+
+当隐藏区域长寿命的中性标量粒子$s$的质量介于两倍底夸克（b quark）与两倍顶夸克（t quark）之间，
+也即 \SI{8.48}{GeV} 至 \SI{344}{GeV} 之间时，其衰变道为 88\% 的$b \bar{b}$、8\% 的$c \bar{c}$ 与 4\% 的$\tau \bar{\tau}$。
+当$s$的质量大于两倍顶夸克时，衰变被$t \bar{t}$主导。
 
 
 \subsection{超对称模型}
@@ -82,11 +109,14 @@ $$H_1 = \mqty(H_1^0 \\ H_1^-) \qc H_2 = \mqty(H_2^+ \\ H_2^0) $$
 
 当R宇称守恒时，最轻的超对称粒子（lightest supersymmetry particle, LSP）是稳定的，因此LSP是暗物质的优秀候选者。
 超对称粒子同时也是LLP的候选者，在近最小超对称（Next-to-Minimal supersymmetry）模型中，
-引入了规范单重态手征超场，它的费米子伴侣singlino因为衰变产物质量近简并而被压低衰变，因此成为长寿命粒子。
+引入了规范单重态手征超场（gauge singlet chiral superfield），它的费米子伴侣singlino因为衰变产物质量近简并而被压低衰变，因此成为长寿命粒子。
 \cite{singlino}
-在分析中，由对产生的质量介于\SI{250}{GeV}至\SI{2}{TeV}的胶微子（gluino）发生衰变，
-产生质量\SI{100}{GeV}的singlino，singlino继续衰变成标准模型粒子被探测器探测。
+在分析中，对产生（pair-produced）的质量介于 \SI{250}{GeV} 至 \SI{2000}{GeV} 的胶微子（gluino）发生衰变，
+产生质量 \SI{100}{GeV} 的singlino，singlino继续衰变成标准模型粒子被探测器探测。
 
 
-\subsection{Higgs-portal baryogenesis models}
+\subsection{希格斯中介重子生成模型}
+希格斯中介重子生成模型（Higgs-portal baryogenesis model）旨在解释通过弱尺度状态衰变而观察到的重子不对称现象。
+该模型引入了长寿命单重态粒子$\chi$，它与希格斯玻色子混合并衰变为三个费米子，从而违反了重子数与轻子数守恒。
+分析考虑了质量介于 10 GeV 至 100 GeV 之间的$\chi$ ，以及$\chi$ 衰变为轻子和夸克组合的各种模式。
 
