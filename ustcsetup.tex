@@ -52,9 +52,11 @@
 % SI 量和单位
 \usepackage{siunitx}
 
+% other packages
 \usepackage{physics}
 \usepackage{makecell}
 \usepackage{tabularx}
+\usepackage{atlasmisc}
 
 % 参考文献使用 BibTeX + natbib 宏包
 % 顺序编码制
@@ -81,16 +83,6 @@
 \graphicspath{{figures/}}
 
 % 数学命令
-\makeatletter
-\newcommand\dif{%  % 微分符号
-  \mathop{}\!%
-  \ifustc@math@style@TeX
-    d%
-  \else
-    \mathrm{d}%
-  \fi
-}
-\makeatother
 \newcommand\eu{{\symup{e}}}
 \newcommand\iu{{\symup{i}}}
 
