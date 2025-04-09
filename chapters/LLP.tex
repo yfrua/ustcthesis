@@ -20,13 +20,6 @@ LLP长寿命的物理机制一般是由于它的衰变被禁戒或是被压低�
 其一是本分析对于在电磁量能器的后端发生衰变的LLP仍然敏感，该情况同样会导致较高的 CalRatio 值。
 其二是由于一些与信号无关的现象可能会导致在电磁量能器中沉积能量。
 
-从\autoref{fig:CalRatioDistribution} 的左图可以看出，LLP的信号数据在$\log_{10}\text{CalRatio}$分布上与背景数据有明显的区别，
-在$-1.5<\log_{10}\text{CalRatio}<0.5$的区间背景数据分布比例高而信号数据分布比例低，
-而在$1<\log_{10}\text{CalRatio}<2.5$的区域背景数据分布比例低而信号数据分布比例高。
-\autoref{fig:CalRatioDistribution} 的中图、右图则是两类LLP在不同的$x$--$y$平面衰变位置$L_{xy}$下$\log_{10}\text{CalRatio}$的分布，
-其中筒部的电磁量能器位于$\SI{1.5}{m} < L_{xy} < \SI{2}{m}$处、强子量能器位于$\SI{2}{m} < L_{xy} < \SI{4}{m}$处，
-所以在$L_{xy} > \SI{2}{m}$时LLP的衰变产物会显著减少在电磁量能器内沉积的能量，因而能观察到$\log_{10}\text{CalRatio}$显著增加。
-
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{CalRatioDistribution.png}
@@ -38,9 +31,12 @@ LLP长寿命的物理机制一般是由于它的衰变被禁戒或是被压低�
     }
 \end{figure}
 
-由于LLP的衰变发生在量能器而非初级顶点，喷注中的粒子能够在探测器中扩散的时间与距离减少，导致喷注宽度变小。
-从\autoref{fig:DR_jet_width} 可以看出相较于LLP产生的喷注，标准模型的喷注可能有部分更靠近轴线方向的次级粒子，
-但考虑所有粒子角距离的贡献后，它的喷注宽度是更宽的。
+从\autoref{fig:CalRatioDistribution} 的左图可以看出，LLP的信号数据在$\log_{10}\text{CalRatio}$分布上与背景数据有明显的区别，
+在$-1.5<\log_{10}\text{CalRatio}<0.5$的区间背景数据分布比例高而信号数据分布比例低，
+而在$1<\log_{10}\text{CalRatio}<2.5$的区域背景数据分布比例低而信号数据分布比例高。
+\autoref{fig:CalRatioDistribution} 的中图、右图则是两类LLP在不同的$x$--$y$平面衰变位置$L_{xy}$下$\log_{10}\text{CalRatio}$的分布，
+其中筒部的电磁量能器位于$\SI{1.5}{m} < L_{xy} < \SI{2}{m}$处、强子量能器位于$\SI{2}{m} < L_{xy} < \SI{4}{m}$处，
+所以在$L_{xy} > \SI{2}{m}$时LLP的衰变产物会显著减少在电磁量能器内沉积的能量，因而能观察到$\log_{10}\text{CalRatio}$显著增加。
 
 \begin{figure}[ht]
     \centering
@@ -52,6 +48,10 @@ LLP长寿命的物理机制一般是由于它的衰变被禁戒或是被压低�
         右图：喷注宽度的分布图，喷注宽度定义为以$p_T$加权的次级粒子与喷注轴线的角距离。
     }
 \end{figure}
+
+由于LLP的衰变发生在量能器而非初级顶点，喷注中的粒子能够在探测器中扩散的时间与距离减少，导致喷注宽度变小。
+从\autoref{fig:DR_jet_width} 可以看出相较于LLP产生的喷注，标准模型的喷注可能有部分更靠近轴线方向的次级粒子，
+但考虑所有粒子角距离的贡献后，它的喷注宽度是更宽的。
 
 综上所述，我们可以通过物理量诸如CalRatio与喷注宽度来区分LLP产生的喷注与标准模型的喷注。
 该思想将被运用到数据获取的触发与后续的分析中。

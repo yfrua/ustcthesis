@@ -57,9 +57,25 @@ $t\bar{t}$ 包含产生的 NLO 截面被修正为 QCD 的 NNLO 理论预测，�
 其总截面被修正为带有 NNLL 软胶子修正的 NLO QCD 理论预测~\cite{Aliev:2010zk}。
 
 \subsubsection{信号数据}
+\begin{figure}[ht]
+    \centering
+    \subfloat[隐藏区域模型]{\includegraphics[width=0.33\textwidth]{fig_01a.pdf}}
+    \hfill
+    \subfloat[ALP模型]{\includegraphics[width=0.33\textwidth]{fig_01b.pdf}}
+    \hfill
+    \subfloat[暗光子模型]{\includegraphics[width=0.33\textwidth]{fig_01c.pdf}}
+    \caption{信号模型的费曼图示例}
+    \label{fig:Feynman_diagram}
+    \figurenote{
+        (a)： 隐藏区域模型中介子 $\Phi$ 与矢量玻色子 $V = W$ 或 $Z$ 共同产生，长寿命粒子 $S$ 衰变为费米子（主要为 $b$ 夸克）。
+        (b)： 类轴轻子（ALP）模型，长寿命粒子 $a$ 衰变为胶子，并与矢量玻色子共同产生。
+        (c)： 暗光子 $Z_d$ 模型中，$Z_d$ 与 $Z$ 玻色子一同由介子 $\Phi$ 的衰变产生。
+    }
+\end{figure}
+
 研究中考虑了三种基准信号模型。第一种是隐藏区域（HS）模型，其中标量玻色子 $\Phi$（可以是希格斯玻色子，
 也可以是其他行为类似的较轻或较重粒子）作为标准模型与隐藏区域之间的媒介。
-$\Phi$ 可衰变为中性的长寿命标量粒子 $s$，通常衰变为运动学允许的最重费米子对，通常为 $b$ 夸克对。
+$\Phi$ 可衰变为中性的长寿命标量粒子 $S$，通常衰变为运动学允许的最重费米子对，通常为 $b$ 夸克对。
 事件使用 \MADGRAPH{5\_aMC@NLO v2.6.2}~\cite{Alwall:2014hca} 在 LO 精度下生成，使用 NNPDF2.3LO PDF 集。
 考虑 $\Phi$ 的两种产生模式：CalR+2J 通道中为胶子-胶子融合（ggF），CalR+W/Z 通道中为伴随矢量玻色子（W 或 Z）产生。
 不考虑矢量玻色子融合（VBF）模式：在 CalR+2J 通道中，所有选择对象均来源于 LLP 的衰变，因此 VBF 与 ggF 的产率预期相似。
@@ -80,6 +96,14 @@ ALP 样本使用 \MADGRAPH{5\_aMC@NLO v2.9.3} 在 LO 精度下生成，使用 NN
 考虑的介子质量范围为 $250$--$600$\,GeV，暗光子质量范围为 $5$--$400$\,GeV。
 事件使用  \MADGRAPH{5\_aMC@NLO v2.6.7} 在 LO 精度下生成，PDF 为 NNPDF2.3LO。
 所有信号样本的部分子簇射和强子化均使用 \Pythia{8} 并采用 A14 tune。
+
+这三种模型的费曼图示例如\autoref{fig:Feynman_diagram}所示。
+对于所有信号样本，生成的长寿命粒子（LLP）的平均本征寿命（$\tau_{\text{gen}}$）是经过选择以最大化其在 ATLAS 强子量能器与 μ 子系统中衰变的事件比例。
+这些平均本征寿命通常在几米数量级，但由于时间膨胀效应，不同样本之间有所差异。
+每次束团交叉中的多重相互作用（pile-up）通过将模拟的硬散射事件与使用 \Pythia{8.186} 生成的非弹性质子碰撞事件叠加进行建模，
+所使用的 PDF 为 NNPDF2.3LO，调参为 A3 tune~\cite{ATL-PHYS-PUB-2016-017}。
+探测器的几何结构与响应使用 Geant4~\cite{GEANT4:2002zbu} 进行模拟。
+ATLAS 标准重建软件被用于模拟数据与真实碰撞数据的重建。
 
 
 \section{数据处理}
