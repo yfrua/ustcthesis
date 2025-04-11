@@ -107,4 +107,73 @@ ATLAS 标准重建软件被用于模拟数据与真实碰撞数据的重建。
 
 
 \section{数据处理}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.85\textwidth]{analysis_strategy.png}
+    \caption{分析流程图}
+    \label{fig:analysis_strategy}
+\end{figure}
+
+整套分析的流程图如\autoref{fig:analysis_strategy}所示。
+数据通过 CalRatio 触发器进行获取，喷注与事例层级的数据经过预选择之后进入下一步的处理。
+对于事件中的每一个喷注，使用了基于深度学习的神经网络（NN）进行分类。
+在获得喷注分类的结果后，使用了逐事件的增强决策树（BDT）对事件进行分类。
+最终的数据样本是通过对候选事件 BDT 输出值进行选择构建，同时还需满足进一步的数据质量与 NCB 抑制条件，
+以确保信号区（SR）具有较高的信号对背景比。
+选出的样本被投影到一个二维平面上，其中 $x$ 轴为 $\sum \Delta R_{\min}(\text{jet, tracks})$，
+$y$ 轴为逐事件 BDT 的输出值。该平面被划分为四个区域，其中的信号区定义为包含大部分信号且背景贡献预期较低的区域。
+为了预测信号区中的背景预期值，使用了基于似然函数的 ABCD 数据驱动方法（又称矩阵法）。
+最后对结果进行了极限设定，并将其外推至平均寿命在几厘米至 50 米之间的情况。
+
+\subsection{喷注预选择}
+在本分析中使用的喷注首先通过标准选择进行筛选。
+ATLAS 喷注清洗工具所定义的工作点为 \texttt{LooseBad}，它会排除具有低电磁量能器活性的喷注，导致大多数的信号喷注被消除。
+因此，本分析采用工作点 \texttt{LooseBadLLP}，该工作点与 \texttt{LooseBad} 相比有以下两点不同：
+移除对低电磁量能器沉积能量比例（low-EMF）喷注的显式选择；
+要求 \(|E_{\text{neg}}| > 4~\text{GeV}\) 且 \(\text{FracSamplingMax} > 0.85\) ，以减少对液氩量能器噪声突发的敏感性。
+
+所谓的“clean”喷注需满足以下条件：
+喷注通过 \texttt{LooseBadLLP} 清洗标准；
+喷注的 \(p_{\mathrm{T}} > 40~\text{GeV}\)；
+喷注的伪快度满足 \(|\eta| < 2.5\)。
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.95\textwidth]{sumDR.png}
+    \caption{$\sum \Delta R_{\text{min}}(\text{jet, tracks})$分布图}
+    \label{fig:sumDR}
+    \figurenote{
+        左图：预选择之后$\sum \Delta R_{\text{min}}(\text{jet, tracks})$在不同数据集上的分布；
+        右图：不同pileup下$\sum \Delta R_{\text{min}}(\text{jet, tracks})$的分布。
+    }
+\end{figure}
+
+为了选择无径迹喷注的事件，定义了一个额外的事件级变量 $\sum \Delta R_{\text{min}}(\text{jet, tracks})$。
+该变量的计算方式为：
+对于每个喷注，\(\Delta R_{\text{min}}(\text{jet, tracks})\) 表示该喷注轴线到最近径迹的距离，径迹需满足以下条件：
+\begin{itemize}
+    \item 径迹满足“Charge Pion Loose”选择条件；
+    \item 径迹与主顶点兼容，即满足 Loose pion-vertex 关联要求；
+    \item 径迹 \(p_{\mathrm{T}} > 2~\text{GeV}\)。
+\end{itemize}
+随后，将每个 \(p_{\mathrm{T}} > 50~\text{GeV}\) 的 clean 喷注的 \(\Delta R_{\text{min}}(\text{jet, tracks})\) 求和，
+得到 \(\sum \Delta R_{\text{min}}(\text{jet, tracks})\) 的值。
+该变量对信号事件与标准模型背景事件有良好的区分能力，如 \autoref{fig:sumDR} 所示，并且该变量在 pileup 条件下表现出良好的稳定性。
+尽管 clean 喷注的定义使用了 \(p_{\mathrm{T}} > 40~\text{GeV}\)，
+但此处使用 \(p_{\mathrm{T}} > 50~\text{GeV}\) 是因为该阈值在信号与背景的区分上效果最佳。
+
+位移喷注通常是无径迹的，因此其喷注轴线与最近径迹之间的角距离较大。
+在含有两个或更多位移喷注的事件中，这些最小角距离的总和也会很大。
+如果事件中还存在 prompt 喷注，则其与最近径迹之间的距离会对总和贡献一个较小的量。
+相反，在标准模型事件中，大多数喷注周围都有径迹，因此 \(\Delta R_{\text{min}}(\text{jet, tracks})\) 值通常较小。
+
+分析中使用的事件需满足以下预选标准：
+\begin{itemize}
+    \item 至少通过一个 CalRatio 触发器；
+    \item 至少包含两个 clean 喷注；
+    \item \(\sum \Delta R_{\text{min}}(\text{jet, tracks}) > 0.5\)。
+\end{itemize}
+
+
+\subsection{神经网络与BDT}
 
