@@ -1,10 +1,15 @@
 % !TeX root = ../main.tex
 
 \chapter{实验数据}
+实验数据一方面来源于真实的质子--质子碰撞事件，另一方面来源于模拟。
+通过模拟期望的超越标准模型的物理过程，得到该过程在探测器中的事件特征，并通过机器学习算法学习提取特征，
+之后将提取到的特征与真实数据进行比较，以期得到新物理存在的证明。
 
 \section{数据来源}
 
 \subsection{探测器数据}
+\label{sec:background_data}
+
 分析所用的数据集是在2015年至2018年期间，由ATLAS探测器通过LHC上质子--质子（pp）碰撞（$\sqrt{s} = 13\,\mathrm{TeV}$）收集的。
 该数据集的总积分亮度为 $140\,\mathrm{fb}^{-1}$。排除了LHC束流不稳定或并非所有子探测器都在运行的数据~\cite{ATLAS_data_quality}。
 
@@ -13,6 +18,8 @@ ATLAS 探测器使用分层触发系统记录事件。
 第二级触发器称为高级触发器 （HLT），由运行在商用计算机集群上的软件实现，该软件可处理事件并将记录事件的发生率降低到 1 kHz。
 软件套件用于数据模拟、真实数据和模拟数据的重建和分析、探测器操作以及实验的触发和数据采集系统。
 
+
+\subsubsection{信号数据}
 对于 CalR+2J 通道，使用了专门的LLP触发器（称为“CalRatio触发器”）。
 在一级触发阶段，喷注在 $\eta \times \phi$ 平面中的 $0.2 \times 0.2$ 区域进行重建，这是基于信号喷注通常比标准模型喷注更窄的事实。
 选取的事件要求喷注的横能量 $E_T$ 超过 60 GeV 或 100 GeV（具体取决于数据收集时期）。
@@ -26,36 +33,37 @@ ATLAS 探测器使用分层触发系统记录事件。
 
 在其余通道中，使用了单轻子或双轻子触发器，其中仅考虑在某一年中整个数据收集期间未被预缩（unprescaled）运行的触发器。
 
+
+\subsubsection{背景数据}
 为研究非碰撞背景（NCB）以及构建验证区和控制区，额外收集了三个数据集：
 BIB 数据集包含满足 CalRatio 触发器所有要求但未通过 BIB 去除算法的事件。
 宇宙射线数据集使用相同的触发器选择标准，但来自空束团交叉期间记录的事件。
 双喷注（dijet）数据集是通过基于单喷注触发器~\cite{trigger} 的触发器选择的，并排除了 CalRatio 触发器，从而确保其与主数据集正交。
 该数据集用于测试位移喷注神经网络标注器（displaced jet neural network tagger）输出中建模的影响。
 
+源自束流背景（BIB）的粒子可能在量能器中产生喷注，但在电磁量能器（ECal）或内径迹探测器中不产生任何信号。
+在这种情况下，所产生的喷注将具有与真实 CalRatio 喷注非常相似的特性。
+如上所述，触发器需要包含一个用于排除 BIB 的算法，但该算法只能识别具有负时间的假喷注。
+来自下一个束团交叠（bunch-crossing, BC）的 BIB 事件可能会产生具有正时间的假喷注，从而通过主要触发条件。
+
+满足上述所有条件的喷注还需通过一个基于探测器单元时间与位置的 BIB 抑制算法。
+BIB 是由束晕（beam-halo）或束气（beam-gas）效应在探测器中产生的μ子组成的，这些μ子与质子束同步传播，并平行于束管方向。
+在 BIB 中，由μ子在强子量能器（HCal）中沉积能量所产生的喷注可能会伪装为信号喷注，从而被 CalRatio 触发器接受。
+该BIB抑制算法的详细描述见文献~\cite{ATLAS-CONF-2016-103} 的附录 B。
+
+该算法利用了以下事实：由 BIB 产生的量能器击中位置（hit）通常沿着一条相对水平、平行于束管的直线分布，并且具有特定的时间分布特征，
+这些特征与从相互作用点（IP）出发以光速传播到击中位置所需时间并不一致。
+当在与触发喷注在相同的 $\phi$ 处、但在 $\Delta R$ 上有一定间隔的位置上，
+存在至少四个探测单元的时间一致且与当前束团交叠中 BIB μ子的时间一致时，该算法将拒绝该事件。
+此处的 BIB μ子是指以光速传播、通过端盖区域进入量能器、与质子束同步但沿水平方向传播的粒子。
+
+需要指出的是，算法中对 BIB 探测单元时间的要求为 $t < -2\,\mathrm{ns}$，
+这使其在排除当前束团交叠（BC）中的 BIB 方面较为有效，但对于来自下一个或下下个 BC 的 BIB 则无能为力。
+此类 BIB 仍可能通过主 CalRatio 触发器，从而污染标准选区。
+因此，需要应用在\autoref{sec:BDT}中描述的 BDT 以进一步抑制 BIB 对分析的影响。
+
+
 \subsection{模拟数据}
-\subsubsection{背景数据}
-主要的标准模型背景包括 CalR+2J 通道中的标准模型多喷注事件，以及 CalR+W 和 CalR+Z 通道中的 W/Z+jets、$t\bar{t}$ 和单顶夸克事件。
-尽管最终的背景估计使用的是数据驱动方法，但仍需要蒙特卡洛（Monte Carlo）模拟事件来训练机器学习（Machine Learning）判别器并评估某些系统不确定性。
-
-标准模型多喷注样本使用 \Pythia 8.186~\cite{pythia} 在领头阶（Leading Order）精度生成，
-采用 A14 参数调节集~\cite{Pythia_tunes} 进行部分子簇射和强子化的计算。
-使用的部分子分布函数（Parton Distribution Function）为 \NNPDF[2.3lo]~\cite{parton_PDF}。
-
-包含 W 或 Z 玻色子与喷注的事件使用 \Sherpa[v2.2.1]~\cite{Sherpa} 进行模拟，
-最多两个喷注的矩阵元计算精确到次领头阶（Next-to-Leading Order），
-最多四个喷注的为 LO 精度，采用 \textsc{Comix}~\cite{Comix} 和 \OPENLOOPS~\cite{Open_Loops} 库计算，
-部分子簇射使用 \Sherpa 默认设置~\cite{parton_shower}。
-
-$t\bar{t}$ 事件的产生使用 \POWHEGBOX[v2]~\cite{POWHEG_BOX} 在 NLO 精度下模拟，
-使用 \NNPDF[3.0NLO] PDF 集，并将 hdamp 参数设为 1.5 倍的顶夸克质量~\cite{ATL-PHYS-PUB-2016-020}。
-事件通过 \Pythia[8.230] 与 A14 参数调节集 和 \NNPDF[2.3LO] PDF 集进行部分子簇射和强子化。
-$t\bar{t}$ 包含产生的 NLO 截面被修正为 QCD 的 NNLO 理论预测，并包括通过 Top++2.0~\cite{Beneke:2011mq} 所计算的 NNLL 软胶子重求和。
-
-单顶夸克的产生使用 \POWHEGBOX[v2] 在五味方案下的 NLO QCD 精度模拟，使用 NNPDF3.0NLO PDF 集。
-为处理与 $t\bar{t}$ 产生的干涉，采用了图移除（diagram-removal）方案~\cite{Frixione:2008yi}。
-事件也使用 \Pythia{8.230} 进行簇射与强子化。
-其总截面被修正为带有 NNLL 软胶子修正的 NLO QCD 理论预测~\cite{Aliev:2010zk}。
-
 \subsubsection{信号数据}
 \begin{figure}[ht]
     \centering
@@ -98,12 +106,35 @@ ALP 样本使用 \MADGRAPH{5\_aMC@NLO v2.9.3} 在 LO 精度下生成，使用 NN
 所有信号样本的部分子簇射和强子化均使用 \Pythia{8} 并采用 A14 tune。
 
 这三种模型的费曼图示例如\autoref{fig:Feynman_diagram}所示。
-对于所有信号样本，生成的长寿命粒子（LLP）的平均本征寿命（$\tau_{\text{gen}}$）是经过选择以最大化其在 ATLAS 强子量能器与 μ 子系统中衰变的事件比例。
+对于所有信号样本，生成的长寿命粒子（LLP）的平均本征寿命$\tau_{\text{gen}}$是经过选择以最大化其在 ATLAS 强子量能器与 μ 子系统中衰变的事件比例。
 这些平均本征寿命通常在几米数量级，但由于时间膨胀效应，不同样本之间有所差异。
 每次束团交叉中的多重相互作用（pile-up）通过将模拟的硬散射事件与使用 \Pythia{8.186} 生成的非弹性质子碰撞事件叠加进行建模，
 所使用的 PDF 为 NNPDF2.3LO，调参为 A3 tune~\cite{ATL-PHYS-PUB-2016-017}。
 探测器的几何结构与响应使用 Geant4~\cite{GEANT4:2002zbu} 进行模拟。
 ATLAS 标准重建软件被用于模拟数据与真实碰撞数据的重建。
+
+\subsubsection{背景数据}
+主要的标准模型背景包括 CalR+2J 通道中的标准模型多喷注事件，以及 CalR+W 和 CalR+Z 通道中的 W/Z+jets、$t\bar{t}$ 和单顶夸克事件。
+尽管最终的背景估计使用的是数据驱动（data-driven）方法，但仍需要蒙特卡洛（Monte Carlo）模拟事件来训练机器学习（Machine Learning）判别器并评估某些系统不确定性。
+
+标准模型多喷注样本使用 \Pythia 8.186~\cite{pythia} 在领头阶（Leading Order）精度生成，
+采用 A14 参数调节集~\cite{Pythia_tunes} 进行部分子簇射和强子化的计算。
+使用的部分子分布函数（Parton Distribution Function）为 \NNPDF[2.3lo]~\cite{parton_PDF}。
+
+包含 W 或 Z 玻色子与喷注的事件使用 \Sherpa[v2.2.1]~\cite{Sherpa} 进行模拟，
+最多两个喷注的矩阵元计算精确到次领头阶（Next-to-Leading Order），
+最多四个喷注的为 LO 精度，采用 \textsc{Comix}~\cite{Comix} 和 \OPENLOOPS~\cite{Open_Loops} 库计算，
+部分子簇射使用 \Sherpa 默认设置~\cite{parton_shower}。
+
+$t\bar{t}$ 事件的产生使用 \POWHEGBOX[v2]~\cite{POWHEG_BOX} 在 NLO 精度下模拟，
+使用 \NNPDF[3.0NLO] PDF 集，并将 hdamp 参数设为 1.5 倍的顶夸克质量~\cite{ATL-PHYS-PUB-2016-020}。
+事件通过 \Pythia[8.230] 与 A14 参数调节集 和 \NNPDF[2.3LO] PDF 集进行部分子簇射和强子化。
+$t\bar{t}$ 包含产生的 NLO 截面被修正为 QCD 的 NNLO 理论预测，并包括通过 Top++2.0~\cite{Beneke:2011mq} 所计算的 NNLL 软胶子重求和。
+
+单顶夸克的产生使用 \POWHEGBOX[v2] 在五味方案下的 NLO QCD 精度模拟，使用 NNPDF3.0NLO PDF 集。
+为处理与 $t\bar{t}$ 产生的干涉，采用了图移除（diagram-removal）方案~\cite{Frixione:2008yi}。
+事件也使用 \Pythia{8.230} 进行簇射与强子化。
+其总截面被修正为带有 NNLL 软胶子修正的 NLO QCD 理论预测~\cite{Aliev:2010zk}。
 
 
 \section{数据处理}
@@ -123,7 +154,8 @@ ATLAS 标准重建软件被用于模拟数据与真实碰撞数据的重建。
 选出的样本被投影到一个二维平面上，其中 $x$ 轴为 $\sum \Delta R_{\min}(\text{jet, tracks})$，
 $y$ 轴为逐事件 BDT 的输出值。该平面被划分为四个区域，其中的信号区定义为包含大部分信号且背景贡献预期较低的区域。
 为了预测信号区中的背景预期值，使用了基于似然函数的 ABCD 数据驱动方法（又称矩阵法）。
-最后对结果进行了极限设定，并将其外推至平均寿命在几厘米至 50 米之间的情况。
+最后对结果进行了极限设定，并将其外推至 LLP 衰变长度在几厘米至 50 米之间的情况。
+
 
 \subsection{喷注预选择}
 在本分析中使用的喷注首先通过标准选择进行筛选。
@@ -175,5 +207,55 @@ ATLAS 喷注清洗工具所定义的工作点为 \texttt{LooseBad}，它会排�
 \end{itemize}
 
 
-\subsection{神经网络与BDT}
+\subsection{提升决策树}
+\label{sec:BDT}
 
+需要基于实际数据训练的神经网络（Neural Network，NN）与提升决策树（Boosted Decision Tree, BDT）是鉴别事例是否为信号事例的核心部分。
+本文的主要工作在于神经网络的设计与实践，关于它的叙述在\autoref{chap:NN}展开，
+这里着重介绍以神经网络输出结果为输入变量的逐事件 BDT。
+
+BDT 是一种基于集成学习方法的机器学习技术，该方法通过迭代训练多个决策树，
+每一轮重点关注前一轮难以分类的样本，最终将所有决策树的预测结果通过加权组合，形成一个性能更优的整体分类器。
+其主要优势在于能够有效提高分类器的准确率；通过调整迭代过程中样本的权重，使模型更关注难分的样本；
+兼顾多个输入变量，增强对复杂数据模式的捕捉能力。
+
+为了将 BIB 事件与至少包含两个具有显著位移喷注的信号事件区分开，设计了一个逐事件 BDT，并使用 HS 模型中的若干组信号样本来对该 BDT 进行训练。
+训练仅使用事件编号为奇数的事件，而将编号为偶数的事件保留用于最终物理诠释。
+BIB 数据的选取方式如\autoref{sec:background_data}所述，来自满足 CalRatio 触发器所有高层触发（HLT）条件、但不包括 BIB 抑制算法的数据事件。
+BIB 样本中包含了在造成 BIB 被触发选中的同时叠加的标准模型多喷注事件。因此，即使在训练过程中未显式使用多喷注样本，
+该逐事件 BDT 也具备区分信号与 BIB 事件以及多喷注背景的能力。
+
+高质量（$m_\Phi$ = 400 至 1000\,GeV）和低质量（$m_\Phi$ = 125 至 200\,GeV）信号样本中的长寿粒子（LLP）通常具有不同的推动（boost），
+从而导致事件级别上的运动学差异。低质量信号样本中的喷注通常具有比高质量样本更小的横动量$p_\mathrm{T}$，
+这使得低质量样本与 BIB 的区分更加困难，因为 BIB 喷注具有相对较软的 $p_\mathrm{T}$ 分布。
+诸如总横动量$H_\mathrm{T}$和有效质量$m_\mathrm{eff}$等事件变量在 BIB 和低质量样本事件中也表现得较为相似。
+为了在所有信号样本中获得最佳性能，分别训练了两个版本的 BDT：
+一个在高质量样本中表现更佳（高-$p_\mathrm{T}$ BDT），另一个则更适用于低质量样本（低-$p_\mathrm{T}$ BDT）。
+这两个训练过程使用了相同的输入变量和 BIB 背景样本，仅在所使用的信号样本方面有所不同。
+
+每个事件中的所有 clean 喷注都会通过逐喷注神经网络（per-jet NN）进行评估。
+在信号数据中，事件中具有最高信号 NN 权重的两个喷注最有可能源自量能器中的 LLP 衰变，
+这两个喷注被称为 CalRatio 喷注候选，记为 $\text{jet}^{\text{sig1}}$ 和 $\text{jet}^{\text{sig2}}$。
+在 BIB 数据中，事件中具有最高 BIB NN 权重的两个喷注（BIB 喷注候选）最有可能是能够伪装成信号的 BIB 喷注，
+记为 $\text{jet}^{\text{BIB}1}$ 和 $\text{jet}^{\text{BIB}2}$。
+这两类喷注的 NN 输出与其他事件特征一起，作为逐事件 BDT 的输入变量。
+其余的输入变量的定义可在\autoref{cpm:BDT} 中查阅。
+
+此外，$p_\mathrm{T} > 30~\text{GeV}$ 的阈值用于计算 $H_\mathrm{T}$ 和 $m_\mathrm{eff}$ 等变量，
+这与 clean 喷注所要求的 $p_\mathrm{T} > 40~\text{GeV}$ 阈值不同。
+这样做的原因是这些变量需要尽可能宽松的选择（同时去除 pileup 产生的软喷注），以便捕捉事件的整体动力学。
+
+\begin{figure}[ht]
+    \centering
+    \subfloat[低-$p_\mathrm{T}$ BDT]{\includegraphics[width=0.45\textwidth]{fig_07a.pdf}}
+    \hfill
+    \subfloat[高-$p_\mathrm{T}$ BDT]{\includegraphics[width=0.45\textwidth]{fig_07b.pdf}}
+    \caption{BDT 在主数据集、BIB数据集、五种信号数据集上的输出分布}
+    \label{fig:BDT}
+\end{figure}
+
+两种 BDT 的训练结果见\autoref{fig:BDT}，它们的性能均呈现出三个不同区域的结构：
+极低 BDT 得分区域对应于高 BIB 污染的事件；中间区域主要由 BIB 污染较低的多喷注事件构成；而较高的 BDT 得分区域则对应于信号类事件。
+考虑到 BIB 与多喷注之间的区分，逐事件 BDT 在本分析中发挥着双重作用：
+首先，它作为第 5.5 节中事件清洗的一部分，用于拒绝 BIB 事件；
+其次，它与 $\sum \Delta R_\mathrm{min}(\text{jet, tracks})$ 一同构成了定义信号区（SR）的 ABCD 平面的两个变量（详见第 6 节）。
