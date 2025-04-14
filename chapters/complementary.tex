@@ -1,33 +1,69 @@
 % !TeX root = ../main.tex
 
-\chapter{BDT 的输入变量}
-\label{cpm:BDT}
+\chapter{数据模拟细节}
+\label{cpm:MC}
 
-以下是用于逐事件 BDT 训练的输入变量列表：
+\begin{table}[ht]
+      \centering
+      \caption{隐藏区域模型模拟数据总结}
+      \label{tab:signal_MC}
+      \begin{tabular}{cccc}
+            \toprule
+            $m_\Phi$ [GeV] & $m_s$ [GeV]          & $c\tau$ [m] & 总事例数 (mc16a, mc16d, mc16e) \\
+            \midrule
+            \multirow{2}{*}{60}
+                           & 5                    & 0.217       & 600k (160k, 190k, 250k)        \\
+                           & 15                   & 0.661       & 300k (80k, 100k, 120k)         \\
+            \midrule
+            \multirow{7}{*}{125}
+                           & \multirow{2}{*}{5}   & 0.127       & 160k (40k, 50k, 70k)           \\
+                           &                      & 0.411       & 601k (160k, 190k, 251k)        \\
+                           & 15                   & 0.58        & 510k (140k, 160k, 210k)        \\
+                           & \multirow{2}{*}{35}  & 1.31        & 720k (190k, 230k, 300k)        \\
+                           &                      & 2.63        & 509k (140k, 160k, 210k)        \\
+                           & \multirow{2}{*}{55}  & 1.05        & 1010k (270k, 320k, 420k)       \\
+                           &                      & 5.32        & 458k (120k, 150k, 188k)        \\
+            \midrule
+            200            & 50                   & 1.255       & 200k (50k, 70k, 80k)           \\
+            \midrule
+            400            & 100                  & 1.608       & 200k (50k, 70k, 80k)           \\
+            \midrule
+            \multirow{4}{*}{600}
+                           & 50                   & 0.59        & 300k (80k, 100k, 120k)         \\
+                           & \multirow{2}{*}{150} & 1.84        & 300k (80k, 100k, 120k)         \\
+                           &                      & 3.309       & 150k (40k, 50k, 60k)           \\
+                           & 275                  & 4.288       & 1000k (260k, 320k, 420k)       \\
+            \midrule
+            \multirow{4}{*}{1000}
+                           & 50                   & 0.406       & 300k (80k, 100k, 120k)         \\
+                           & \multirow{2}{*}{275} & 2.399       & 300k (80k, 100k, 120k)         \\
+                           &                      & 4.328       & 150k (40k, 50k, 60k)           \\
+                           & 475                  & 6.039       & 1000k (260k, 320k, 420k)       \\
+            \bottomrule
+      \end{tabular}
+\end{table}
 
-\begin{itemize}
-    \item 每个 CalRatio 候选信号喷注（$\text{jet}^{\text{sig}1}$、$\text{jet}^{\text{sig}2}$）
-          与 BIB 候选喷注（$\text{jet}^{\text{BIB}1}$、$\text{jet}^{\text{BIB}2}$）
-          的喷注 NN 信号得分与 BIB 得分，
+\begin{table}[ht]
+      \centering
+      \caption{标准模型多喷注背景模拟数据总结}
+      \label{tab:background_MC}
+      \begin{tabular}{*4{c}}
+            \toprule
+            样本编号 & 名称  & $p_{\mathrm{T}}$ 范围 [GeV] & 产生 截面 $\sigma$ [pb] \\
+            \midrule
+            361022   & JZ2W  & 60 -- 160                   & $2.43 \times 10^{9}$    \\
+            361023   & JZ3W  & 160 -- 400                  & $2.65 \times 10^{7}$    \\
+            361024   & JZ4W  & 400 -- 800                  & $2.55 \times 10^{5}$    \\
+            361025   & JZ5W  & 800 -- 1300                 & $4.55 \times 10^{3}$    \\
+            361026   & JZ6W  & 1300 -- 1800                & \num{2.58e2}            \\
+            361027   & JZ7W  & 1800 -- 2500                & \num{1.62e1}            \\
+            361028   & JZ8W  & 2500 -- 3200                & \num{6.25e-1}           \\
+            361029   & JZ9W  & 3200 -- 3900                & \num{1.96e-2}           \\
+            361030   & JZ10W & 3900 -- 4600                & \num{1.20e-3}           \\
+            361031   & JZ11W & 4600 -- 5300                & $4.23 \times 10^{-5}$   \\
+            361032   & JZ12W & 5300 -- $\infty$            & $1.04 \times 10^{-6}$   \\
+            \bottomrule
+      \end{tabular}
+\end{table}
 
-    \item CalRatio 喷注候选（$\text{jet}^{\text{sig}1}$、$\text{jet}^{\text{sig}2}$）的 $p_T$；
 
-    \item $H_T^{\text{miss}} / H_T$，其中 $H_T$ 是所有 $p_T > 30$\,GeV 且 $|\eta| < 3.2$ 的喷注的 $p_T$ 的标量和，
-          $H_T^{\text{miss}}$ 是这些喷注 $p_T$ 的矢量和的负值的模长；
-
-    \item $M_{\text{eff}} = H_T + H_T^{\text{miss}} $；
-
-    \item $\Delta \phi (\text{jet}^{\text{sig}1}, \text{jet}^{\text{sig}2})$ 和
-          $\Delta R(\text{jet}^{\text{sig}1}, \text{jet}^{\text{sig}2})$，
-          即事件中两个候选信号喷注之间的角距离；
-
-    \item 所有事件中 clean 喷注的信号 NN 权重的均值。
-          这些变量与列表中第一项所述的每喷注信号 NN 权重相关，但它们在以下情况下提供了额外的判别能力：
-          当一个（或两个） LLP 衰变被重建为两个分辨的喷注时，可能会出现第三个（甚至第四个）具有较高信号 NN 权重的喷注。
-          这一点在高质量样本中尤其重要，因为这些附加喷注的 $p_T$ 足够高，可以被归类为 clean 喷注。
-          而在 BIB 样本中出现此类情形的概率则要低得多。均值的计算方式利用了第三和第四个类信号喷注的信息，而无需对每个事件中 clean 喷注的数量作出特定要求。
-
-    \item 所有事件中 clean 喷注的 BIB NN 权重的均值。
-          上一项中关于使用第三和第四个类信号喷注的讨论，同样适用于这些变量。
-          在这种情况下，BIB 样本比任何一个信号样本更有可能出现第三或第四个具有较高 BIB NN 权重的 clean 喷注。
-\end{itemize}
