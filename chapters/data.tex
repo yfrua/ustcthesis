@@ -257,60 +257,60 @@ BIB 样本中包含了在造成 BIB 被触发选中的同时叠加的标准模�
 两种 BDT 的训练结果见\autoref{fig:BDT}，它们的性能均呈现出三个不同区域的结构：
 极低 BDT 得分区域对应于高 BIB 污染的事件；中间区域主要由 BIB 污染较低的多喷注事件构成；而较高的 BDT 得分区域则对应于信号类事件。
 考虑到 BIB 与多喷注之间的区分，逐事件 BDT 在本分析中发挥着双重作用：
-首先，它作为\autoref{sec:Event_Cleaning}中事件清洗的一部分，用于拒绝 BIB 事件；
-其次，它与 $\sum \Delta R_\mathrm{min}(\text{jet, tracks})$ 一同构成了定义信号区（SR）的 ABCD 平面的两个变量（详见\autoref{sec:Final_Selection}）。
+首先，它作为事件清洗的一部分，用于去除 BIB 事件；
+其次，它与 $\sum \Delta R_\mathrm{min}(\text{jet, tracks})$ 一同构成了定义信号区（SR）的 ABCD 平面的两个变量。
 
 
-\subsection{事件清洗}
-\label{sec:Event_Cleaning}
+% \subsection{事件清洗}
+% \label{sec:Event_Cleaning}
 
-ABCD 方法用于本分析中的背景估计，其关键是在 ABCD 平面中定义两个不相关的变量。
-当最终选择中包含多个背景组成部分时，只有在它们在 ABCD 平面上的分布相同时，变量之间的不相关性才得以保持。
-而在类 QCD 事件与 BIB 事件组合的情况下，这一条件并不满足。
-因此，控制区域 B、C 和 D 中的 BIB 污染可能会影响该方法的正常运作。
-因此，在应用 ABCD 方法之前，需要将 BIB 背景从平面中去除。
+% ABCD 方法用于本分析中的背景估计，其关键是在 ABCD 平面中定义两个不相关的变量。
+% 当最终选择中包含多个背景组成部分时，只有在它们在 ABCD 平面上的分布相同时，变量之间的不相关性才得以保持。
+% 而在类 QCD 事件与 BIB 事件组合的情况下，这一条件并不满足。
+% 因此，控制区域 B、C 和 D 中的 BIB 污染可能会影响该方法的正常运作。
+% 因此，在应用 ABCD 方法之前，需要将 BIB 背景从平面中去除。
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\textwidth]{BIB_eta_time.png}
-    \caption{BIB 候选喷注的$\eta$--$t$分布图}
-    \label{fig:BIB_eta_time}
-    \figurenote{
-        第一行为 BIB 数据集上的结果，第二行为主数据集上的结果。
-        左侧的图为 BDT 得分$< -0.35$的事件；
-        中间的图为 $-0.35 <$ BDT 得分 $< 0$的事件；
-        右侧的图为 BDT 得分 $> 0$的事件。
-    }
-\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=\textwidth]{BIB_eta_time.png}
+%     \caption{BIB 候选喷注的$\eta$--$t$分布图}
+%     \label{fig:BIB_eta_time}
+%     \figurenote{
+%         第一行为 BIB 数据集上的结果，第二行为主数据集上的结果。
+%         左侧的图为 BDT 得分$< -0.35$的事件；
+%         中间的图为 $-0.35 <$ BDT 得分 $< 0$的事件；
+%         右侧的图为 BDT 得分 $> 0$的事件。
+%     }
+% \end{figure}
 
-\autoref{fig:BIB_eta_time} 展示了 BIB 候选喷注在不同 BDT 得分区间上的$\eta$关于时间的分布。
-每个图的第一行对应 BIB 样本（以 BIB 为主，并带有少量 multi-jet 污染），第二行为主数据（以 multi-jet 为主，带有少量 BIB 污染）。
-左侧的图展示了 BDT 得分$< -0.35$的事件，这些事件主要是当前束团交叉中的 BIB，其时间为负值。
-中间的图为 $-0.35 <$ BDT 得分$< 0.0$的事件，除了当前束团交叉的 BIB 贡献外，还包括下一束团交叉的 BIB，出现在正时间弯曲带中。
-在此范围内也能看到以 $0$ ns 为中心的 SM 喷注贡献。
-右侧的图展示了 BDT 得分$> 0.0$的事件，这些事件以 multi-jet 为主，几乎不含时间偏离零的喷注。
-于是 BIB 的典型形状表现为穿越 $-10$ ns（当前 BC）和 $+15$ ns（下一个 BC）处的弯曲带状结构。
-因此，进入数据分析的事件被要求满足 BDT 得分$> 0.0$，以确保绝大多数非碰撞背景（NCB）在该阶段已被剔除。
+% \autoref{fig:BIB_eta_time} 展示了 BIB 候选喷注在不同 BDT 得分区间上的$\eta$关于时间的分布。
+% 每个图的第一行对应 BIB 样本（以 BIB 为主，并带有少量 multi-jet 污染），第二行为主数据（以 multi-jet 为主，带有少量 BIB 污染）。
+% 左侧的图展示了 BDT 得分$< -0.35$的事件，这些事件主要是当前束团交叉中的 BIB，其时间为负值。
+% 中间的图为 $-0.35 <$ BDT 得分$< 0.0$的事件，除了当前束团交叉的 BIB 贡献外，还包括下一束团交叉的 BIB，出现在正时间弯曲带中。
+% 在此范围内也能看到以 $0$ ns 为中心的 SM 喷注贡献。
+% 右侧的图展示了 BDT 得分$> 0.0$的事件，这些事件以 multi-jet 为主，几乎不含时间偏离零的喷注。
+% 于是 BIB 的典型形状表现为穿越 $-10$ ns（当前 BC）和 $+15$ ns（下一个 BC）处的弯曲带状结构。
+% 因此，进入数据分析的事件被要求满足 BDT 得分$> 0.0$，以确保绝大多数非碰撞背景（NCB）在该阶段已被剔除。
 
-在应用预选和上述逐事件 BDT 选择后，仍存在一些事件，其特征既不像多喷注背景，也不像信号。
-因此，需要进一步的选择来清除这些事件。完整的事件清洗要求如下：
+% 在应用预选和上述逐事件 BDT 选择后，仍存在一些事件，其特征既不像多喷注背景，也不像信号。
+% 因此，需要进一步的选择来清除这些事件。完整的事件清洗要求如下：
 
-\begin{itemize}
-    \item BDT 得分$> 0$；
-    \item 触发匹配：至少一个 CalRatio 喷注候选需与触发的 HLT 喷注匹配，
-          匹配定义为 $\Delta R(\text{offline jet}, \text{HLT jet}) < 0.2$；
-          此外，该喷注还需满足 $\log_{10} \text{CalRatio} > 1.2$ 且
-          $\Delta R_{\min}(\text{jet}, \text{tracks}) > 0.2$；
-    \item CalRatio 喷注候选的时间需满足 $-3 < t < 15$ ns。
-          此时间要求用于剔除来自前一个和下一个束团交叉的 pileup，因为其时间主要分布在 $\pm 25$ ns 附近；
-    \item 清洗条件：剔除落入电磁量能器桶部与端盖过渡区域的喷注（$1.45 < |\eta| < 1.55$），
-          该区域电磁量能器覆盖不足，会导致伪低 EMF 喷注的产生；
-    \item 探测器噪声及其他效应可能产生具有极低 $\log_{10} \text{CalRatio}$ 的喷注，导致数据与 MC 在该变量上的比较不一致。
-          这一现象在用于研究 ABCD 方法系统不确定性的双喷注控制区中观察到。
-          为避免引入该失拟合区域，且由于这些喷注对本分析不具意义，若任一 CalRatio 或 BIB 喷注候选的
-          $\log_{10} \text{CalRatio} < -1.5$（即 EMF $> 96.9\%$），则不考虑该事件。
-\end{itemize}
+% \begin{itemize}
+%     \item BDT 得分$> 0$；
+%     \item 触发匹配：至少一个 CalRatio 喷注候选需与触发的 HLT 喷注匹配，
+%           匹配定义为 $\Delta R(\text{offline jet}, \text{HLT jet}) < 0.2$；
+%           此外，该喷注还需满足 $\log_{10} \text{CalRatio} > 1.2$ 且
+%           $\Delta R_{\min}(\text{jet}, \text{tracks}) > 0.2$；
+%     \item CalRatio 喷注候选的时间需满足 $-3 < t < 15$ ns。
+%           此时间要求用于剔除来自前一个和下一个束团交叉的 pileup，因为其时间主要分布在 $\pm 25$ ns 附近；
+%     \item 清洗条件：剔除落入电磁量能器桶部与端盖过渡区域的喷注（$1.45 < |\eta| < 1.55$），
+%           该区域电磁量能器覆盖不足，会导致伪低 EMF 喷注的产生；
+%     \item 探测器噪声及其他效应可能产生具有极低 $\log_{10} \text{CalRatio}$ 的喷注，导致数据与 MC 在该变量上的比较不一致。
+%           这一现象在用于研究 ABCD 方法系统不确定性的双喷注控制区中观察到。
+%           为避免引入该失拟合区域，且由于这些喷注对本分析不具意义，若任一 CalRatio 或 BIB 喷注候选的
+%           $\log_{10} \text{CalRatio} < -1.5$（即 EMF $> 96.9\%$），则不考虑该事件。
+% \end{itemize}
 
 
-\subsection{最终选择}
-\label{sec:Final_Selection}
+% \subsection{最终选择}
+% \label{sec:Final_Selection}
