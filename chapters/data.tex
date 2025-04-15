@@ -8,7 +8,7 @@
 \section{数据来源}
 
 \subsection{探测器数据}
-\label{sec:background_data}
+\label{sec:detector_data}
 
 分析所用的数据集是在2015年至2018年期间，由ATLAS探测器通过LHC上质子--质子（pp）碰撞（$\sqrt{s} = 13\,\mathrm{TeV}$）收集的。
 该数据集的总积分亮度为 $140\,\mathrm{fb}^{-1}$。排除了LHC束流不稳定或并非所有子探测器都在运行的数据~\cite{ATLAS_data_quality}。
@@ -64,23 +64,9 @@ BIB 是由束晕（beam-halo）或束气（beam-gas）效应在探测器中产�
 
 
 \subsection{模拟数据}
-\subsubsection{信号数据}
-\begin{figure}[ht]
-    \centering
-    \subfloat[隐藏区域模型]{\includegraphics[width=0.33\textwidth]{fig_01a.pdf}}
-    \hfill
-    \subfloat[ALP模型]{\includegraphics[width=0.33\textwidth]{fig_01b.pdf}}
-    \hfill
-    \subfloat[暗光子模型]{\includegraphics[width=0.33\textwidth]{fig_01c.pdf}}
-    \caption{信号模型的费曼图示例}
-    \label{fig:Feynman_diagram}
-    \figurenote{
-        (a)： 隐藏区域模型中介子 $\Phi$ 与矢量玻色子 $V = W$ 或 $Z$ 共同产生，长寿命粒子 $S$ 衰变为费米子（主要为 $b$ 夸克）。
-        (b)： 类轴轻子（ALP）模型，长寿命粒子 $a$ 衰变为胶子，并与矢量玻色子共同产生。
-        (c)： 暗光子 $Z_d$ 模型中，$Z_d$ 与 $Z$ 玻色子一同由介子 $\Phi$ 的衰变产生。
-    }
-\end{figure}
+\label{sec:MC}
 
+\subsubsection{信号数据}
 本分析总计考虑三种基准信号模型。第一种是隐藏区域（HS）模型，其中标量玻色子 $\Phi$（可以是希格斯玻色子，
 也可以是其他行为类似的较轻或较重粒子）作为标准模型与隐藏区域之间的媒介。
 $\Phi$ 可衰变为中性的长寿命标量粒子 $S$，通常衰变为运动学允许的最重费米子对，通常为 $b$ 夸克对。
@@ -105,6 +91,22 @@ ALP 样本使用 \MADGRAPH{5\_aMC@NLO v2.9.3} 在 LO 精度下生成，使用 NN
 事件使用  \MADGRAPH{5\_aMC@NLO v2.6.7} 在 LO 精度下生成，PDF 为 NNPDF2.3LO。
 所有信号样本的部分子簇射和强子化均使用 \Pythia{8} 并采用 A14 tune。
 
+\begin{figure}[ht]
+    \centering
+    \subfloat[隐藏区域模型]{\includegraphics[width=0.33\textwidth]{fig_01a.pdf}}
+    \hfill
+    \subfloat[ALP模型]{\includegraphics[width=0.33\textwidth]{fig_01b.pdf}}
+    \hfill
+    \subfloat[暗光子模型]{\includegraphics[width=0.33\textwidth]{fig_01c.pdf}}
+    \caption{信号模型的费曼图示例}
+    \label{fig:Feynman_diagram}
+    \figurenote{
+        (a)： 隐藏区域模型中介子 $\Phi$ 与矢量玻色子 $V = W$ 或 $Z$ 共同产生，长寿命粒子 $S$ 衰变为费米子（主要为 $b$ 夸克）。
+        (b)： 类轴轻子（ALP）模型，长寿命粒子 $a$ 衰变为胶子，并与矢量玻色子共同产生。
+        (c)： 暗光子 $Z_d$ 模型中，$Z_d$ 与 $Z$ 玻色子一同由介子 $\Phi$ 的衰变产生。
+    }
+\end{figure}
+
 这三种模型的费曼图示例如\autoref{fig:Feynman_diagram} 所示。
 对于所有信号样本，生成的 LLP 的平均本征寿命$\tau_{\text{gen}}$是经过选择以最大化其在 ATLAS 强子量能器与 μ 子系统中衰变的事件比例。
 这些平均本征寿命通常在几米数量级，但由于时间膨胀效应，不同样本之间有所差异。
@@ -120,7 +122,7 @@ ATLAS 标准重建软件被用于模拟数据与真实碰撞数据的重建。
 标准模型多喷注样本使用 \Pythia 8.186~\cite{pythia} 在领头阶（Leading Order，LO）精度生成，
 采用 A14 参数调节集~\cite{Pythia_tunes} 进行部分子簇射和强子化的计算。
 使用的部分子分布函数（Parton Distribution Function，PDF）为 \NNPDF[2.3lo]~\cite{parton_PDF}。
-生成的样本依据不同的$p_T$范围被记为 \texttt{JZxW}，其中 \texttt{x} 从2到12递增，
+生成的样本依据不同的$p_T$范围被记为 \texttt{JZxW}，其中 \texttt{x} 随着$p_T$的增加从2到12递增，
 具体的$p_T$范围与产生截面详见\autoref{cpm:MC} 中的\autoref{tab:background_MC}。
 
 包含 W 或 Z 玻色子与喷注的事件使用 \Sherpa[v2.2.1]~\cite{Sherpa} 进行模拟，
@@ -168,9 +170,9 @@ ATLAS 喷注清洗工具所定义的工作点为 \texttt{LooseBad}，它会排�
 移除对低电磁量能器沉积能量比例（low-EMF）喷注的显式选择；
 要求 \(|E_{\text{neg}}| > 4~\text{GeV}\) 且 \(\text{FracSamplingMax} > 0.85\) ，以减少对液氩量能器噪声突发的敏感性。
 
-所谓的“clean”喷注需满足以下条件：
+所谓的“clean”喷注需满足以下三个条件：
 喷注通过 \texttt{LooseBadLLP} 清洗标准；
-喷注的 \(p_{\mathrm{T}} > 40~\text{GeV}\)；
+喷注的 \(p_T > 40~\text{GeV}\)；
 喷注的伪快度满足 \(|\eta| < 2.5\)。
 
 \begin{figure}[ht]
@@ -186,17 +188,17 @@ ATLAS 喷注清洗工具所定义的工作点为 \texttt{LooseBad}，它会排�
 
 为了选择无径迹喷注的事件，定义了一个额外的事件级变量 $\sum \Delta R_{\text{min}}(\text{jet, tracks})$。
 该变量的计算方式为：
-对于每个喷注，\(\Delta R_{\text{min}}(\text{jet, tracks})\) 表示该喷注轴线到最近径迹的距离，径迹需满足以下条件：
+对于每个喷注，\(\Delta R_{\text{min}}(\text{jet, tracks})\) 表示该喷注轴线到最近径迹的距离，同时径迹需满足以下条件：
 \begin{itemize}
-    \item 径迹满足“Charge Pion Loose”选择条件；
-    \item 径迹与主顶点兼容，即满足 Loose pion-vertex 关联要求；
-    \item 径迹 \(p_{\mathrm{T}} > 2~\text{GeV}\)。
+    \item 径迹满足 \texttt{Charge Pion Loose} 选择条件；
+    \item 径迹与主顶点兼容，即满足 \texttt{Loose pion-vertex} 关联要求；
+    \item 径迹 \(p_T > 2~\text{GeV}\)。
 \end{itemize}
-随后，将每个 \(p_{\mathrm{T}} > 50~\text{GeV}\) 的 clean 喷注的 \(\Delta R_{\text{min}}(\text{jet, tracks})\) 求和，
+随后，将每个 \(p_T > 50~\text{GeV}\) 的 clean 喷注的 \(\Delta R_{\text{min}}(\text{jet, tracks})\) 求和，
 得到 \(\sum \Delta R_{\text{min}}(\text{jet, tracks})\) 的值。
-该变量对信号事件与标准模型背景事件有良好的区分能力，如 \autoref{fig:sumDR} 所示，并且该变量在 pileup 条件下表现出良好的稳定性。
-尽管 clean 喷注的定义使用了 \(p_{\mathrm{T}} > 40~\text{GeV}\)，
-但此处使用 \(p_{\mathrm{T}} > 50~\text{GeV}\) 是因为该阈值在信号与背景的区分上效果最佳。
+该变量对信号事件与标准模型背景事件有良好的区分能力，如\autoref{fig:sumDR} 所示，并且该变量在 pileup 条件下表现出良好的稳定性。
+尽管 clean 喷注的定义使用了 \(p_T > 40~\text{GeV}\)，
+但此处使用 \(p_T > 50~\text{GeV}\) 是因为该阈值在信号与背景的区分上效果最佳。
 
 位移喷注通常是无径迹的，因此其喷注轴线与最近径迹之间的角距离较大。
 在含有两个或更多位移喷注的事件中，这些最小角距离的总和也会很大。
@@ -225,7 +227,7 @@ BDT 是一种基于集成学习方法的机器学习技术，该方法通过迭�
 
 为了将 BIB 事件与至少包含两个具有显著位移喷注的信号事件区分开，设计了一个逐事件 BDT，并使用 HS 模型中的若干组信号样本来对该 BDT 进行训练。
 训练仅使用事件编号为奇数的事件，而将编号为偶数的事件保留用于最终物理诠释。
-BIB 数据的选取方式如\autoref{sec:background_data}所述，来自满足 CalRatio 触发器所有高层触发（HLT）条件、但不包括 BIB 抑制算法的数据事件。
+BIB 数据的选取方式如\autoref{sec:detector_data}所述，来自满足 CalRatio 触发器所有高层触发（HLT）条件、但不包括 BIB 抑制算法的数据事件。
 BIB 样本中包含了在造成 BIB 被触发选中的同时叠加的标准模型多喷注事件。因此，即使在训练过程中未显式使用多喷注样本，
 该逐事件 BDT 也具备区分信号与 BIB 事件以及多喷注背景的能力。
 
