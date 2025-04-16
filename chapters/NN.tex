@@ -7,13 +7,13 @@
 该神经网络在隐藏区域（Hidden Sector）模型信号、标准模型多喷注（SM Multi-jets）以及 BIB 的混合样本上进行训练。
 神经网络的输入变量为与每个喷注相关的低级特征，涵盖整个 ATLAS 探测器的信息，包括径迹、量能器以及 μ 子谱仪相关信息。
 训练前对每个变量进行了预处理，以确保神经网络训练的最优效果。
-网络结构选用基于 Transformer\cite{vaswani2023attentionneed} 的图神经网络（GNN）。
+NN 的主体结构选用基于 Transformer\cite{vaswani2023attentionneed} 的图神经网络（Graphic Neural Network, GNN）。
 训练采用 Pytorch\cite{paszke2019pytorchimperativestylehighperformance} 框架，
 并使用 Optuna\cite{akiba2019optunanextgenerationhyperparameteroptimization} 框架进行超参数（hyperparameter）优化。
 训练结果经过评估以排除过拟合现象，并在所用信号样本上相较于此前的网络性能有所提升。
 
 训练使用的信号区域（signal region）数据集包括来自探测器的 BIB 数据（见\autoref{sec:detector_data}）
-和带有真相信息（truth value）的信号与标准模型多喷注（简记为 QCD）模拟数据（见\autoref{sec:MC}）。
+和信号与标准模型多喷注（简记为 QCD）模拟数据（见\autoref{sec:MC}）。
 训练中使用的喷注均为 clean 喷注，其定义见\autoref{sec:jet_preselection}。
 信号喷注为隐藏区域（Hidden Sector）模型中由一系列不同的$m_\Phi$、$m_s$、$c\tau$参数生成的模拟数据，
 其中 $m_\Phi$ 为中介粒子质量，$m_s$ 为 LLP 的质量，$c\tau$ 为 LLP 衰变长度。
@@ -23,24 +23,25 @@
 BIB 喷注训练样本选取触发 HLT CalRatio 触发器但未通过 HLT BIB 抑制算法的事件。
 随后通过 $\Delta R$ 匹配离线喷注与触发喷注，匹配成功并满足公共选择条件的喷注被标记为 BIB 喷注。
 
-控制区域（control region）数据集包括来自探测器的数据和带有真相信息的 QCD 模拟数据。
+为了进行补充训练以及计算本分析中使用的机器学习方法的系统不确定性，需要在数据和 MC 模拟中定义一个控制区域（control region）。
+控制区域中所选样本具有统一的筛选条件（见\autoref{cpm:CR_jet_selection}），以确保喷注来源于相同的产生机制，并覆盖相同的运动学范围。
+控制区域数据包括探测器数据和 QCD 模拟数据。
 
-主数据集总计有 2.09M jets，其中 766k jets 属于信号集、660k jets 属于 QCD 集、660k jets 属于 BIB 集。
-CR有 449k jets，其中 223k jets 来自模拟、226k jets 来自探测器。
+信号区域上定义的主数据集总计有 2.09M jets，其中 766k jets 属于信号集、660k jets 属于 QCD 集、660k jets 属于 BIB 集。
+控制区域上定义的补充数据集总计有 449k jets，其中 223k jets 属于 MC 模拟、226k jets 属于探测器。
 
 由于信号与背景喷注可通过 ATLAS 探测器的各个子系统加以刻画，因此神经网络也应当充分利用来自各子探测器的信息。
-NN 输入变量的概述如下，详细变量见\autoref{cpm:NN_variables}：
+NN 输入变量的概述如下（详见\autoref{cpm:NN_variables}）：
 \begin{itemize}
-      \item 位于喷注轴线 $\Delta R < 0.2$ 范围内的径迹的空间位置、动量、碰撞参数（impact parameter）和径迹拟合质量参量；
-      \item 与喷注相关联的拓扑集团（topo-clusters） 的动量、时间信息和空间位置；
-      \item 喷注在电磁量能器与强子量能器各层的能量沉积比例；
-      \item 距喷注 $\Delta \phi < 0.2$ 范围内的μ子段（muon segment）的空间与时间信息；
-      \item 喷注本身的动量与空间位置。
+    \item 位于喷注轴线 $\Delta R < 0.2$ 范围内的径迹的空间位置、动量、碰撞参数（impact parameter）和径迹拟合质量参量（quality variables）；
+    \item 与喷注相关联的拓扑集团（topo-clusters） 的动量、时间信息和空间位置；
+    \item 喷注在电磁量能器与强子量能器各层的能量沉积比例；
+    \item 位于喷注 $\Delta \phi < 0.2$ 范围内的μ子段（muon segment）的空间与时间信息；
+    \item 喷注本身的动量与空间位置。
 \end{itemize}
 
-训练前对输入变量进行预处理以减少训练事件之间的偏差，并调整变量分布以加快训练收敛速度。
-预处理完成后，喷注输入至神经网络，网络输出对应于信号、QCD 或 BIB 的标签。
-训练程序使用的是基于 TensorFlow 后端的 Keras 框架，因其提供了对复杂网络的高度自定义能力，同时保持了快速开发的优势。
+训练前对所有输入变量进行预处理，调整变量分布使得各变量的均值为0、标准差为1，以加快训练收敛速度。
+预处理完成后，喷注输入至神经网络，网络输出对应于信号、QCD 或 BIB 的预测权值。
 
 
 \section{网络结构}
