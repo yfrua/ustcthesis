@@ -11,8 +11,8 @@
 %
 
 \NeedsTeXFormat{LaTeX2e}[2017/04/15]
-\newcommand\ustcthesisversion{4.0.0-beta.7}
-\ProvidesClass{ustcthesis}[2025/04/07 v\ustcthesisversion\space USTC thesis template]
+\newcommand\ustcthesisversion{4.0.0-beta.8}
+\ProvidesClass{ustcthesis}[2025/04/16 v\ustcthesisversion\space USTC thesis template]
 
 % 报错和警告
 \newcommand\ustc@error[1]{%
@@ -2768,6 +2768,9 @@
 \fi
 
 % 若有英文图题，另起一行置于中文图题下方。
+\AtBeginOfPackageFile*{bicaption}{
+  \let\captionmainlanguage\ustc@main@language
+}
 \AtEndOfPackageFile*{bicaption}{
   \captionsetup[bi-first]{lang = chinese}
   \captionsetup[bi-second]{
@@ -3288,6 +3291,7 @@
   \ifustc@degree@graduate
     \@mainmatterfalse
     \chapter{\ustc@achievements@name}%
+    \fontsize{12bp}{16bp}\selectfont
     #1\par
   \fi
 }{}
@@ -3299,8 +3303,16 @@
   \chapter{\ustc@achievements@name}%
 }{}
 
+\newif\ifustc@first@achievement@list
+\ustc@first@achievement@listtrue
+
 \newenvironment{theachievements}[1][已发表论文]{%
-  \par\null\par
+  \ifustc@first@achievement@list
+    \vspace{1bp}%
+  \else
+    \vspace{19bp}%
+  \fi
+  \global\ustc@first@achievement@listfalse
   \noindent\textbf{#1：}\par
   \begin{achievementlist}
 }{%
@@ -3309,16 +3321,16 @@
 
 \newlist{achievementlist}{enumerate}{1}
 \setlist[achievementlist]{
-  topsep     = 0bp,
+  topsep     = 3bp,
   partopsep  = 0bp,
   itemsep    = 0bp,
-  parsep     = 0bp,
-  leftmargin = 1.5em,
-  itemindent = 1.5em,
-  labelsep   = 0em,
-  labelwidth = 3em,
+  parsep     = 3bp,
+  leftmargin = 21bp,
+  itemindent = 0bp,
+  labelsep   = 0bp,
+  labelwidth = 21bp,
   align      = left,
-  label      = （\arabic*）,
+  label      = [\arabic*],
 }
 
 

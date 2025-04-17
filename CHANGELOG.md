@@ -7,12 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [4.0.0-beta.7] - 2025-04-07
+## [4.0.0-beta.8] - 2025-04-16
+
+### Changed
+
+- 科研成果列表的序号改为方括号（[#449](https://github.com/ustctug/ustcthesis/issues/449#issuecomment-2804822791)）。
+- 更新科研成果列表的缩进（[#449](https://github.com/ustctug/ustcthesis/issues/449#issuecomment-2804870730)）。
 
 ### Fixed
 
 - 修正中文摘要的关键词和分隔符（[#449](https://github.com/ustctug/ustcthesis/issues/449)、[#450](https://github.com/ustctug/ustcthesis/issues/450)）。
 - 修正插图和附表清单的标签（[#449](https://github.com/ustctug/ustcthesis/issues/449)）。
+
+## [4.0.0-beta.7] - 2025-04-07
 
 ### Added
 
@@ -422,7 +429,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 优化图注、算法的行距。
 - 二级以下节标题编号下采用“1.”、“(1)”、“①”。
 
-[Unreleased]: https://github.com/ustctug/ustcthesis/compare/v4.0.0-beta.7...HEAD
+[Unreleased]: https://github.com/ustctug/ustcthesis/compare/v4.0.0-beta.8...HEAD
+[4.0.0-beta.8]: https://github.com/ustctug/ustcthesis/compare/v4.0.0-beta.7...v4.0.0-beta.8
 [4.0.0-beta.7]: https://github.com/ustctug/ustcthesis/compare/v4.0.0-beta.6...v4.0.0-beta.7
 [4.0.0-beta.6]: https://github.com/ustctug/ustcthesis/compare/v4.0.0-beta.5...v4.0.0-beta.6
 [4.0.0-beta.5]: https://github.com/ustctug/ustcthesis/compare/v4.0.0-beta.4...v4.0.0-beta.5
