@@ -5,8 +5,10 @@
 
 为了识别信号中的位移喷注（displaced jets）与类标准模型（SM-like）喷注以及由束流背景（BIB）产生的伪喷注，训练了一个逐喷注（per-jet）的神经网络（NN）。
 该神经网络在隐藏区域（Hidden Sector）模型信号、标准模型多喷注（SM Multi-jets）以及 BIB 的混合样本上进行训练。
-神经网络的输入变量为与每个喷注相关的低级特征，涵盖整个 ATLAS 探测器的信息，包括径迹、量能器以及 μ 子谱仪相关信息。
+神经网络的输入变量为与喷注相关的低级特征，涵盖整个 ATLAS 探测器的信息，包括径迹、量能器以及 μ 子谱仪相关信息。
 训练前对每个变量进行了预处理，以确保神经网络训练的最优效果。
+
+该神经网络基于 ATLAS 喷注味标注（flavor tagging）合作组开发的 salt~\cite{ATL-PHYS-PUB-2022-027} 框架开发。
 NN 的主体结构选用基于 Transformer\cite{vaswani2023attentionneed} 的图神经网络（Graphic Neural Network, GNN）。
 训练采用 Pytorch\cite{paszke2019pytorchimperativestylehighperformance} 框架，
 并使用 Optuna\cite{akiba2019optunanextgenerationhyperparameteroptimization} 框架进行超参数（hyperparameter）优化。
@@ -40,8 +42,13 @@ NN 输入变量的概述如下（详见\autoref{cpm:NN_variables}）：
     \item 喷注本身的动量与空间位置。
 \end{itemize}
 
-训练前对所有输入变量进行预处理，调整变量分布使得各变量的均值为0、标准差为1，以加快训练收敛速度。
-预处理完成后，喷注输入至神经网络，网络输出对应于信号、QCD 或 BIB 的预测权值。
+训练前对所有输入变量（设为$x$）进行归一化预处理
+\begin{equation}
+    x' = \frac{x-\mu}{\sigma}
+\end{equation}
+其中$\mu$为该变量分布的均值、$\sigma$为标准差，
+使得处理后该变量分布的均值为0、标准差为1，以加快训练收敛速度。
+预处理完成后，喷注输入至神经网络，网络输出对应于信号、QCD 与 BIB 的预测权值。
 
 
 \section{网络结构}
@@ -53,13 +60,36 @@ NN 输入变量的概述如下（详见\autoref{cpm:NN_variables}）：
 \end{figure}
 
 逐喷注神经网络的结构如\autoref{fig:CalRatio_GNN_Architecture} 所示。
-来自径迹、量能器和 μ 子谱仪的输入变量被分别输入至用于初始化的子网络（initializer）中，得到维度相同的向量表示。
+多个来自径迹、量能器和 μ 子谱仪的输入变量被分别输入至用于初始化的子网络（initializer）中，得到维度相同的向量表示。
 每个向量表示作为全连接图神经网络的节点，根据节点之间的相关性计算注意力权重作为边值。
 然后利用 Transformer 机制更新节点表示得到下一层 GNN，最后一层 GNN 的所有节点经过池化（pooling）得到单向量特征表示。
 将该特征表示传入全连接层分类器，得到最终分类的预测值。
 
 基于 Transformer 的 GNN 兼顾了节点自身的特征提取（通过自注意力机制）和节点间的相关性（通过注意力边值），
-获得了更好的特征提取与表示能力，得到了相较于卷积神经网络（CNN）\cite{} 更好的性能（见\autoref{}）。
+获得了更好的特征提取与表示能力，得到了相较于卷积神经网络（CNN）\cite{ATLAS:2022zhj} 更好的性能（见\autoref{fig:ROC}）。
+
+
+\subsection{初始化网络}
+初始化网络的作用类似于大语言模型（LLM）中的嵌入层（embedding layer），
+用来将输入变量映射为高维向量表示。
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{input_concatenate.png}
+    \caption{输入变量拼接示意图}
+    \label{fig:input_concatenate}
+\end{figure}
+
+以径迹为例，由于模型的输入包括喷注和径迹两个层级的输入变量，它们各自的特征维度不同（$n_\text{jf}=3, n_\text{tf}=10$），
+而一个喷注中将选取 20 条径迹作为输入（$n_\text{tracks}=20$），所以需要将喷注输入变量复制后与每个径迹输入变量拼接，
+得到一个$n_\text{tracks} \times (n_\text{jf} + n_\text{tf})$维度的联合输入（combined input），如\autoref{fig:input_concatenate} 所示。
+对于拓扑集团（topo-cluster）和 μ 子段的拼接处理同理，它们的数量与特征维度为
+$n_\text{\topos} = 30, n_\text{tcf}=12, n_\text{muon-segments}=30, n_\text{msf}=6$。
+
+初始化网络为几个全连接层组成的多层感知器（MLP），负责得到各个输入变量初始化后的高维向量表示。
+每一类输入变量对应一个初始化网络，它们有着不同的输入层维度，对应不同类别输入的特征维度，
+但具有相同的隐藏层（hidden layer）维度和输出层维度。
+初始化网络具有相同的输出维度是为了在后续的 GNN 中将不同类别的输入变量视为同质的（homogeneous）。
 
 
 \section{训练方法}
@@ -69,3 +99,9 @@ NN 输入变量的概述如下（详见\autoref{cpm:NN_variables}）：
 \section{结果}
 最终训练效果可见图 12--14，分数越低表明被标记为该类别喷注的可能性越低，分数接近 1 则表示为该类别喷注的置信度越高。训练约经历 50 个 epoch（遍历完整训练集）收敛。有关神经网络输入建模的不确定性的系统评估流程见附录 B.9。
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{CalRatio_GNN_Architecture.pdf}
+    \caption{ROC}
+    \label{fig:ROC}
+\end{figure}
