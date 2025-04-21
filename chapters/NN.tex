@@ -115,7 +115,7 @@ ${V}$携带实际输出信息，根据注意力分数完成加权聚合。
 \begin{align}
     \mathrm{Attention}({Q},{K},{V})
     = \mathrm{softmax}\!\Bigl(\frac{{Q}\,{K}^\top}{\sqrt{d_k}}\Bigr)\,{V}
-    \cite{vaswani2023attentionneed}.
+    \cite{vaswani2023attentionneed}
 \end{align}
 其中，除以 $\sqrt{d_k}$ 用于缓解高维点积过大带来的梯度不稳定问题。
 
@@ -126,11 +126,11 @@ ${V}$携带实际输出信息，根据注意力分数完成加权聚合。
     K_i = KW_i^K,\quad
     V_i = VW_i^V,\quad
     W_i^Q,W_i^K,W_i^V\in\mathbb{R}^{d_{\text{model}}\times d_k},
-    \quad i=1,\dots,h.
+    \quad i=1,\dots,h
 \]
 在第 $i$ 个子空间上执行注意力计算
 \begin{align}
-    \mathrm{head}_i & = \mathrm{Attention}(Q_i, K_i, V_i).
+    \mathrm{head}_i & = \mathrm{Attention}(Q_i, K_i, V_i)
 \end{align}
 将所有头的输出拼接后，再通过线性变换映射回原始维度
 \begin{align}
@@ -146,6 +146,27 @@ GNN 更新后的节点值为
 \begin{equation}
     h'_i = \mathrm{MLP}\bigl(\mathrm{MultiHead}(Q,K,V)\bigr)_i + h_i,
     \quad i=1,\dots,n
+\end{equation}
+
+重复上述 GNN 加 MLP 的操作多次，得到最终的节点表示。
+
+
+\subsection{池化层}
+GNN 的输出为 $n$ 个节点的向量表示，池化层用于将 GNN 的输出节点表示通过加权和的方式转换为单个向量表示。
+池化层由一个线性层和一个 softmax 层组成，
+线性层的输入维度为 GNN 的输出向量维度，输出维度为 1，用于产生每个节点的初始权重$a_i$
+\begin{equation}
+    a_i = \mathrm{Linear}(h'_i), \quad i=1,\dots,n,
+    \quad a_i\in\mathbb{R}^1
+\end{equation}
+每个节点的初始权值经过 softmax 层后，得到每个节点的权值 $w_i$
+\begin{equation}
+    w_i = \frac{\exp(a_i)}{\sum_{j=1}^n \exp(a_j)}, \quad i=1,\dots,n
+\end{equation}
+池化层的输出 $p$ 为所有节点的加权和
+\begin{equation}
+    p = \sum_{i=1}^n w_i h'_i,
+    \quad p\in\mathbb{R}^{d_{\text{model}}}
 \end{equation}
 
 
