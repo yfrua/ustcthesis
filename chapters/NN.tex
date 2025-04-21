@@ -86,10 +86,67 @@ NN 输入变量的概述如下（详见\autoref{cpm:NN_variables}）：
 对于拓扑集团（topo-cluster）和 μ 子段的拼接处理同理，它们的数量与特征维度为
 $n_\text{\topos} = 30, n_\text{tcf}=12, n_\text{muon-segments}=30, n_\text{msf}=6$。
 
-初始化网络为几个全连接层组成的多层感知器（MLP），负责得到各个输入变量初始化后的高维向量表示。
+初始化网络为几个全连接层组成的多层感知器（Multi-layer perceptron, MLP），负责得到各个输入变量初始化后的高维向量表示。
 每一类输入变量对应一个初始化网络，它们有着不同的输入层维度，对应不同类别输入的特征维度，
 但具有相同的隐藏层（hidden layer）维度和输出层维度。
 初始化网络具有相同的输出维度是为了在后续的 GNN 中将不同类别的输入变量视为同质的（homogeneous）。
+
+
+\subsection{图神经网络}
+初始化后的特征表示被输入至基于 Transformer 的图神经网络（GNN）中，GNN 由多个 GNN 层组成。
+每一层 GNN 由两个子网络组成，分别为多头注意力（multi-head attention）网络和多层感知器（MLP）。
+其中多头注意力网络用于提取节点间的相关性，构成图结构的边值；多层感知器用于更新节点的特征表示。
+
+多头注意力网络通过在多个子空间并行执行缩放点积注意力，使模型能够从不同角度捕获序列依赖关系。
+在 Transformer 中，输入特征矩阵 ${X}\in\mathbb{R}^{n\times d_{\mathrm{model}}}$
+（$n$为 GNN 节点数，$d_{\mathrm{model}}$ 为初始化网络的输出维数）
+分别与三组可训练的投影矩阵相乘，生成查询（Query）、键（Key）和值（Value）矩阵
+\begin{align}
+    {Q} & = {X}\,W^Q, \quad W^Q \in\mathbb{R}^{d_{\mathrm{model}}\times d_k}, \\
+    {K} & = {X}\,W^K, \quad W^K \in\mathbb{R}^{d_{\mathrm{model}}\times d_k}, \\
+    {V} & = {X}\,W^V, \quad W^V \in\mathbb{R}^{d_{\mathrm{model}}\times d_v}.
+\end{align}
+其中${Q}$表示“我在寻找什么”，用于与所有键做相似度匹配；
+${K}$作为每个位置的“标签”，与查询计算注意力权重；
+${V}$携带实际输出信息，根据注意力分数完成加权聚合。
+节点 $i$ 的查询向量 ${Q}_i$ 与节点 $j$ 的键向量 ${K}_j$ 的点积 ${Q}_i \cdot {K}_j$
+为图结构里节点 $j$ 指向节点 $i$的边值，代表了第 $i$ 个查询与第 $j$ 个键之间的相似度，点积越大表示它们之间的相关性越强。
+矩阵形式的缩放点积注意力（scaled dot-product attention）为
+\begin{align}
+    \mathrm{Attention}({Q},{K},{V})
+    = \mathrm{softmax}\!\Bigl(\frac{{Q}\,{K}^\top}{\sqrt{d_k}}\Bigr)\,{V}
+    \cite{vaswani2023attentionneed}.
+\end{align}
+其中，除以 $\sqrt{d_k}$ 用于缓解高维点积过大带来的梯度不稳定问题。
+
+在缩放点积注意力的基础上引入多头注意力机制，使得 NN 可以在多个子空间并行执行注意力计算，以捕获不同类型的依赖关系。
+令头数为 $h$，并为每一头准备独立的线性投影
+\[
+    Q_i = QW_i^Q,\quad
+    K_i = KW_i^K,\quad
+    V_i = VW_i^V,\quad
+    W_i^Q,W_i^K,W_i^V\in\mathbb{R}^{d_{\text{model}}\times d_k},
+    \quad i=1,\dots,h.
+\]
+在第 $i$ 个子空间上执行注意力计算
+\begin{align}
+    \mathrm{head}_i & = \mathrm{Attention}(Q_i, K_i, V_i).
+\end{align}
+将所有头的输出拼接后，再通过线性变换映射回原始维度
+\begin{align}
+    \mathrm{MultiHead}(Q,K,V)
+     & = \mathrm{Concat}\bigl(\mathrm{head}_1,\dots,\mathrm{head}_h\bigr)\,W^O,
+    \quad W^O\in\mathbb{R}^{hd_v\times d_{\text{model}}}
+    \cite{uvadlc2025}.
+\end{align}
+
+在得到每个节点的多头注意力后，GNN 通过多层感知器（MLP）对节点进行更新。
+MLP 由两个线性变换和一个激活函数（ReLU）组成，以“线性变换-激活函数-线性变换”的顺序排列。
+GNN 更新后的节点值为
+\begin{equation}
+    h'_i = \mathrm{MLP}\bigl(\mathrm{MultiHead}(Q,K,V)\bigr)_i + h_i,
+    \quad i=1,\dots,n
+\end{equation}
 
 
 \section{训练方法}
