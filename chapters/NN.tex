@@ -114,7 +114,7 @@ ${V}$携带实际输出信息，根据注意力分数完成加权聚合。
 矩阵形式的缩放点积注意力（scaled dot-product attention）为
 \begin{align}
     \mathrm{Attention}({Q},{K},{V})
-    = \mathrm{softmax}\!\Bigl(\frac{{Q}\,{K}^\top}{\sqrt{d_k}}\Bigr)\,{V}
+    = \mathrm{softmax} \Bigl(\frac{{Q}\,{K}^\top}{\sqrt{d_k}}\Bigr)\,{V}
     \cite{vaswani2023attentionneed}
 \end{align}
 其中，除以 $\sqrt{d_k}$ 用于缓解高维点积过大带来的梯度不稳定问题。
@@ -172,16 +172,67 @@ GNN 的输出为 $n$ 个节点的向量表示，池化层用于将 GNN 的输出
 
 \subsection{分类器}
 池化层的输出 $p$ 被输入至分类器中，分类器为具有三个隐藏层的 MLP，输出维度为 3，
-对应于信号、QCD 和 BIB 的预测权值。
-
+经过 softmax 处理后对应于信号、QCD 和 BIB 的预测权值。
 
 
 \section{训练方法}
-此外，还在神经网络输出后添加了一个对抗网络（adversarial network），该网络用于在控制区中学习区分模拟喷注与真实数据喷注的特征，并将此反馈至主网络以抑制数据与 MC 的不一致性。这一对抗训练显著降低了数据与 MC 模型之间的差异，效果可见图 10 与图 11 中 BIB 分数的比较。网络结构图与对抗训练流程可见图 9。
+\begin{figure}[ht]
+    \centering
+    \subfloat[signal]{\includegraphics[width=0.33\textwidth]{GNN_sig_before.png}}
+    \hfill
+    \subfloat[QCD]{\includegraphics[width=0.33\textwidth]{GNN_QCD_before.png}}
+    \hfill
+    \subfloat[BIB]{\includegraphics[width=0.33\textwidth]{GNN_BIB_before.png}}
+    \caption{GNN 在信号区域的预测分数分布}
+    \label{fig:GNN_before}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \subfloat[CNN]{\includegraphics[width=0.49\textwidth]{CNN_CR.png}}
+    \hfill
+    \subfloat[GNN]{\includegraphics[width=0.49\textwidth]{GNN_CR_before.png}}
+    \caption{NN 在控制区域的 BIB 预测分数分布}
+    \label{fig:CR_BIB_before}
+\end{figure}
+
+NN 在信号区域的预测分数分布如\autoref{fig:GNN_before} 所示，
+可以看到信号、QCD 和 BIB 的预测分数分布均呈现出良好的分离。
+NN 在控制区域的 BIB 预测分数分布如\autoref{fig:CR_BIB_before} 所示，
+与文献\cite{ATLAS:2022zhj} 中加入对抗网络的 CNN 结果相比，
+GNN 的 BIB 预测分数分布在真实数据（data）和模拟数据（MC）上呈现较大差别。
+所以需要引入控制区域的数据和新的训练方法来改善这一问题。
+
+\begin{figure}[ht]
+    \includegraphics[width=\textwidth]{GNN_complement_workflow.png}
+    \caption{GNN 补充训练流程示意图}
+    \label{fig:GNN_complement_workflow}
+\end{figure}
+
+% 文献\cite{ATLAS:2022zhj} 提出的训练方法为：在神经网络输出后添加一个对抗网络（adversarial network），
+% 该网络用于在控制区中学习区分模拟喷注与真实数据喷注的特征，并将此反馈至主网络以抑制数据与 MC 的不一致性。
+由于控制区域的喷注样本均为 QCD 喷注，想要让神经网络无法区分模拟数据与真实数据，
+可以直接将控制区域的 QCD 喷注与信号区域的 QCD 喷注混合在一起进行训练。
+为了更好的灵活性，将控制区域数据的影响用一个随训练迭代次数变化的权重 $\lambda$ 控制，
+对应的损失函数为
+\begin{equation}
+    \text{loss} = \text{loss}(\text{signal region}) + \lambda \cdot \text{loss}(\text{control region})
+\end{equation}
+随迭代步数变化的权重因子为
+\begin{equation}
+    \lambda(x) = \begin{cases}
+        0,                                    & x < a        \\
+        \lambda_{\max} \cdot \frac{x-a}{b-a}, & a \leq x < b \\
+        \lambda_{\max},                       & x \geq b
+    \end{cases}
+\end{equation}
+其中$x \in [0, 1]$为当前迭代步数占预期总迭代步数的比例，$a$ 决定什么时候控制区域数据开始起作用，
+$b$ 决定什么时候控制区域数据的影响力达到最大值，$\lambda_{\max}$ 决定控制区域数据的最大影响力。
+$a$、$b$ 和 $\lambda_{\max}$ 为自由选取的超参数，仅需要满足$a<b$。
+加入控制区域数据集的 GNN 补充训练流程示意图如\autoref{fig:GNN_complement_workflow} 所示。
 
 
 \section{结果}
-最终训练效果可见图 12--14，分数越低表明被标记为该类别喷注的可能性越低，分数接近 1 则表示为该类别喷注的置信度越高。训练约经历 50 个 epoch（遍历完整训练集）收敛。有关神经网络输入建模的不确定性的系统评估流程见附录 B.9。
 
 \begin{figure}[ht]
     \centering
