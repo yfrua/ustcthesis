@@ -232,7 +232,39 @@ $a$、$b$ 和 $\lambda_{\max}$ 为自由选取的超参数，仅需要满足$a<b
 加入控制区域数据集的 GNN 补充训练流程示意图如\autoref{fig:GNN_complement_workflow} 所示。
 
 
-\section{结果}
+\section{训练结果}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{GNN_loss.pdf}
+    \caption{在训练集和验证集上的损失函数}
+    \label{fig:GNN_loss}
+    \figurenote{注：黑线未加入控制区域数据（$\lambda_{\max}=0$）的贡献，红线加入控制区域数据。}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{GNN_ks.pdf}
+    \caption{在控制区域验证集上的 KS 检验结果}
+    \label{fig:GNN_ks}
+    \figurenote{注：黑线未加入控制区域数据（$\lambda_{\max}=0$）的贡献，红线加入控制区域数据。}
+\end{figure}
+
+训练过程中损失函数的变化如\autoref{fig:GNN_loss} 所示，
+可以看到加入控制区域数据后，控制区域的损失函数有明显下降，但同时影响信号区域的损失函数。
+用 KS 检验（Kolmogorov-Smirnov test）评估真实数据与模拟数据的分布差异，
+其统计量$D$（KS statistic）为两者累计分布函数（CDF）的最大差异
+\begin{equation}
+    D = \max\limits_{x} |F_1(x) - F_2(x)|
+\end{equation}
+统计量的值越小表示两者分布越接近。
+$p$值（$p$-value）为 $D$ 统计量对应的概率，
+$p$ 值越大表示两者分布越接近。
+KS 检验的结果如\autoref{fig:GNN_ks} 所示，
+可以看到加入控制区域数据后，在 QCD 类别与 BIB 类别的 KS 检验结果均有明显改善，
+说明 GNN 在控制区域的性能有了显著提升。
+
+为对数坐标与非对数坐标下的控制区域 BIB 预测分数分布，
+可以看到加入控制区域数据参与训练后，GNN 的 BIB 预测分数分布的一致性有了明显改善。
 
 \begin{figure}[ht]
     \centering
@@ -240,3 +272,7 @@ $a$、$b$ 和 $\lambda_{\max}$ 为自由选取的超参数，仅需要满足$a<b
     \caption{ROC}
     \label{fig:ROC}
 \end{figure}
+
+加入控制区域数据集前后的 GNN 和文献\cite{ATLAS:2022zhj} 中的 CNN 的 ROC 曲线如\autoref{fig:ROC} 所示，
+可以看到加入控制区域数据在一定程度上影响了 GNN 在信号区域的性能，
+但相较于文献\cite{ATLAS:2022zhj} 中的 CNN，GNN 的性能仍然有明显提升。
