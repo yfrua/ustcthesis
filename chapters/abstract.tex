@@ -1,27 +1,28 @@
 % !TeX root = ../main.tex
 
 \ustcsetup{
-  keywords  = {长寿命粒子, 量能器, 图神经网络, CalRatio, 提升决策树},
-  keywords* = {Long‐Lived Particle, Calorimeter, Graph Neural Network, CalRatio, Boosted Decision Tree},
+  keywords  = {质子对撞, 长寿命粒子, 量能器, 图神经网络},
+  keywords* = {Proton-Proton Scattering, Long‐Lived Particle, Calorimeter, Graphic Neural Network},
 }
 
 \begin{abstract}
-  本论文基于 ATLAS 探测器的量能器（Calorimeter）信息，
-  采用深度神经网络方法对长寿命粒子（Long‐Lived Particle, LLP）衰变产生的位移喷注（displaced jets）进行信号–背景分类研究。
-  首先，利用 CalRatio 触发器与喷注预选策略，提取含有高比例强子量能器能量沉积且径迹稀疏的候选喷注。
-  随后，设计了一种以图神经网络（Graph Neural Network, GNN）为核心的逐喷注分类器，
-  充分融合喷注内部拓扑集团（topo‐clusters）、径迹与 μ子系统信息。
-  再以逐喷注分类器输出、事件级别物理量（如∑ΔR<sub>min</sub>(jet,tracks)与 HT、meff）为输入，
-  训练了两套针对高/低 $p_{T}$ 信号的逐事件提升决策树（Boosted Decision Tree, BDT）。
-  在 2015–2018 年 139 fb⁻¹ 数据集上验证，该方法相较于传统一维卷积+LSTM 主网络，
-  使信号识别效率在相同背景误识率下提升约 25\%–35\%，同时显著降低了束流背景（BIB）与 pileup 敏感性。
-  基于 ABCD 数据驱动法对信号区进行背景估计，并对多种 LLP 模型（Hidden‐Sector、ALP、暗光子）进行了排除限值设定，
-  拓展了对平均衰变长度在厘米至几十米区间 LLP 的探测灵敏度。
-  实验结果表明，引入 GNN 与多阶段分类策略显著提升了对长寿命粒子的搜索能力。
+  本论文基于 ATLAS 探测器量能器信息，提出并实现了一种多阶段神经网络分类架构，用以识别由长寿命粒子衰变产生的位移喷注。
+  选用的数据通过 CalRatio 触发与喷注预选，以选取具有显著强子量能器能量沉积比例且喷注宽度窄的候选事件。
+  引入图神经网络对喷注产生的径迹、量能器、 μ 子谱仪信息进行深度特征提取，实现了对信号与背景的有效区分。
+  同时网络训练过程中引入控制区喷注信息，利用该补充信息减小了真实数据与模拟模拟间的差异。
+  该方法相较于传统一维卷积加上 LSTM 网络，将背景区分能力提升了一倍，同时有效减小了在真实数据与模拟数据之间的错误建模。
 
 \end{abstract}
 
 \begin{abstract*}
-  This thesis presents a search for long‐lived particles (LLPs) decaying inside the ATLAS calorimeter using deep neural network techniques. Events are first selected by a dedicated CalRatio trigger and jet preselection targeting track‐sparse, high hadronic‐energy deposit jets. A per‐jet classifier based on a Graph Neural Network (GNN) is developed to exploit the full topology of calorimeter topo‐clusters, inner‐detector tracks, and muon‐spectrometer information. Its outputs, together with global event variables such as $\sum\Delta R_{\min}(\text{jet},\text{tracks})$, $H_{T}$, and $m_{\text{eff}}$, serve as inputs to two separate event‐level Boosted Decision Trees (BDTs) optimized for high‐ and low‐$p_{T}$ signal scenarios. On the 139 fb$^{-1}$ of $pp$ collision data at $\sqrt{s}=13$ TeV collected from 2015 to 2018, this multi‐stage approach achieves a 25\%–35\% improvement in signal efficiency at fixed background rejection compared to the baseline 1D‐CNN + LSTM tagger, and substantially suppresses beam‐induced background and pileup effects. Backgrounds in the signal region are estimated with an ABCD data‐driven method, and exclusion limits are set on various LLP benchmark models (Hidden‐Sector scalars, axion‐like particles, dark photons) for proper decay lengths from centimeters to tens of meters. The results demonstrate that the integration of GNNs and multi‐stage classification significantly enhances the sensitivity of LLP searches in the ATLAS calorimeter.
-
+  This thesis proposes and implements a multi-stage neural network classifier based on calorimeter information from the ATLAS detector,
+  aiming to identify displaced jets originating from the decays of long-lived particles.
+  Candidate events were selected using the CalRatio trigger and jet preselection,
+  targeting those with a large hadronic calorimeter deposited energy fraction and narrow jet width.
+  A graphic neural network was introduced to perform deep feature extraction from track, calorimeter,
+  and muon spectrometer information associated with the jets, enabling effective discrimination between signal and background.
+  During network training, jet information from control regions was incorporated
+  to reduce discrepancies between real and simulated data using this complementary input.
+  Compared with a traditional architecture combining one-dimensional convolution and LSTM networks,
+  this method doubled the background rejection and significantly mitigated the mismodeling between data and simulation.
 \end{abstract*}

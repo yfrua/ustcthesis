@@ -8,7 +8,7 @@
 神经网络的输入变量为与喷注相关的低级特征，涵盖整个 ATLAS 探测器的信息，包括径迹、量能器以及 μ 子谱仪相关信息。
 训练前对每个变量进行了预处理，以确保神经网络训练的最优效果。
 
-该神经网络基于 ATLAS 喷注味标注（flavor tagging）合作组开发的 salt~\cite{ATL-PHYS-PUB-2022-027} 框架开发。
+该神经网络基于 ATLAS 喷注味标注（flavor tagging）合作组开发的 salt\cite{ATL-PHYS-PUB-2022-027} 框架开发。
 NN 的主体结构选用基于 Transformer\cite{vaswani2023attentionneed} 的图神经网络（Graphic Neural Network, GNN）。
 训练采用 Pytorch\cite{paszke2019pytorchimperativestylehighperformance} 框架，
 并使用 Optuna\cite{akiba2019optunanextgenerationhyperparameteroptimization} 框架进行超参数（hyperparameter）优化。
