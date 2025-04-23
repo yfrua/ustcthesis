@@ -209,8 +209,10 @@ GNN 的 BIB 预测分数分布在真实数据（data）和模拟数据（MC）�
     \label{fig:GNN_complement_workflow}
 \end{figure}
 
-% 文献\cite{ATLAS:2022zhj} 提出的训练方法为：在神经网络输出后添加一个对抗网络（adversarial network），
-% 该网络用于在控制区中学习区分模拟喷注与真实数据喷注的特征，并将此反馈至主网络以抑制数据与 MC 的不一致性。
+文献\cite{ATLAS:2022zhj} 提出的训练方法为：在神经网络输出后添加一个对抗网络（adversarial network），
+该网络用于在控制区中学习区分模拟喷注与真实数据喷注的特征，并将此反馈至主网络以抑制数据与 MC 的不一致性。
+但该方法存在对抗网络训练不稳定的问题，本论文尝试用另一种方法来改善这一问题。
+
 由于控制区域的喷注样本均为 QCD 喷注，想要让神经网络无法区分模拟数据与真实数据，
 可以直接将控制区域的 QCD 喷注与信号区域的 QCD 喷注混合在一起进行训练。
 为了更好的灵活性，将控制区域数据的影响用一个随训练迭代次数变化的权重 $\lambda$ 控制，
@@ -218,7 +220,7 @@ GNN 的 BIB 预测分数分布在真实数据（data）和模拟数据（MC）�
 \begin{equation}
     \text{loss} = \text{loss}(\text{signal region}) + \lambda \cdot \text{loss}(\text{control region})
 \end{equation}
-随迭代步数变化的权重因子为
+随迭代步数变化的权重因子
 \begin{equation}
     \lambda(x) = \begin{cases}
         0,                                    & x < a        \\
@@ -236,7 +238,7 @@ $a$、$b$ 和 $\lambda_{\max}$ 为自由选取的超参数，仅需要满足$a<b
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{GNN_loss.pdf}
-    \caption{在训练集和验证集上的损失函数}
+    \caption{在训练集和验证集上的损失函数随代数的变化}
     \label{fig:GNN_loss}
     \figurenote{注：黑线未加入控制区域数据（$\lambda_{\max}=0$）的贡献，红线加入控制区域数据。}
 \end{figure}
@@ -244,7 +246,7 @@ $a$、$b$ 和 $\lambda_{\max}$ 为自由选取的超参数，仅需要满足$a<b
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{GNN_ks.pdf}
-    \caption{在控制区域验证集上的 KS 检验结果}
+    \caption{在控制区域验证集上的 KS 检验结果随代数的变化}
     \label{fig:GNN_ks}
     \figurenote{注：黑线未加入控制区域数据（$\lambda_{\max}=0$）的贡献，红线加入控制区域数据。}
 \end{figure}
@@ -257,22 +259,31 @@ $a$、$b$ 和 $\lambda_{\max}$ 为自由选取的超参数，仅需要满足$a<b
     D = \max\limits_{x} |F_1(x) - F_2(x)|
 \end{equation}
 统计量的值越小表示两者分布越接近。
-$p$值（$p$-value）为 $D$ 统计量对应的概率，
-$p$ 值越大表示两者分布越接近。
+$p$值（$p$-value）为在原假设（两个样本取自同一分布）成立时，统计量 $D$ 大于或等于观测值 $D_{\text{obs}}$ 的概率，
+$p$ 值大于或等于某个显著性水平 $\alpha$ （通常取0.05）时，则不能拒绝原假设，说明分布差异可能由随机误差引起。
 KS 检验的结果如\autoref{fig:GNN_ks} 所示，
 可以看到加入控制区域数据后，在 QCD 类别与 BIB 类别的 KS 检验结果均有明显改善，
-说明 GNN 在控制区域的性能有了显著提升。
+$p$值达到了无法拒绝原假设的显著性水平，说明 GNN 在控制区域的性能有了显著提升。
 
-为对数坐标与非对数坐标下的控制区域 BIB 预测分数分布，
+\begin{figure}[ht]
+    \centering
+    \subfloat[加入控制区域数据集前]{\includegraphics[width=0.49\textwidth]{GNN_ks_before_log.png}}
+    \hfill
+    \subfloat[加入控制区域数据集后]{\includegraphics[width=0.49\textwidth]{GNN_ks_after_log.png}}
+    \caption{GNN 控制区域 BIB 预测分数分布}
+    \label{fig:GNN_ks_compare}
+\end{figure}
+
+\autoref{fig:GNN_ks_compare} 为加入控制区域数据集前后 GNN 在对数坐标与非对数坐标下的控制区域 BIB 预测分数分布，
 可以看到加入控制区域数据参与训练后，GNN 的 BIB 预测分数分布的一致性有了明显改善。
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{CalRatio_GNN_Architecture.pdf}
-    \caption{ROC}
+    \includegraphics[width=0.7\textwidth]{ROC.jpg}
+    \caption{NN 在信号区域的 ROC 曲线}
     \label{fig:ROC}
 \end{figure}
 
 加入控制区域数据集前后的 GNN 和文献\cite{ATLAS:2022zhj} 中的 CNN 的 ROC 曲线如\autoref{fig:ROC} 所示，
-可以看到加入控制区域数据在一定程度上影响了 GNN 在信号区域的性能，
-但相较于文献\cite{ATLAS:2022zhj} 中的 CNN，GNN 的性能仍然有明显提升。
+可以看到加入控制区域数据在一定程度上影响了 GNN 在信号区域的背景区分能力，
+但相较于文献\cite{ATLAS:2022zhj} 中的 CNN，GNN 的性能仍然有大约两倍的提升。
