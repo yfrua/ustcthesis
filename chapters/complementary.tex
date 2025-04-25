@@ -67,37 +67,37 @@
 \end{table}
 
 
-\chapter{BDT 的输入变量}
-\label{cpm:BDT}
+% \chapter{BDT 的输入变量}
+% \label{cpm:BDT}
 
-以下是用于逐事件 BDT 训练的输入变量列表：
+% 以下是用于逐事件 BDT 训练的输入变量列表：
 
-\begin{enumerate}
-      \item 每个 CalRatio 候选信号喷注（$\text{jet}^{\text{sig}1}$、$\text{jet}^{\text{sig}2}$）
-            与 BIB 候选喷注（$\text{jet}^{\text{BIB}1}$、$\text{jet}^{\text{BIB}2}$）
-            的喷注 NN 信号得分与 BIB 得分，
+% \begin{enumerate}
+%       \item 每个 CalRatio 候选信号喷注（$\text{jet}^{\text{sig}1}$、$\text{jet}^{\text{sig}2}$）
+%             与 BIB 候选喷注（$\text{jet}^{\text{BIB}1}$、$\text{jet}^{\text{BIB}2}$）
+%             的喷注 NN 信号得分与 BIB 得分，
 
-      \item CalRatio 喷注候选（$\text{jet}^{\text{sig}1}$、$\text{jet}^{\text{sig}2}$）的 \pt ；
+%       \item CalRatio 喷注候选（$\text{jet}^{\text{sig}1}$、$\text{jet}^{\text{sig}2}$）的 \pt ；
 
-      \item $H_T^{\text{miss}} / H_T$，其中 $H_T$ 是所有 $p_T > 30$\,\GeV 且 $|\eta| < 3.2$ 的喷注的 \pt 的标量和，
-            $H_T^{\text{miss}}$ 是这些喷注 \pt 的矢量和的负值的模长；
+%       \item $H_T^{\text{miss}} / H_T$，其中 $H_T$ 是所有 $p_T > 30$\,\GeV 且 $|\eta| < 3.2$ 的喷注的 \pt 的标量和，
+%             $H_T^{\text{miss}}$ 是这些喷注 \pt 的矢量和的负值的模长；
 
-      \item $M_{\text{eff}} = H_T + H_T^{\text{miss}} $；
+%       \item $M_{\text{eff}} = H_T + H_T^{\text{miss}} $；
 
-      \item $\Delta \phi (\text{jet}^{\text{sig}1}, \text{jet}^{\text{sig}2})$ 和
-            $\Delta R(\text{jet}^{\text{sig}1}, \text{jet}^{\text{sig}2})$，
-            即事件中两个候选信号喷注之间的角距离；
+%       \item $\Delta \phi (\text{jet}^{\text{sig}1}, \text{jet}^{\text{sig}2})$ 和
+%             $\Delta R(\text{jet}^{\text{sig}1}, \text{jet}^{\text{sig}2})$，
+%             即事件中两个候选信号喷注之间的角距离；
 
-      \item 所有事件中 clean 喷注的信号 NN 权重的均值。
-            这些变量与列表中第一项所述的每喷注信号 NN 权重相关，但它们在以下情况下提供了额外的判别能力：
-            当一个（或两个） LLP 衰变被重建为两个分辨的喷注时，可能会出现第三个（甚至第四个）具有较高信号 NN 权重的喷注。
-            这一点在高质量样本中尤其重要，因为这些附加喷注的 \pt 足够高，可以被归类为 clean 喷注。
-            而在 BIB 样本中出现此类情形的概率则要低得多。均值的计算方式利用了第三和第四个类信号喷注的信息，而无需对每个事件中 clean 喷注的数量作出特定要求。
+%       \item 所有事件中 clean 喷注的信号 NN 权重的均值。
+%             这些变量与列表中第一项所述的每喷注信号 NN 权重相关，但它们在以下情况下提供了额外的判别能力：
+%             当一个（或两个） LLP 衰变被重建为两个分辨的喷注时，可能会出现第三个（甚至第四个）具有较高信号 NN 权重的喷注。
+%             这一点在高质量样本中尤其重要，因为这些附加喷注的 \pt 足够高，可以被归类为 clean 喷注。
+%             而在 BIB 样本中出现此类情形的概率则要低得多。均值的计算方式利用了第三和第四个类信号喷注的信息，而无需对每个事件中 clean 喷注的数量作出特定要求。
 
-      \item 所有事件中 clean 喷注的 BIB NN 权重的均值。
-            上一项中关于使用第三和第四个类信号喷注的讨论，同样适用于这些变量。
-            在这种情况下，BIB 样本比任何一个信号样本更有可能出现第三或第四个具有较高 BIB NN 权重的 clean 喷注。
-\end{enumerate}
+%       \item 所有事件中 clean 喷注的 BIB NN 权重的均值。
+%             上一项中关于使用第三和第四个类信号喷注的讨论，同样适用于这些变量。
+%             在这种情况下，BIB 样本比任何一个信号样本更有可能出现第三或第四个具有较高 BIB NN 权重的 clean 喷注。
+% \end{enumerate}
 
 
 \chapter{神经网络的细节}

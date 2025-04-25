@@ -3,22 +3,21 @@
 \chapter{神经网络}
 \label{chap:NN}
 
-为了识别信号中的位移喷注（displaced jets）与类标准模型（SM-like）喷注以及由束流背景（BIB）产生的伪喷注，训练了一个逐喷注（per-jet）的神经网络（NN）。
+为了识别信号中的位移喷注（displaced jets）与类标准模型（SM-like）喷注以及由束流背景（BIB）产生的伪喷注，训练了一个逐喷注（per-jet）的神经网络（神经网络）。
 该神经网络在隐藏区域（Hidden Sector）模型信号、标准模型多喷注（SM Multi-jets）以及 BIB 的混合样本上进行训练。
 神经网络的输入变量为与喷注相关的低级特征，涵盖整个 ATLAS 探测器的信息，包括径迹、量能器以及 μ 子谱仪相关信息。
 训练前对每个变量进行了预处理，以确保神经网络训练的最优效果。
 
-该神经网络基于 ATLAS 喷注味标注（flavor tagging）合作组开发的 salt\cite{ATL-PHYS-PUB-2022-027} 框架开发。
-NN 的主体结构选用基于 Transformer\cite{vaswani2023attentionneed} 的图神经网络（Graphic Neural Network, GNN）。
-训练采用 Pytorch\cite{paszke2019pytorchimperativestylehighperformance} 框架，
-并使用 Optuna\cite{akiba2019optunanextgenerationhyperparameteroptimization} 框架进行超参数（hyperparameter）优化。
+该神经网络基于 ATLAS 喷注味标注（flavor tagging）合作组开发的 salt 框架\cite{ATL-PHYS-PUB-2022-027}开发。
+NN的主体结构选用基于 Transformer\cite{vaswani2023attentionneed}的图神经网络（Graphic Neural Network, GNN）。
+训练采用 Pytorch 框架\cite{paszke2019pytorchimperativestylehighperformance}，
+并使用 Optuna 框架\cite{akiba2019optunanextgenerationhyperparameteroptimization}进行超参数（hyperparameter）优化。
 训练结果经过评估以排除过拟合现象，并在所用信号样本上相较于此前的网络性能有所提升。
 
 训练使用的信号区域（signal region）数据集包括来自探测器的 BIB 数据（见\autoref{sec:detector_data}）
 和信号与标准模型多喷注（简记为 QCD）模拟数据（见\autoref{sec:MC}）。
 训练中使用的喷注均为 clean 喷注，其定义见\autoref{sec:jet_preselection}。
-信号喷注为隐藏区域（Hidden Sector）模型中由一系列不同的$m_\Phi$、$m_s$、$c\tau$参数生成的模拟数据，
-其中 $m_\Phi$ 为中介粒子质量，$m_s$ 为 LLP 的质量，$c\tau$ 为 LLP 衰变长度。
+信号喷注为隐藏区域（Hidden Sector）模型中由一系列不同的中介粒子质量$m_\Phi$、LLP 的质量$m_s$、LLP 衰变长度$c\tau$参数生成的模拟数据。
 训练阶段仅使用事件编号为奇数的信号事件，偶数编号的事件则用于后续分析流程，以避免因数据重叠而引发的偏差，确保最终结果的客观性和可信度。
 对于 QCD 喷注，训练样本来自 JZ2W、JZ3W 和 JZ4W 样本，
 这些样本覆盖了 \pt 范围为 60 GeV 至 800 GeV 的双喷注（dijet）事件，叠加的 pileup 喷注将该范围的下界扩展至 40 GeV。
@@ -27,13 +26,13 @@ BIB 喷注训练样本选取触发 HLT CalRatio 触发器但未通过 HLT BIB �
 
 为了进行补充训练以及计算本分析中使用的机器学习方法的系统不确定性，需要在数据和 MC 模拟中定义一个控制区域（control region）。
 控制区域中所选样本具有统一的筛选条件（见\autoref{cpm:CR_jet_selection}），以确保喷注来源于相同的产生机制，并覆盖相同的运动学范围。
-控制区域数据包括探测器数据和 QCD 模拟数据。
+控制区域数据包括探测器真实数据和 QCD 模拟数据。
 
 信号区域上定义的主数据集总计有 2.09M jets，其中 766k jets 属于信号集、660k jets 属于 QCD 集、660k jets 属于 BIB 集。
-控制区域上定义的补充数据集总计有 449k jets，其中 223k jets 属于 MC 模拟、226k jets 属于探测器。
+控制区域上定义的补充数据集总计有 449k jets，其中 223k jets 属于 MC 模拟、226k jets 属于真实数据。
 
 由于信号与背景喷注可通过 ATLAS 探测器的各个子系统加以刻画，因此神经网络也应当充分利用来自各子探测器的信息。
-NN 输入变量的概述如下（详见\autoref{cpm:NN_variables}）：
+神经网络输入变量的概述如下（详见\autoref{cpm:NN_variables}）：
 \begin{itemize}
     \item 位于喷注轴线 $\Delta R < 0.2$ 范围内的径迹的空间位置、动量、碰撞参数（impact parameter）和径迹拟合质量参量（quality variables）；
     \item 与喷注相关联的拓扑集团（topo-clusters） 的动量、时间信息和空间位置；
@@ -48,7 +47,7 @@ NN 输入变量的概述如下（详见\autoref{cpm:NN_variables}）：
 \end{equation}
 其中$\mu$为该变量分布的均值、$\sigma$为标准差，
 使得处理后该变量分布的均值为0、标准差为1，以加快训练收敛速度。
-预处理完成后，喷注输入至神经网络，网络输出对应于信号、QCD 与 BIB 的预测权值。
+预处理完成后，喷注输入至神经网络，网络输出对应于信号、QCD 与 BIB 的预测分数。
 
 
 \section{网络结构}
@@ -70,8 +69,7 @@ NN 输入变量的概述如下（详见\autoref{cpm:NN_variables}）：
 
 
 \subsection{初始化网络}
-初始化网络的作用类似于大语言模型（LLM）中的嵌入层（embedding layer），
-用来将输入变量映射为高维向量表示。
+初始化网络的作用类似于大语言模型（LLM）中的词嵌入层（embedding layer），用来将输入变量映射为高维向量表示。
 
 \begin{figure}[ht]
     \centering
@@ -80,11 +78,11 @@ NN 输入变量的概述如下（详见\autoref{cpm:NN_variables}）：
     \label{fig:input_concatenate}
 \end{figure}
 
-以径迹为例，由于模型的输入包括喷注和径迹两个层级的输入变量，它们各自的特征维度不同（$n_\text{jf}=3, n_\text{tf}=10$），
+以径迹为例，由于模型的输入包括喷注和径迹两个层级的输入变量，它们各自的特征维度不同（$n_\text{jf}=3, \, n_\text{tf}=10$），
 而一个喷注中将选取 20 条径迹作为输入（$n_\text{tracks}=20$），所以需要将喷注输入变量复制后与每个径迹输入变量拼接，
 得到一个$n_\text{tracks} \times (n_\text{jf} + n_\text{tf})$维度的联合输入（combined input），如\autoref{fig:input_concatenate} 所示。
 对于拓扑集团（topo-cluster）和 μ 子段的拼接处理同理，它们的数量与特征维度为
-$n_\text{\topos} = 30, n_\text{tcf}=12, n_\text{muon-segments}=30, n_\text{msf}=6$。
+$n_\text{\topos} = 30, \, n_\text{tcf}=12, \, n_\text{muon-segments}=30, \, n_\text{msf}=6$。
 
 初始化网络为几个全连接层组成的多层感知器（Multi-layer perceptron, MLP），负责得到各个输入变量初始化后的高维向量表示。
 每一类输入变量对应一个初始化网络，它们有着不同的输入层维度，对应不同类别输入的特征维度，
@@ -98,13 +96,13 @@ $n_\text{\topos} = 30, n_\text{tcf}=12, n_\text{muon-segments}=30, n_\text{msf}=
 其中多头注意力网络用于提取节点间的相关性，构成图结构的边值；多层感知器用于更新节点的特征表示。
 
 多头注意力网络通过在多个子空间并行执行缩放点积注意力，使模型能够从不同角度捕获序列依赖关系。
-在 Transformer 中，输入特征矩阵 ${X}\in\mathbb{R}^{n\times d_{\mathrm{model}}}$
-（$n$为 GNN 节点数，$d_{\mathrm{model}}$ 为初始化网络的输出维数）
+在 Transformer 中，输入特征矩阵 ${X}\in\mathbb{R}^{n\times d_{\mathrm{embed}}}$
+（$n$为 GNN 节点数，$d_{\mathrm{embed}}$ 为初始化网络的输出维数）
 分别与三组可训练的投影矩阵相乘，生成查询（Query）、键（Key）和值（Value）矩阵
 \begin{align}
-    {Q} & = {X}\,W^Q, \quad W^Q \in\mathbb{R}^{d_{\mathrm{model}}\times d_k}, \\
-    {K} & = {X}\,W^K, \quad W^K \in\mathbb{R}^{d_{\mathrm{model}}\times d_k}, \\
-    {V} & = {X}\,W^V, \quad W^V \in\mathbb{R}^{d_{\mathrm{model}}\times d_v}.
+    {Q} & = {X}\,W^Q, \quad W^Q \in\mathbb{R}^{d_{\mathrm{embed}}\times d_k}, \\
+    {K} & = {X}\,W^K, \quad W^K \in\mathbb{R}^{d_{\mathrm{embed}}\times d_k}, \\
+    {V} & = {X}\,W^V, \quad W^V \in\mathbb{R}^{d_{\mathrm{embed}}\times d_v}.
 \end{align}
 其中${Q}$表示“我在寻找什么”，用于与所有键做相似度匹配；
 ${K}$作为每个位置的“标签”，与查询计算注意力权重；
@@ -119,20 +117,21 @@ ${V}$携带实际输出信息，根据注意力分数完成加权聚合。
 \end{align}
 其中，除以 $\sqrt{d_k}$ 用于缓解高维点积过大带来的梯度不稳定问题。
 
-在缩放点积注意力的基础上引入多头注意力机制，使得 NN 可以在多个子空间并行执行注意力计算，以捕获不同类型的依赖关系。
+在缩放点积注意力的基础上引入多头注意力机制，使得神经网络可以在多个子空间并行执行注意力计算，以捕获不同类型的依赖关系。
 令头数为 $h$，并为每一头准备独立的线性投影
-\[
-    Q_i = QW_i^Q,\quad
-    K_i = KW_i^K,\quad
-    V_i = VW_i^V,\quad
-    W_i^Q,W_i^K,W_i^V\in\mathbb{R}^{d_{\text{model}}\times d_k},
+\begin{align}
+    Q_i = X W_i^Q,\quad
+    K_i = X W_i^K,\quad
+    V_i = X W_i^V,\quad \\
+    W_i^Q, W_i^K \in\mathbb{R}^{d_{\text{embed}}\times d_k}, \quad
+    W_i^V \in \mathbb{R}^{d_{\text{embed}}\times d_v},
     \quad i=1,\dots,h
-\]
+\end{align}
 在第 $i$ 个子空间上执行注意力计算
 \begin{align}
     \mathrm{head}_i & = \mathrm{Attention}(Q_i, K_i, V_i)
 \end{align}
-将所有头的输出拼接后，再通过线性变换映射回原始维度
+将所有头的输出拼接后，再通过线性变换映射到期望的模型维度
 \begin{align}
     \mathrm{MultiHead}(Q,K,V)
      & = \mathrm{Concat}\bigl(\mathrm{head}_1,\dots,\mathrm{head}_h\bigr)\,W^O,
@@ -152,9 +151,9 @@ GNN 更新后的节点值为
 
 
 \subsection{池化层}
-GNN 的输出为 $n$ 个节点的向量表示，池化层用于将 GNN 的输出节点表示通过加权和的方式转换为单个向量表示。
+GNN 的输出为 $n$ 个节点对应的 $n$ 个向量表示，池化层用于将 GNN 的输出节点表示通过加权和的方式转换为单个向量表示。
 池化层由一个线性层和一个 softmax 层组成，
-线性层的输入维度为 GNN 的输出向量维度，输出维度为 1，用于产生每个节点的初始权重$a_i$
+线性层的输入维度为 GNN 的输出向量维度$d_{\text{model}}$，输出维度为 1，用于产生每个节点的初始权重$a_i$
 \begin{equation}
     a_i = \mathrm{Linear}(h'_i), \quad i=1,\dots,n,
     \quad a_i\in\mathbb{R}^1
@@ -172,7 +171,7 @@ GNN 的输出为 $n$ 个节点的向量表示，池化层用于将 GNN 的输出
 
 \subsection{分类器}
 池化层的输出 $p$ 被输入至分类器中，分类器为具有三个隐藏层的 MLP，输出维度为 3，
-经过 softmax 处理后对应于信号、QCD 和 BIB 的预测权值。
+经过 softmax 处理后对应于信号、QCD 和 BIB 的预测分数。
 
 
 \section{训练方法}
@@ -196,9 +195,9 @@ GNN 的输出为 $n$ 个节点的向量表示，池化层用于将 GNN 的输出
     \label{fig:CR_BIB_before}
 \end{figure}
 
-NN 在信号区域的预测分数分布如\autoref{fig:GNN_before} 所示，
+神经网络在信号区域的预测分数分布如\autoref{fig:GNN_before} 所示，
 可以看到信号、QCD 和 BIB 的预测分数分布均呈现出良好的分离。
-NN 在控制区域的 BIB 预测分数分布如\autoref{fig:CR_BIB_before} 所示，
+神经网络在控制区域的 BIB 预测分数分布如\autoref{fig:CR_BIB_before} 所示，
 与文献\cite{ATLAS:2022zhj} 中加入对抗网络的 CNN 结果相比，
 GNN 的 BIB 预测分数分布在真实数据（data）和模拟数据（MC）上呈现较大差别。
 所以需要引入控制区域的数据和新的训练方法来改善这一问题。
@@ -274,7 +273,7 @@ $p$值达到了无法拒绝原假设的显著性水平，说明 GNN 在控制区
     \label{fig:GNN_ks_compare}
 \end{figure}
 
-\autoref{fig:GNN_ks_compare} 为加入控制区域数据集前后 GNN 在对数坐标与非对数坐标下的控制区域 BIB 预测分数分布，
+\autoref{fig:GNN_ks_compare} 为加入控制区域数据集前后 GNN 在对数坐标下的控制区域 BIB 预测分数分布，
 可以看到加入控制区域数据参与训练后，GNN 的 BIB 预测分数分布的一致性有了明显改善。
 
 \begin{figure}[ht]
