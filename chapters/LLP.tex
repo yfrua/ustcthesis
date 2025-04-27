@@ -5,7 +5,7 @@
 \section{物理背景}
 长寿命粒子（Long Lived Particle, LLP）是指在探测器内衰变的时间尺度远大于标准模型粒子的寿命的粒子，它的存在是许多新物理模型的预言。
 LLP长寿命的物理机制一般是由于它的衰变被禁戒或是被压低，
-其中压低可能出于衰变末态粒子的近退简并质量态（nearly-degenerate mass states）或是沟通LLP与末态粒子的相互作用强度微弱。
+其中压低可能出于衰变末态粒子的近退简并质量态（nearly-degenerate mass states）或是 LLP 与末态粒子的耦合很小。
 由于LLP具有较长的寿命、与标准模型粒子仅存在微弱的相互作用，因此它常被认为是暗物质的候选者。
 
 由于LLP能在衰变前行进一定的宏观距离，其衰变产物不会从原始碰撞点（Primary Vertices）产生，
@@ -23,7 +23,7 @@ LLP长寿命的物理机制一般是由于它的衰变被禁戒或是被压低�
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{CalRatioDistribution.png}
-    \caption{CalRatio分布图}
+    \caption{CalRatio分布图\cite{ATLAS:2022zhj}}
     \label{fig:CalRatioDistribution}
     \figurenote{
         左图：探测器数据、BIB数据与五个不同的信号数据的$\log_{10}\text{CalRatio}$分布图，
@@ -41,18 +41,27 @@ LLP长寿命的物理机制一般是由于它的衰变被禁戒或是被压低�
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.85\textwidth]{DR_jet_width.png}
-    \caption{$\Delta R_{\min}$与喷注宽度的分布图}
+    \caption{$\Delta R_{\min}$与喷注宽度的分布图\cite{ATLAS:2022zhj}}
     \label{fig:DR_jet_width}
     \figurenote{
         左图：喷注中$p_T>\SI{2}{GeV}$的径迹距离喷注轴线方向的最小角距离的分布图，角距离$\Delta R = \sqrt{(\Delta \phi)^2+(\Delta \eta)^2}$；
-        右图：喷注宽度的分布图，喷注宽度定义为以\pt 加权的次级粒子与喷注轴线的角距离。
+        右图：喷注宽度的分布图，喷注宽度定义为
+        $\sum_{i \in \text{tracks}} p_{\text{T}, i} \Delta R_i / \sum_{i \in \text{tracks}} p_{\text{T}, i}$，
+        即以\pt 加权的次级粒子与喷注轴线的角距离。
     }
 \end{figure}
 
 由于LLP的衰变发生在量能器而非初级顶点，喷注中的粒子能够在探测器中扩散的时间与距离减少，导致喷注宽度变小。
 从\autoref{fig:DR_jet_width} 可以看出相较于LLP产生的喷注，标准模型的喷注可能有部分更靠近轴线方向的次级粒子，
-但考虑所有粒子角距离的贡献后，它的最小角距离和
-$\sum \Delta R_{\text{min}}(\text{jet, tracks})$（定义见\autoref{sec:jet_preselection}）是更大的。
+但考虑所有喷注的贡献后，它的最小角距离和 $\sum \Delta R_{\text{min}}(\text{jet, tracks})$ 是更大的。
+
+最小角距离和 $\sum \Delta R_{\text{min}}(\text{jet, tracks})$ 的计算方式为：
+考虑一个喷注中满足特定条件（详见\autoref{sec:jet_preselection}）的所有径迹，
+用 $\Delta R_{\text{min}}(\text{jet, tracks})$ 表示该喷注轴线到它们的角距离
+$R = \sqrt{(\Delta \phi)^2 + (\Delta \eta)^2}$ 的最小值。
+随后，将事件中满足 \(p_T > 50~\text{GeV}\) 的 clean 喷注（筛选条件见\autoref{sec:jet_preselection}）的
+\(\Delta R_{\text{min}}(\text{jet, tracks})\) 求和，
+得到 \(\sum \Delta R_{\text{min}}(\text{jet, tracks})\) 的值。
 
 综上所述，我们可以通过物理量诸如CalRatio与$\sum \Delta R_{\text{min}}(\text{jet, tracks})$来区分LLP产生的喷注与标准模型的喷注。
 该思想将被运用到数据获取的触发与后续的分析中。
@@ -120,7 +129,7 @@ $$H_1 = \mqty(H_1^0 \\ H_1^-) \qc H_2 = \mqty(H_2^+ \\ H_2^0) $$
 
 
 \subsection{希格斯中介重子生成模型}
-希格斯中介重子生成模型旨在解释通过弱尺度状态衰变而观察到的重子不对称现象。
+希格斯中介重子生成模型旨在解释通过弱尺度状态衰变而观察到的正反重子不对称现象。
 该模型引入了长寿命单重态粒子$\chi$，它与希格斯玻色子混合并衰变为三个费米子，从而违反了重子数与轻子数守恒。
 分析考虑了质量介于 10 GeV 至 100 GeV 之间的$\chi$ ，以及$\chi$ 衰变为轻子和夸克组合的各种模式。
 
