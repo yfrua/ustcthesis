@@ -14,22 +14,36 @@
 该数据集的总积分亮度为 $140\,\mathrm{fb}^{-1}$。排除了LHC束流不稳定或并非所有子探测器都在运行的数据~\cite{ATLAS_data_quality}。
 
 ATLAS 探测器使用分层触发系统记录事件。
-一级 （L1） 触发器采用定制电子设备实现，可将事件发生率从 LHC 交叉频率 40 MHz 降低到设计值 100 kHz。
+一级 （L1） 触发器采用定制电子设备实现，可将事件发生率从 LHC 束团交汇频率 40~MHz 降低到设计值 100~kHz。
 第二级触发器称为高级触发器 （HLT），由运行在商用计算机集群上的软件实现，该软件可处理事件并将记录事件的发生率降低到 1 kHz。
 软件套件用于数据模拟、真实数据和模拟数据的重建和分析、探测器操作以及实验的触发和数据采集系统。
 
 
 \subsubsection{信号数据}
-对于 CalR+2J 通道，使用了专门的LLP触发器（称为“CalRatio触发器”）。
+本分析依据最终态的物理对象将信号分为三个通道进行研究，
+这三类通道分别针对 LLP 的不同产生机制与动量范围，实现了信号覆盖范围的互补性：
+\begin{itemize}
+    \item {CalRatio + 双喷注（CalR+2J）：} 该通道主要针对隐藏区域（Hidden Sector, HS）模型中介子粒子的胶子–胶子融合（$gg \to \Phi$）产生模式，
+    中介粒子再衰变到一对长寿命粒子（$\Phi \to ss$）后其中一个$s$具有足够短的衰变长度与动量，使其在探测器中产生两个可分辨的位移喷注。
+    
+    \item {CalRatio + W玻色子（CalR+W）：} 该通道目标为伴随 $W$ 玻色子产生 LLP 的情形，
+    如 HS 模型中介子粒子伴随 $W$ 玻色子产生，或类轴轻子（Axion-like Particle, ALP）从 $W$ 玻色子辐射而来。
+    通过选取 $W$ 的轻子衰变产物（电子或 $\mu$ 子）增强触发效率并抑制背景。
+    
+    \item {CalRatio + Z玻色子（CalR+Z）：} 类似于 CalR+W 通道，CalR+Z 通道利用 $Z$ 玻色子的轻子衰变作为分析入口，
+    适用于 LLP 与 $Z$ 玻色子共同产生的场景，如 ALP 或暗光子模型中 $Z$ 联合产生机制。
+\end{itemize}
+
+为了获取符合信号特征的数据，对于CalRatio+2J通道，分析使用了专门的LLP触发器，称为CalRatio触发器。
 在一级触发阶段，喷注在 $\eta \times \phi$ 平面中的 $0.2 \times 0.2$ 区域进行重建，这是基于信号喷注通常比标准模型喷注更窄的事实。
-选取的事件要求喷注的横能量 $E_T$ 超过 60~\GeV 或 100 \GeV（具体取决于数据收集时期）。
+选取的事件要求喷注的横能量 $E_T$ 超过 60~\GeV 或 100~\GeV（具体取决于数据收集时期）。
 在某些运行阶段，存在一些触发器，其要求仅在喷注所在的 $\eta - \phi$ 位置上电磁量能器中没有能量沉积时才接受L1喷注对象。
-该要求可作为 CalRatio 指标的替代，使得 $E_T$ 阈值可降低至 30\,\GeV。
+该要求可作为 CalRatio 指标的替代，使得 $E_T$ 阈值可降低至 30~\GeV。
 
 在高级触发阶段，触发喷注还需满足 $|\eta| < 2.5$ 的条件，即在可获得径迹信息的范围内。
 此外，该喷注还应具有高比例的强子量能器能量沉积，并满足修改后的噪声抑制条件，
 并通过一种用于去除束流背景（Beam Induced Background，BIB）的算法（例如利用能量沉积在 $\phi$ 方向上的时间和对准信息）。
-在其余通道中，使用了单轻子或双轻子触发器，其中仅考虑在某一年中整个数据收集期间未被预缩（unprescaled）运行的触发器。
+在其余通道中，使用了单轻子或双轻子触发器，仅考虑在某一年中整个数据收集期间未进行舍选的触发器。
 
 
 \subsubsection{背景数据}
@@ -70,8 +84,7 @@ BIB 是由束晕（beam-halo）或束气（beam-gas）效应在探测器中产�
 $\Phi$ 可衰变为中性的长寿命标量粒子 $S$，通常衰变为运动学允许的最重费米子对，通常为 $b$ 夸克对。
 事件使用 \MADGRAPH{5\_aMC@NLO v2.6.2}~\cite{Alwall:2014hca} 在 LO 精度下生成，使用 NNPDF2.3LO PDF 集。
 考虑 $\Phi$ 的两种产生模式：CalR+2J 通道中为胶子--胶子融合（ggF），CalR+W/Z 通道中为伴随矢量玻色子（W 或 Z）产生。
-不考虑矢量玻色子融合（VBF）模式：在 CalR+2J 通道中，所有选择对象均来源于 LLP 的衰变，因此 VBF 与 ggF 的产率预期相似。
-由于两种产生模式的相对截面，没有预期来自 VBF 模式的显著附加贡献。
+在 CalR+2J 通道中，所有选择对象均来源于 LLP 的衰变，没有预期来自矢量玻色子融合（VBF）模式的显著贡献。
 伴随 W 或 Z 玻色子产生的 HS 样本分别称为 WHS 和 ZHS。
 对于胶子融合样本，对 $\Phi$ 的横动量分布进行重加权，使其与同一生成器的 NLO 预测相匹配。
 归一化时假设 $\Phi$ 为 标准模型 希格斯玻色子时，其产生截面为：胶子融合 $48.6$\,pb，
@@ -96,7 +109,7 @@ ALP 样本使用 \MADGRAPH{5\_aMC@NLO v2.9.3} 在 LO 精度下生成，使用 NN
     \subfloat[ALP模型]{\includegraphics[width=0.33\textwidth]{fig_01b.pdf}}
     \hfill
     \subfloat[暗光子模型]{\includegraphics[width=0.33\textwidth]{fig_01c.pdf}}
-    \caption{信号模型的费曼图示例}
+    \caption{信号模型的费曼图示例\cite{ATLAS:2022zhj}}
     \label{fig:Feynman_diagram}
     \figurenote{
         (a)： 隐藏区域模型中介子 $\Phi$ 与矢量玻色子 $V = W$ 或 $Z$ 共同产生，长寿命粒子 $S$ 衰变为费米子（主要为 $b$ 夸克）。
@@ -108,7 +121,7 @@ ALP 样本使用 \MADGRAPH{5\_aMC@NLO v2.9.3} 在 LO 精度下生成，使用 NN
 这三种模型的费曼图示例如\autoref{fig:Feynman_diagram} 所示。
 对于所有信号样本，生成的 LLP 的平均本征寿命$\tau_{\text{gen}}$是经过选择以最大化其在 ATLAS 强子量能器与 μ 子系统中衰变的事件比例。
 这些平均本征寿命通常在几米数量级，但由于时间膨胀效应，不同样本之间有所差异。
-每次束团交叉中的多重相互作用（pile-up）通过将模拟的硬散射事件与使用 \Pythia{8.186} 生成的非弹性质子碰撞事件叠加进行建模，
+每次束团交叉中的堆积背景（pile-up）通过将模拟的硬散射事件与使用 \Pythia{8.186} 生成的非弹性质子碰撞事件叠加进行建模，
 所使用的 PDF 为 NNPDF2.3LO，调参为 A3 tune~\cite{ATL-PHYS-PUB-2016-017}。
 探测器的几何结构与响应使用 Geant4~\cite{GEANT4:2002zbu} 进行模拟。
 ATLAS 标准重建软件被用于模拟数据与真实碰撞数据的重建。
@@ -143,7 +156,7 @@ $t\bar{t}$ 包含产生的 NLO 截面被修正为 QCD 的 NNLO 理论预测，�
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.85\textwidth]{analysis_strategy.png}
-    \caption{分析流程图}
+    \caption{分析流程图\cite{ATLAS:2022zhj}}
     \label{fig:analysis_strategy}
 \end{figure}
 
@@ -151,8 +164,8 @@ $t\bar{t}$ 包含产生的 NLO 截面被修正为 QCD 的 NNLO 理论预测，�
 数据通过 CalRatio 触发器进行获取，喷注与事例层级的数据经过预选择之后进入下一步的处理。
 对于事件中的每一个喷注，使用了基于深度学习的神经网络（NN）进行分类。
 在获得喷注分类的结果后，使用了逐事件的增强决策树（BDT）对事件进行分类。
-最终的数据样本是通过对候选事件 BDT 输出值进行选择构建，同时还需满足进一步的数据质量与 NCB 抑制条件，
-以确保信号区（SR）具有较高的信号对背景比。
+最终的数据样本是通过对候选事件 BDT 输出值进行选择构建，同时还需满足进一步的数据质量与非对撞背景（NCB）抑制条件，
+以确保信号区（Signal Region）具有较高的信号对背景比。
 选出的样本被投影到一个二维平面上，其中 $x$ 轴为 $\sum \Delta R_{\min}(\text{jet, tracks})$，
 $y$ 轴为逐事件 BDT 的输出值。该平面被划分为四个区域，其中的信号区定义为包含大部分信号且背景贡献预期较低的区域。
 为了预测信号区中的背景预期值，使用了基于似然函数的 ABCD 数据驱动方法（又称矩阵法）。
@@ -163,20 +176,22 @@ $y$ 轴为逐事件 BDT 的输出值。该平面被划分为四个区域，其�
 \label{sec:jet_preselection}
 
 在本分析中使用的喷注首先通过标准选择进行筛选。
-ATLAS 喷注清洗工具所定义的工作点为 \texttt{LooseBad}，它会排除具有低电磁量能器活性的喷注，导致大多数的信号喷注被消除。
+ATLAS 喷注清洗工具所定义的工作点为 \texttt{LooseBad}\cite{ATLAS-CONF-2015-029}，
+它会排除具有低电磁量能器活性的喷注，导致大多数的信号喷注被消除。
 因此，本分析采用工作点 \texttt{LooseBadLLP}，该工作点与 \texttt{LooseBad} 相比有以下两点不同：
 移除对低电磁量能器沉积能量比例（low-EMF）喷注的显式选择；
-要求 $ |E_{\text{neg}}| > 4~\GeV $ 且 \(\text{FracSamplingMax} > 0.85\) ，以减少对液氩量能器噪声突发的敏感性。
+要求【负能量】 $ |E_{\text{neg}}| > 4~\GeV $ 且【最大取样比例】 \(\text{FracSamplingMax} > 0.85\) ，
+以减少对液氩量能器噪声突发的敏感性。
 
 所谓的“clean”喷注需满足以下三个条件：
 喷注通过 \texttt{LooseBadLLP} 清洗标准；
 喷注的 \(p_T > 40~\GeV \)；
-喷注的伪快度满足 \(|\eta| < 2.5\)。
+喷注的赝快度满足 \(|\eta| < 2.5\)。
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.95\textwidth]{sumDR.png}
-    \caption{$\sum \Delta R_{\text{min}}(\text{jet, tracks})$分布图}
+    \caption{$\sum \Delta R_{\text{min}}(\text{jet, tracks})$分布图\cite{ATLAS:2022zhj}}
     \label{fig:sumDR}
     \figurenote{
         左图：预选择之后$\sum \Delta R_{\text{min}}(\text{jet, tracks})$在不同数据集上的分布；
@@ -189,8 +204,8 @@ ATLAS 喷注清洗工具所定义的工作点为 \texttt{LooseBad}，它会排�
 对于每个喷注，\(\Delta R_{\text{min}}(\text{jet, tracks})\) 表示该喷注轴线到所有径迹的角距离
 $R = \sqrt{(\Delta \phi)^2 + (\Delta \eta)^2}$ 的最小值，同时径迹需满足以下条件：
 \begin{itemize}
-    \item 径迹满足 \texttt{Charge Pion Loose} 选择条件；
-    \item 径迹与主顶点兼容，即满足 \texttt{Loose pion-vertex} 关联要求；
+    \item 径迹满足 \texttt{Charge Pion Loose}\cite{CPgroup} 选择条件；
+    \item 径迹与初级顶点兼容，即满足 \texttt{Loose pion-vertex association}\cite{CPgroup} 要求；
     \item 径迹 \(p_T > 2~\text{GeV}\)。
 \end{itemize}
 随后，将每个 \(p_T > 50~\text{GeV}\) 的 clean 喷注的 \(\Delta R_{\text{min}}(\text{jet, tracks})\) 求和，

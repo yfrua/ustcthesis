@@ -1,0 +1,24 @@
+{
+	"files": [
+		{
+			"path": "chapters/data.tex",
+			"bookmarks": [
+				{
+					"line": 182,
+					"column": 64,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "chapters/NN.tex",
+			"bookmarks": [
+				{
+					"line": 221,
+					"column": 38,
+					"label": ""
+				}
+			]
+		}
+	]
+}
