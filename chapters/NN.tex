@@ -191,43 +191,43 @@ GNN 的输出为 $n$ 个节点对应的 $n$ 个向量表示，池化层用于将
 
 \begin{figure}[ht]
     \centering
-    \subfloat[RNN]{\includegraphics[width=0.49\textwidth]{RNN_CR.png}}
+    \subfloat[RNN 预测分数分布]{\includegraphics[width=0.33\textwidth]{RNN_CR.png}}
     \hfill
-    \subfloat[GNN]{\includegraphics[width=0.49\textwidth]{GNN_CR_before.png}}
-    \caption{NN 在控制区域的 BIB 预测分数分布}
+    \subfloat[GNN 预测分数分布]{\includegraphics[width=0.33\textwidth]{GNN_CR_before.png}}
+    \hfill
+    \subfloat[RNN ks 检验结果]{\includegraphics[width=0.33\textwidth]{RNN_ks.png}}
+    \caption{NN 在控制区域 BIB 数据集上的表现}
     \label{fig:CR_BIB_before}
 \end{figure}
 
 神经网络在信号区域的预测分数分布如\autoref{fig:GNN_before} 所示，
 可以看到信号、QCD 和 BIB 的预测分数分布均呈现出良好的分离。
-神经网络在控制区域的 BIB 预测分数分布如\autoref{fig:CR_BIB_before} 所示，
+神经网络在控制区域的 BIB 预测分数分布如\autoref{fig:CR_BIB_before} 中的图(a)(b)所示，
 与 Run 2 分析\cite{ATLAS:2022zhj} 中加入对抗网络的 RNN 结果相比，
 GNN 的 BIB 预测分数分布在真实数据（data）和模拟数据（MC）上呈现较大差别。
 所以需要引入控制区域的数据和新的训练方法来改善这一问题。
 
+Run 2 分析\cite{ATLAS:2022zhj} 提出的训练方法为：在神经网络输出后添加一个对抗网络（adversarial network），
+该网络用于在控制区中学习区分模拟喷注与真实喷注的特征，并将此反馈至主网络以抑制数据与 MC 不一致性带来的影响。
+但该方法存在对抗网络训练不稳定的问题
+（见\autoref{fig:CR_BIB_before} 的图(c)，预期 ks 检验结果最终稳定在一个较小的值上），
+同时分类性能较低（见\autoref{fig:ROC} 中与 GNN 的对比），
+因此本论文尝试用另一种方法来改善这一问题。
+
 \begin{figure}[ht]
+    \centering
     \includegraphics[width=\textwidth]{GNN_complement_workflow.png}
     \caption{GNN 补充训练流程示意图}
     \label{fig:GNN_complement_workflow}
 \end{figure}
-
-\begin{figure}[ht]
-    \includegraphics[width=\textwidth]{RNN_ks.png}
-    \caption{RNN ks 检验结果}
-    \label{fig:RNN_ks}
-\end{figure}
-
-Run 2 分析\cite{ATLAS:2022zhj} 提出的训练方法为：在神经网络输出后添加一个对抗网络（adversarial network），
-该网络用于在控制区中学习区分模拟喷注与真实喷注的特征，并将此反馈至主网络以抑制数据与 MC 不一致性带来的影响。
-但该方法存在对抗网络训练不稳定的问题（见\autoref{fig:RNN_ks}），同时分类性能较低（见\autoref{fig:ROC}），
-因此本论文尝试用另一种方法来改善这一问题。
 
 由于控制区域的喷注样本均为 QCD 喷注，想要让神经网络无法区分模拟数据与真实数据，
 可以直接将控制区域的 QCD 喷注与信号区域的 QCD 喷注混合在一起进行训练。
 为了更好的灵活性，将控制区域数据的影响用一个随训练迭代次数变化的权重 $\lambda$ 控制，
 对应的损失函数为
 \begin{equation}
-    \text{loss} = \text{loss}(\text{signal region}) + \lambda \cdot \text{loss}(\text{control region})
+    \text{loss} = \text{CrossEntropy}(\text{signal region}) +
+    \lambda \cdot \text{CrossEntropy}(\text{control region})
 \end{equation}
 随迭代步数变化的权重因子
 \begin{equation}
@@ -291,6 +291,7 @@ $p$值达到了无法拒绝原假设的显著性水平，说明 GNN 在控制区
     \includegraphics[width=0.7\textwidth]{ROC.jpg}
     \caption{NN 在信号区域的 ROC 曲线}
     \label{fig:ROC}
+    \figurenote{注：AUC（Area Under Curve）为 ROC 曲线下的面积，数值越接近 1 表示分类性能越好。}
 \end{figure}
 
 加入控制区域数据集前后的 GNN 和文献\cite{ATLAS:2022zhj} 中的 RNN 的 ROC 曲线如\autoref{fig:ROC} 所示，
