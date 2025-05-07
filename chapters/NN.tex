@@ -12,7 +12,7 @@
 NN的主体结构选用基于 Transformer\cite{vaswani2023attentionneed}的图神经网络（Graphic Neural Network, GNN）。
 训练采用 Pytorch 框架\cite{paszke2019pytorchimperativestylehighperformance}，
 并使用 Optuna 框架\cite{akiba2019optunanextgenerationhyperparameteroptimization}进行超参数（hyperparameter）优化。
-训练结果经过评估以排除过拟合现象，并在所用信号样本上相较于此前的网络性能有所提升。
+训练结果经过评估以排除过拟合现象。
 
 训练使用的信号区域（signal region）数据集包括来自探测器的 BIB 数据（见\autoref{sec:detector_data}）
 和信号与标准模型多喷注（简记为 QCD）模拟数据（见\autoref{sec:MC}）。
@@ -195,7 +195,7 @@ GNN 的输出为 $n$ 个节点对应的 $n$ 个向量表示，池化层用于将
     \hfill
     \subfloat[GNN 预测分数分布]{\includegraphics[width=0.33\textwidth]{GNN_CR_before.png}}
     \hfill
-    \subfloat[RNN ks 检验结果]{\includegraphics[width=0.33\textwidth]{RNN_ks.png}}
+    \subfloat[RNN KS 检验结果]{\includegraphics[width=0.33\textwidth]{RNN_ks.png}}
     \caption{NN 在控制区域 BIB 数据集上的表现}
     \label{fig:CR_BIB_before}
 \end{figure}
@@ -210,7 +210,7 @@ GNN 的 BIB 预测分数分布在真实数据（data）和模拟数据（MC）�
 Run 2 分析\cite{ATLAS:2022zhj} 提出的训练方法为：在神经网络输出后添加一个对抗网络（adversarial network），
 该网络用于在控制区中学习区分模拟喷注与真实喷注的特征，并将此反馈至主网络以抑制数据与 MC 不一致性带来的影响。
 但该方法存在对抗网络训练不稳定的问题
-（见\autoref{fig:CR_BIB_before} 的图(c)，预期 ks 检验结果最终稳定在一个较小的值上），
+（见\autoref{fig:CR_BIB_before} 的图(c)，预期 KS 检验结果最终稳定在一个较小的值上，但实际得到的结果波动很大），
 同时分类性能较低（见\autoref{fig:ROC} 中与 GNN 的对比），
 因此本论文尝试用另一种方法来改善这一问题。
 
@@ -223,7 +223,7 @@ Run 2 分析\cite{ATLAS:2022zhj} 提出的训练方法为：在神经网络输�
 
 由于控制区域的喷注样本均为 QCD 喷注，想要让神经网络无法区分模拟数据与真实数据，
 可以直接将控制区域的 QCD 喷注与信号区域的 QCD 喷注混合在一起进行训练。
-为了更好的灵活性，将控制区域数据的影响用一个随训练迭代次数变化的权重 $\lambda$ 控制，
+为了获得更好的灵活性，将控制区域数据的影响用一个随训练迭代次数变化的权重 $\lambda$ 控制，
 对应的损失函数为
 \begin{equation}
     \text{loss} = \text{CrossEntropy}(\text{signal region}) +
@@ -239,7 +239,7 @@ Run 2 分析\cite{ATLAS:2022zhj} 提出的训练方法为：在神经网络输�
 \end{equation}
 其中$x \in [0, 1]$为当前迭代步数占预期总迭代步数的比例，$a$ 决定什么时候控制区域数据开始起作用，
 $b$ 决定什么时候控制区域数据的影响力达到最大值，$\lambda_{\max}$ 决定控制区域数据的最大影响力。
-$a$、$b$ 和 $\lambda_{\max}$ 为自由选取的超参数，仅需要满足$a<b$。
+$a$、$b$ 和 $\lambda_{\max}$ 为自由选取的超参数，仅需要满足条件$a<b$。
 加入控制区域数据集的 GNN 补充训练流程示意图如\autoref{fig:GNN_complement_workflow} 所示。
 
 
@@ -247,7 +247,7 @@ $a$、$b$ 和 $\lambda_{\max}$ 为自由选取的超参数，仅需要满足$a<b
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{GNN_loss.pdf}
-    \caption{在训练集和验证集上的损失函数随代数的变化}
+    \caption{在训练集和验证集上的损失函数随训练代数的变化}
     \label{fig:GNN_loss}
     \figurenote{注：黑线未加入控制区域数据（$\lambda_{\max}=0$）的贡献，红线加入控制区域数据。}
 \end{figure}
@@ -255,7 +255,7 @@ $a$、$b$ 和 $\lambda_{\max}$ 为自由选取的超参数，仅需要满足$a<b
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{GNN_ks.pdf}
-    \caption{在控制区域验证集上的 KS 检验结果随代数的变化}
+    \caption{在控制区域验证集上的 KS 检验结果随训练代数的变化}
     \label{fig:GNN_ks}
     \figurenote{注：黑线未加入控制区域数据（$\lambda_{\max}=0$）的贡献，红线加入控制区域数据。}
 \end{figure}
@@ -263,16 +263,16 @@ $a$、$b$ 和 $\lambda_{\max}$ 为自由选取的超参数，仅需要满足$a<b
 训练过程中损失函数的变化如\autoref{fig:GNN_loss} 所示，
 可以看到加入控制区域数据后，控制区域的损失函数有明显下降，但同时影响信号区域的损失函数。
 用 KS 检验（Kolmogorov-Smirnov test）评估真实数据与模拟数据的分布差异，
-其统计量$D$（KS statistic）为两者累计分布函数（CDF）的最大差异
+其统计量$D$（KS statistic）为两者累计分布函数（CDF）最大差异的绝对值
 \begin{equation}
     D = \max\limits_{x} |F_1(x) - F_2(x)|
 \end{equation}
 统计量的值越小表示两者分布越接近。
-$p$值（$p$-value）为在原假设（两个样本取自同一分布）成立时，统计量 $D$ 大于或等于观测值 $D_{\text{obs}}$ 的概率，
+KS 检验的$p$值（$p$-value）为在原假设（两个样本取自同一分布）成立时，统计量 $D$ 大于或等于观测值 $D_{\text{obs}}$ 的概率，
 $p$ 值大于或等于某个显著性水平 $\alpha$ （通常取0.05）时，则不能拒绝原假设，说明分布差异可能由随机误差引起。
 KS 检验的结果如\autoref{fig:GNN_ks} 所示，
-可以看到加入控制区域数据后，在 QCD 类别与 BIB 类别的 KS 检验结果均有明显改善，
-$p$值达到了无法拒绝原假设的显著性水平，说明 GNN 在控制区域的性能有了显著提升。
+可以看到加入控制区域数据后，在各个类别的 KS 检验结果均有明显改善，
+$p$值达到了无法拒绝原假设的显著性水平，说明 GNN 在控制区域的一致性有了显著提升。
 
 \begin{figure}[ht]
     \centering
@@ -294,6 +294,6 @@ $p$值达到了无法拒绝原假设的显著性水平，说明 GNN 在控制区
     \figurenote{注：AUC（Area Under Curve）为 ROC 曲线下的面积，数值越接近 1 表示分类性能越好。}
 \end{figure}
 
-加入控制区域数据集前后的 GNN 和文献\cite{ATLAS:2022zhj} 中的 RNN 的 ROC 曲线如\autoref{fig:ROC} 所示，
-可以看到加入控制区域数据在一定程度上影响了 GNN 在信号区域的背景区分能力，
-但相较于文献\cite{ATLAS:2022zhj} 中的 RNN，GNN 的性能仍然有大约两倍的提升。
+加入控制区域数据集前后的 GNN 和 Run 2 分析\cite{ATLAS:2022zhj} 中加入对抗网络的 RNN 的 ROC 曲线如\autoref{fig:ROC} 所示，
+可以看到加入控制区域数据并没有明显影响 GNN 在信号区域的背景区分能力，
+同时相较于 RNN 有大约三倍的分类性能提升。

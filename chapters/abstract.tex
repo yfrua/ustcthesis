@@ -10,7 +10,7 @@
   选用的数据通过基于长寿命粒子信号设计的触发器，以选取具有显著强子量能器能量沉积比例且喷注宽度窄的候选事件。
   使用图神经网络对喷注产生的径迹、量能器、 μ 子谱仪信息进行特征提取，实现了对信号与背景的有效区分。
   同时网络训练过程中引入控制区域喷注信息，牺牲一定信号识别能力的同时有效减小了由真实数据与模拟数据之间的差异带来的网络预测分数分布差异。
-  该方法相较于 ATLAS 实验在 Run~2 分析中使用的一维卷积加上 LSTM 网络，将背景区分能力提升了一倍，同时有效减小了在真实数据与模拟数据之间的错误建模。
+  该方法相较于 ATLAS 实验在 Run~2 分析中使用的一维卷积加上 LSTM 网络，将背景区分能力提升了三倍，同时有效减小了在真实数据与模拟数据之间的错误建模。
 \end{abstract}
 
 \begin{abstract*}
@@ -24,5 +24,5 @@
   which--despite sacrificing some signal identification performance--effectively reduced the discrepancy
   between the score distributions predicted on real data and those from simulation.
   Compared with a architecture combining one-dimensional convolution and LSTM networks from the ATLAS Run 2 analysis,
-  this method doubled the background rejection and significantly mitigated the mismodeling between data and simulation.
+  this method tripled the background rejection and significantly mitigated the mismodeling between data and simulation.
 \end{abstract*}
