@@ -37,7 +37,7 @@ BIB 喷注训练样本选取触发 HLT CalRatio 触发器但未通过 HLT BIB �
     \item 位于喷注轴线 $\Delta R < 0.2$ 范围内的径迹的空间位置、动量、碰撞参数（impact parameter）和径迹拟合质量参量（quality variables）；
     \item 与喷注相关联的拓扑团簇（topo-clusters） 的动量、时间信息和空间位置；
     \item 喷注在电磁量能器与强子量能器各层的能量沉积比例；
-    \item 位于喷注 $\Delta \phi < 0.2$ 范围内的μ子段（muon segment）的空间与时间信息；
+    \item 位于喷注 $\Delta \phi < 0.2$ 范围内的 μ 子径迹段（muon segment）的空间与时间信息；
     \item 喷注本身的动量与空间位置。
 \end{itemize}
 
@@ -84,8 +84,8 @@ BIB 喷注训练样本选取触发 HLT CalRatio 触发器但未通过 HLT BIB �
 径迹的特征维度为 $n_\text{tf}=10$（包括径迹的空间位置、动量、碰撞参数、探测器击中信息和径迹拟合质量参量共10个变量）。
 而一个喷注中将选取 20 条径迹作为输入（$n_\text{tracks}=20$），所以需要将喷注输入变量复制后与每个径迹输入变量拼接，
 得到一个$n_\text{tracks} \times (n_\text{jf} + n_\text{tf})$维度的联合输入（combined input），如\autoref{fig:input_concatenate} 所示。
-对于拓扑团簇（\topo）和 μ 子段（muon segment）的拼接处理同理，
-拓扑团簇的输入数量为 30 ，特征维度为 12；μ 子段的输入数量为 30 ，特征维度为 6。
+对于拓扑团簇（\topo）和 μ 子径迹段（muon segment）的拼接处理同理，
+拓扑团簇的输入数量为 30 ，特征维度为 12；μ 子径迹段的输入数量为 30 ，特征维度为 6。
 
 初始化网络为若干全连接层组成的多层感知器（Multi-layer perceptron, MLP），负责得到各个输入变量初始化后的高维向量表示。
 每一类输入变量对应一个初始化网络，它们有着不同的输入层维度，对应不同类别输入的特征维度，
@@ -225,7 +225,7 @@ Run 2 分析\cite{ATLAS:2022zhj} 提出的训练方法为：在神经网络输�
 可以直接将控制区域的 QCD 喷注与信号区域的 QCD 喷注混合在一起进行训练。
 为了获得更好的灵活性，将控制区域数据的影响用一个随训练迭代次数变化的权重 $\lambda$ 控制，
 对应的损失函数为
-\begin{equation}
+\begin{equation} \label{eq:loss}
     \text{loss} = \text{CrossEntropy}(\text{signal region}) +
     \lambda \cdot \text{CrossEntropy}(\text{control region})
 \end{equation}
@@ -249,7 +249,11 @@ $a$、$b$ 和 $\lambda_{\max}$ 为自由选取的超参数，仅需要满足条�
     \includegraphics[width=\textwidth]{GNN_loss.pdf}
     \caption{在训练集和验证集上的损失函数随训练代数的变化}
     \label{fig:GNN_loss}
-    \figurenote{注：黑线未加入控制区域数据（$\lambda_{\max}=0$）的贡献，红线加入控制区域数据。}
+    \figurenote{
+        黑线未加入控制区域数据（$\lambda_{\max}=0$）的贡献，红线加入控制区域数据。
+        第一行为训练集上的损失函数，第二行为验证集上的损失函数。
+        第一列代表信号区域，第二列代表控制区域，第三列为经过\autoref{eq:loss} 计算的损失函数。
+    }
 \end{figure}
 
 \begin{figure}[ht]

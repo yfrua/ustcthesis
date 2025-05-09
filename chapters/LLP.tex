@@ -5,7 +5,7 @@
 \section{物理背景}
 长寿命粒子（Long Lived Particle, LLP）是指在探测器内衰变的时间尺度远大于标准模型粒子的寿命的粒子，它的存在是许多新物理模型的预言。
 LLP长寿命的物理机制一般是由于它的衰变被禁戒或是被压低，
-其中压低可能出于衰变末态粒子的近退简并质量态（nearly-degenerate mass states）或是 LLP 与末态粒子的耦合很小。
+其中压低可能出于衰变末态粒子的近简并质量谱（nearly-degenerate mass states）或是 LLP 与末态粒子的耦合很小。
 由于LLP具有较长的寿命、与标准模型粒子仅存在微弱的相互作用，因此它常被认为是暗物质的候选者。
 
 由于LLP能在衰变前行进一定的宏观距离，其衰变产物不会从原始碰撞点（Primary Vertices）产生，
@@ -47,7 +47,7 @@ LLP长寿命的物理机制一般是由于它的衰变被禁戒或是被压低�
         左图：喷注中$p_T>\SI{2}{GeV}$的径迹距离喷注轴线方向的最小角距离的分布图，角距离$\Delta R = \sqrt{(\Delta \phi)^2+(\Delta \eta)^2}$；
         右图：喷注宽度的分布图，喷注宽度定义为
         $\sum_{i \in \text{tracks}} p_{\text{T}, i} \Delta R_i / \sum_{i \in \text{tracks}} p_{\text{T}, i}$，
-        即以\pt 加权的次级粒子与喷注轴线的角距离。
+        即以\pt 加权的径迹与喷注轴线的角距离。
     }
 \end{figure}
 
@@ -120,7 +120,7 @@ $$H_1 = \mqty(H_1^0 \\ H_1^-) \qc H_2 = \mqty(H_2^+ \\ H_2^0) $$
 对于所有的标准模型粒子，$R=1$；对于所有的超对称粒子，$R=-1$。
 \cite{SUSY_ATLAS}
 
-当R宇称守恒时，最轻的超对称粒子（lightest supersymmetry particle, LSP）是稳定的，因此LSP是暗物质的优秀候选者。
+当R宇称守恒时，最轻的超对称粒子（lightest supersymmetry particle, LSP）是稳定的，因此LSP是暗物质的候选者。
 超对称粒子同时也是LLP的候选者，在近最小超对称（Next-to-Minimal supersymmetry）模型中，
 引入了规范单重态手征超场（gauge singlet chiral superfield），它的费米子伴侣singlino因为衰变产物质量近简并而被压低衰变，因此成为长寿命粒子。
 \cite{singlino}
@@ -129,7 +129,48 @@ $$H_1 = \mqty(H_1^0 \\ H_1^-) \qc H_2 = \mqty(H_2^+ \\ H_2^0) $$
 
 
 \subsection{希格斯中介重子生成模型}
-希格斯中介重子生成模型旨在解释通过弱尺度状态衰变而观察到的正反重子不对称现象。
+希格斯中介重子生成模型（Higgs-portal baryogenesis model）旨在解释通过弱尺度状态衰变而观察到的正反重子不对称现象。
 该模型引入了长寿命单重态粒子$\chi$，它与希格斯玻色子混合并衰变为三个费米子，从而违反了重子数与轻子数守恒。
-分析考虑了质量介于 10 GeV 至 100 GeV 之间的$\chi$ ，以及$\chi$ 衰变为轻子和夸克组合的各种模式。
+分析考虑了质量介于 10~GeV 至 100~GeV 之间的$\chi$ ，以及$\chi$ 衰变为轻子和夸克组合的各种模式。
 
+长寿命单重态粒子$\chi$的产生与衰变机制具体如下：
+\cite{Cui_2015}
+
+粒子 $\chi$ 的产生机制必须遵循使其成为亚稳态的 $Z_2$ 或更高的对称性，这意味着在 LHC 中 $\chi$ 应成对产生。
+我们预期存在至少一个相对较大的耦合项，使得 $\chi$ 能以接近暗物质丰度的形式在宇宙早期热冻结（thermally freeze out），
+从而可以通过反演其湮灭图得到它的产生方式，并且该产生方式在对撞机中有可观的产率。
+作为马约拉纳费米子（Majorana fermion），$\chi$ 要么是标准模型的单重态，要么属于标准模型规范群的实表示。
+
+考虑规范单重态的新亚稳态粒子 $\chi$，它的产生高度依赖于模型结构。
+我们类比暗物质研究中的处理方式，将 $\chi$ 的产生按其与标准模型的有效相互作用进行分类。最低维有效算符如下：
+\begin{equation}
+    \mathcal{L}_{\text{prod}}^{\text{singlet}} \supset \frac{c_H}{\Lambda_H} \chi^2 |H|^2 +
+    \frac{c_q}{\Lambda_q^2} (\bar{\chi} \Gamma \chi)(\bar{q} \Gamma' q) +
+    \frac{c_g}{\Lambda_g^3} \chi^2 (G_{\mu\nu})^2 + \cdots
+\end{equation}
+其中第一项为希格斯中介（Higgs portal），第二项为经由狄拉克矩阵$\Gamma, \Gamma'$与夸克进行耦合，第三项为胶子中介（gluon portal）。
+为具体起见，我们聚焦于最低维的希格斯中介耦合，其他算符导致类似的对撞机现象，只是产生率有所不同。
+
+与由 $Z_2$ 守恒相互作用主导的产生过程不同，$\chi$ 的衰变由 $Z_2$ 破缺相互作用引发。
+$\chi$ 的衰变违反重子数和/或轻子数守恒，此类相互作用的最低维允许 $\chi$ 衰变为三个标准模型费米子。
+我们将所有可与 $\chi$ 耦合的三费米子标准模型算符进行分类如下：
+\begin{itemize}
+    \item {标记为 $q$ 的算符：} 至少包含两个夸克；
+    \item {标记为 $\ell$ 的算符：} 仅包含轻子；
+    \item {标记为 $L$ 的算符：} 含两个 $SU(2)_L$ 左手双重态；
+    \item {标记为 $R$ 的算符：} 仅包含 $SU(2)_L$ 右手单重态。
+\end{itemize}
+得到有效拉氏量形式为：
+\begin{equation}
+    \mathcal{L}_{\text{decay}} \supset \chi (\mathcal{O}, \mathcal{O}^\dagger) + \text{h.c.}
+\end{equation}
+其中可能的算符$\mathcal{O}$包括：
+\begin{itemize}
+    \item $\mathcal{O}_{qL}     : \lambda'_{ijk} Q_i D_j L_k,\quad \eta'_{ijk} Q_i U_j L^\dagger_k,\quad \eta''_{ijk} Q_i Q_j d^\dagger_k$
+    \item $\mathcal{O}_{qR}     : \lambda''_{ijk} U_i D_j D_k,\quad \eta_{ijk} U_i E_j D^\dagger_k$
+    \item $\mathcal{O}_{\ell L} : \lambda_{ijk} L_i L_j E_k$
+\end{itemize}
+
+若 $\chi$ 为单重态，则可耦合所有上述算符；若 $\chi$ 属于规范群的伴随表示，则其耦合仅限于可与该规范群基本表示场耦合的算符。
+例如，$SU(3)$ 八重态（如 gluino）可耦合 $\mathcal{O}_{qL}$ 和 $\mathcal{O}_{qR}$，
+$SU(2)_L$ 三重态（如 wino）可耦合 $\mathcal{O}_{qL}$ 和 $\mathcal{O}_{\ell L}$。
