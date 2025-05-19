@@ -7,20 +7,28 @@
 
 \section{数据来源}
 
-\subsection{探测器数据}
-\label{sec:detector_data}
-
-分析所用的数据集是在2015年至2018年期间，由ATLAS探测器通过LHC上质子--质子（$pp$）碰撞（$\sqrt{s} = 13\,\mathrm{TeV}$）收集的。
-该数据集的总积分亮度为 $140\,\mathrm{fb}^{-1}$。排除了LHC束流不稳定或并非所有子探测器都在运行的数据~\cite{ATLAS_data_quality}。
-
-ATLAS 探测器使用分层触发系统记录事件。
-一级 （L1） 触发器采用定制电子设备实现，可将事件发生率从 LHC 束流交汇频率 40~MHz 降低到设计值 100~kHz。
-第二级触发器称为高级触发器 （HLT），由运行在商用计算机集群上的软件实现，该软件可处理事件并将记录事件的发生率降低到 1 kHz。
-软件套件用于数据模拟、真实数据和模拟数据的重建和分析、探测器操作以及实验的触发和数据采集系统。
-
+\subsection{模拟数据}
+\label{sec:MC}
 
 \subsubsection{信号数据}
-本分析依据最终态的物理对象将信号分为三个通道进行研究，
+\begin{figure}[ht]
+    \centering
+    \subfloat[隐藏区域模型]{\includegraphics[width=0.33\textwidth]{fig_01a.pdf}}
+    \hfill
+    \subfloat[ALP模型]{\includegraphics[width=0.33\textwidth]{fig_01b.pdf}}
+    \hfill
+    \subfloat[暗光子模型]{\includegraphics[width=0.33\textwidth]{fig_01c.pdf}}
+    \caption{信号模型的费曼图示例\cite{ATLAS:2022zhj}}
+    \label{fig:Feynman_diagram}
+    \figurenote{
+        (a)： 隐藏区域模型的中介粒子 $\Phi$ 与矢量玻色子 $V = W$ 或 $Z$ 共同产生，长寿命粒子 $S$ 衰变为费米子（主要为 $b$ 夸克）。
+        (b)： 类轴子（ALP）模型，长寿命粒子 $a$ 衰变为胶子，并与矢量玻色子共同产生。
+        (c)： 暗光子 $Z_d$ 模型中，$Z_d$ 与 $Z$ 玻色子一同由中介粒子 $\Phi$ 的衰变产生。
+    }
+\end{figure}
+
+本分析总计考虑三种基准信号模型，它们的费曼图示例如\autoref{fig:Feynman_diagram} 所示，
+并且依据最终态的物理对象将信号分为三个通道进行研究，
 这三类通道分别针对 LLP 的不同产生机制与动量范围，实现了信号覆盖范围的互补性：
 \begin{itemize}
     \item {CalRatio + 双喷注（CalR+2J）：} 该通道主要针对隐藏区域（Hidden Sector, HS）模型中介子粒子的胶子–胶子融合（$gg \to \Phi$）产生模式，
@@ -34,6 +42,75 @@ ATLAS 探测器使用分层触发系统记录事件。
           适用于 LLP 与 $Z$ 玻色子共同产生的场景，如 ALP 或暗光子模型中 $Z$ 联合产生机制。
 \end{itemize}
 
+\autoref{fig:Feynman_diagram} 中的第一种信号模型是隐藏区域（HS）模型，其中标量玻色子 $\Phi$（可以是希格斯玻色子，
+也可以是其他行为类似的较轻或较重粒子）作为标准模型与隐藏区域之间的媒介。
+$\Phi$ 可衰变为中性的长寿命标量粒子 $S$，通常衰变为运动学允许的最重费米子对，通常为 $b$ 夸克对。
+事件使用 \MADGRAPH{5\_aMC@NLO v2.6.2}~\cite{Alwall:2014hca} 在 LO 精度下生成，使用 NNPDF2.3LO PDF 集。
+考虑 $\Phi$ 的两种产生模式：CalR+2J 通道中为胶子--胶子融合（ggF），CalR+W/Z 通道中为伴随矢量玻色子（W 或 Z）产生。
+在 CalR+2J 通道中，所有选择对象均来源于 LLP 的衰变，没有预期来自矢量玻色子融合（VBF）模式的显著贡献。
+伴随 W 或 Z 玻色子产生的 HS 样本分别称为 WHS 和 ZHS。
+对于胶子融合样本，对 $\Phi$ 的横动量分布进行重加权，使其与同一生成器的 NLO 预测相匹配。
+归一化时假设 $\Phi$ 为 标准模型 希格斯玻色子时，其产生截面为：胶子融合 $48.6$\,pb，
+伴随 W 玻色子（轻子衰变）$0.45$\,pb，伴随 Z 玻色子（轻子衰变）$0.09$\,pb（均来自 NNLO 计算）。
+根据不同的粒子质量与寿命生成了多个数据集，其具体参数与事例数详见\autoref{cpm:MC} 中的\autoref{tab:signal_MC}。
+
+第二种信号模型应用于 CalR+W/Z 通道，是辐射自矢量玻色子并衰变为胶子的厌光轴子（photo-phobic ALPs）。~\cite{Brivio:2017ije}
+ALP 质量范围为 $0.1$--$40$\,\GeV，其与胶子的耦合决定其寿命，范围为 $10^{-7}$ 到 $10^{-2}$。
+此模型中仅考虑矢量玻色子衰变为电子或 μ 子的情形。
+ALP 样本使用 \MADGRAPH{5\_aMC@NLO v2.9.3} 在 LO 精度下生成，使用 NNPDF2.3LO PDF 集，分别称为 ZALP 和 WALP。
+
+第三种基准模型为长寿命暗光子（$Z_d$）模型~\cite{Davoudiasl:2012ag, Davoudiasl:2013aya}，
+其中 $Z_d$ 是与 $Z$ 一同在标量中介粒子衰变中产生的，称为 HZZd 模型。
+考虑的中介粒子质量范围为 $250$--$600$\,\GeV，暗光子质量范围为 $5$--$400$\,\GeV。
+事件使用  \MADGRAPH{5\_aMC@NLO v2.6.7} 在 LO 精度下生成，PDF 为 NNPDF2.3LO。
+所有信号样本的部分子簇射和强子化均使用 \Pythia{8} 并采用 A14 tune。
+
+对于所有信号样本，生成的 LLP 的平均本征寿命$\tau_{\text{gen}}$是经过选择以最大化其在 ATLAS 强子量能器与 μ 子系统中衰变的事件比例。
+这些平均本征寿命通常在几米数量级，但由于时间膨胀效应，不同样本之间有所差异。
+每次束团交叉中的堆积背景（pile-up）通过将模拟的硬散射事件与使用 \Pythia{8.186} 生成的非弹性质子碰撞事件叠加进行建模，
+所使用的 PDF 为 NNPDF2.3LO，调参为 A3 tune~\cite{ATL-PHYS-PUB-2016-017}。
+探测器的几何结构与响应使用 Geant4~\cite{GEANT4:2002zbu} 进行模拟。
+ATLAS 标准重建软件被用于模拟数据与真实碰撞数据的重建。
+
+\subsubsection{背景数据}
+主要的标准模型背景包括 CalR+2J 通道中的标准模型多喷注事件，以及 CalR+W 和 CalR+Z 通道中的 W/Z+jets、$t\bar{t}$ 和单顶夸克事件。
+尽管最终的背景估计使用的是数据驱动（data-driven）方法，但仍需要蒙特卡洛（Monte Carlo）模拟事件来训练机器学习（Machine Learning）判别器并评估某些系统不确定性。
+
+标准模型多喷注样本使用 \Pythia 8.186~\cite{pythia} 在领头阶（Leading Order，LO）精度生成，
+采用 A14 参数调节集~\cite{Pythia_tunes} 进行部分子簇射和强子化的计算。
+使用的部分子分布函数（Parton Distribution Function，PDF）为 \NNPDF[2.3lo]~\cite{parton_PDF}。
+生成的样本依据不同的\pt 范围被记为 \texttt{JZxW}，其中 \texttt{x} 随着\pt 的增加从2到12递增，
+具体的\pt 范围与产生截面详见\autoref{cpm:MC} 中的\autoref{tab:background_MC}。
+
+包含 W 或 Z 玻色子与喷注的事件使用 \Sherpa[v2.2.1]~\cite{Sherpa} 进行模拟，
+最多两个喷注的矩阵元计算精确到次领头阶（Next-to-Leading Order，NLO），
+最多四个喷注的为 LO 精度，采用 \textsc{Comix}~\cite{Comix} 和 \OPENLOOPS~\cite{Open_Loops} 库计算，
+部分子簇射使用 \Sherpa 默认设置~\cite{parton_shower}。
+
+$t\bar{t}$ 事件的产生使用 \POWHEGBOX[v2]~\cite{POWHEG_BOX} 在 NLO 精度下模拟，
+使用 \NNPDF[3.0NLO] PDF 集，并将 \hdamp 参数设为 1.5 倍的顶夸克质量~\cite{ATL-PHYS-PUB-2016-020}。
+事件通过 \Pythia[8.230] 与 A14 参数调节集 和 \NNPDF[2.3LO] PDF 集进行部分子簇射和强子化。
+$t\bar{t}$ 包含产生的 NLO 截面被修正为 QCD 的 NNLO 理论预测，并包括通过 Top++2.0~\cite{Beneke:2011mq} 所计算的 NNLL 软胶子重求和。
+
+单顶夸克的产生使用 \POWHEGBOX[v2] 在五味方案下的 NLO QCD 精度模拟，使用 NNPDF3.0NLO PDF 集。
+为处理与 $t\bar{t}$ 产生的干涉，采用了图移除（diagram-removal）方案~\cite{Frixione:2008yi}。
+事件也使用 \Pythia{8.230} 进行簇射与强子化。
+其总截面被修正为带有 NNLL 软胶子修正的 NLO QCD 理论预测~\cite{Aliev:2010zk}。
+
+
+\subsection{探测器数据}
+\label{sec:detector_data}
+
+分析所用的数据集是在2015年至2018年期间，由ATLAS探测器通过LHC上质子--质子（$pp$）碰撞（$\sqrt{s} = 13\,\mathrm{TeV}$）收集的。
+该数据集的总积分亮度为 $140\,\mathrm{fb}^{-1}$。排除了LHC束流不稳定或并非所有子探测器都在运行的数据~\cite{ATLAS_data_quality}。
+
+ATLAS 探测器使用分层触发系统记录事件。
+一级 （L1） 触发器采用定制电子设备实现，可将事件发生率从 LHC 束流交汇频率 40~MHz 降低到设计值 100~kHz。
+第二级触发器称为高级触发器 （HLT），由运行在商用计算机集群上的软件实现，该软件可处理事件并将记录事件的发生率降低到 1 kHz。
+软件套件用于数据模拟、真实数据和模拟数据的重建和分析、探测器操作以及实验的触发和数据采集系统。
+
+
+\subsubsection{信号数据}
 为了获取符合信号特征的数据，对于CalRatio+2J通道，分析使用了专门的LLP触发器，称为CalRatio触发器。
 在一级触发阶段，喷注在 $\eta \times \phi$ 平面中的 $0.2 \times 0.2$ 区域进行重建，这是基于信号喷注通常比标准模型喷注更窄的事实。
 选取的事件要求喷注的横能量 $E_T$ 超过 60~\GeV 或 100~\GeV（具体取决于数据收集时期）。
@@ -73,83 +150,6 @@ BIB 是由束晕（beam-halo）或束气（beam-gas）效应在探测器中产�
 这使其在排除当前束团交叠中的 BIB 方面较为有效，但对于来自下一个或下下个束团交叉的 BIB 则无能为力。
 此类 BIB 仍可能通过主 CalRatio 触发器，从而污染标准选区。
 因此，需要应用 BDT 以进一步抑制 BIB 对分析的影响。
-
-
-\subsection{模拟数据}
-\label{sec:MC}
-
-\subsubsection{信号数据}
-本分析总计考虑三种基准信号模型。第一种是隐藏区域（HS）模型，其中标量玻色子 $\Phi$（可以是希格斯玻色子，
-也可以是其他行为类似的较轻或较重粒子）作为标准模型与隐藏区域之间的媒介。
-$\Phi$ 可衰变为中性的长寿命标量粒子 $S$，通常衰变为运动学允许的最重费米子对，通常为 $b$ 夸克对。
-事件使用 \MADGRAPH{5\_aMC@NLO v2.6.2}~\cite{Alwall:2014hca} 在 LO 精度下生成，使用 NNPDF2.3LO PDF 集。
-考虑 $\Phi$ 的两种产生模式：CalR+2J 通道中为胶子--胶子融合（ggF），CalR+W/Z 通道中为伴随矢量玻色子（W 或 Z）产生。
-在 CalR+2J 通道中，所有选择对象均来源于 LLP 的衰变，没有预期来自矢量玻色子融合（VBF）模式的显著贡献。
-伴随 W 或 Z 玻色子产生的 HS 样本分别称为 WHS 和 ZHS。
-对于胶子融合样本，对 $\Phi$ 的横动量分布进行重加权，使其与同一生成器的 NLO 预测相匹配。
-归一化时假设 $\Phi$ 为 标准模型 希格斯玻色子时，其产生截面为：胶子融合 $48.6$\,pb，
-伴随 W 玻色子（轻子衰变）$0.45$\,pb，伴随 Z 玻色子（轻子衰变）$0.09$\,pb（均来自 NNLO 计算）。
-根据不同的粒子质量与寿命生成了多个数据集，其具体参数与事例数详见\autoref{cpm:MC} 中的\autoref{tab:signal_MC}。
-
-第二种信号模型应用于 CalR+W/Z 通道，是辐射自矢量玻色子并衰变为胶子的厌光轴子（photo-phobic ALPs）。~\cite{Brivio:2017ije}
-ALP 质量范围为 $0.1$--$40$\,\GeV，其与胶子的耦合决定其寿命，范围为 $10^{-7}$ 到 $10^{-2}$。
-此模型中仅考虑矢量玻色子衰变为电子或 μ 子的情形。
-ALP 样本使用 \MADGRAPH{5\_aMC@NLO v2.9.3} 在 LO 精度下生成，使用 NNPDF2.3LO PDF 集，分别称为 ZALP 和 WALP。
-
-第三种基准模型为长寿命暗光子（$Z_d$）模型~\cite{Davoudiasl:2012ag, Davoudiasl:2013aya}，
-其中 $Z_d$ 是与 $Z$ 一同在标量中介粒子衰变中产生的，称为 HZZd 模型。
-考虑的中介粒子质量范围为 $250$--$600$\,\GeV，暗光子质量范围为 $5$--$400$\,\GeV。
-事件使用  \MADGRAPH{5\_aMC@NLO v2.6.7} 在 LO 精度下生成，PDF 为 NNPDF2.3LO。
-所有信号样本的部分子簇射和强子化均使用 \Pythia{8} 并采用 A14 tune。
-
-\begin{figure}[ht]
-    \centering
-    \subfloat[隐藏区域模型]{\includegraphics[width=0.33\textwidth]{fig_01a.pdf}}
-    \hfill
-    \subfloat[ALP模型]{\includegraphics[width=0.33\textwidth]{fig_01b.pdf}}
-    \hfill
-    \subfloat[暗光子模型]{\includegraphics[width=0.33\textwidth]{fig_01c.pdf}}
-    \caption{信号模型的费曼图示例\cite{ATLAS:2022zhj}}
-    \label{fig:Feynman_diagram}
-    \figurenote{
-        (a)： 隐藏区域模型的中介粒子 $\Phi$ 与矢量玻色子 $V = W$ 或 $Z$ 共同产生，长寿命粒子 $S$ 衰变为费米子（主要为 $b$ 夸克）。
-        (b)： 类轴子（ALP）模型，长寿命粒子 $a$ 衰变为胶子，并与矢量玻色子共同产生。
-        (c)： 暗光子 $Z_d$ 模型中，$Z_d$ 与 $Z$ 玻色子一同由中介粒子 $\Phi$ 的衰变产生。
-    }
-\end{figure}
-
-这三种模型的费曼图示例如\autoref{fig:Feynman_diagram} 所示。
-对于所有信号样本，生成的 LLP 的平均本征寿命$\tau_{\text{gen}}$是经过选择以最大化其在 ATLAS 强子量能器与 μ 子系统中衰变的事件比例。
-这些平均本征寿命通常在几米数量级，但由于时间膨胀效应，不同样本之间有所差异。
-每次束团交叉中的堆积背景（pile-up）通过将模拟的硬散射事件与使用 \Pythia{8.186} 生成的非弹性质子碰撞事件叠加进行建模，
-所使用的 PDF 为 NNPDF2.3LO，调参为 A3 tune~\cite{ATL-PHYS-PUB-2016-017}。
-探测器的几何结构与响应使用 Geant4~\cite{GEANT4:2002zbu} 进行模拟。
-ATLAS 标准重建软件被用于模拟数据与真实碰撞数据的重建。
-
-\subsubsection{背景数据}
-主要的标准模型背景包括 CalR+2J 通道中的标准模型多喷注事件，以及 CalR+W 和 CalR+Z 通道中的 W/Z+jets、$t\bar{t}$ 和单顶夸克事件。
-尽管最终的背景估计使用的是数据驱动（data-driven）方法，但仍需要蒙特卡洛（Monte Carlo）模拟事件来训练机器学习（Machine Learning）判别器并评估某些系统不确定性。
-
-标准模型多喷注样本使用 \Pythia 8.186~\cite{pythia} 在领头阶（Leading Order，LO）精度生成，
-采用 A14 参数调节集~\cite{Pythia_tunes} 进行部分子簇射和强子化的计算。
-使用的部分子分布函数（Parton Distribution Function，PDF）为 \NNPDF[2.3lo]~\cite{parton_PDF}。
-生成的样本依据不同的\pt 范围被记为 \texttt{JZxW}，其中 \texttt{x} 随着\pt 的增加从2到12递增，
-具体的\pt 范围与产生截面详见\autoref{cpm:MC} 中的\autoref{tab:background_MC}。
-
-包含 W 或 Z 玻色子与喷注的事件使用 \Sherpa[v2.2.1]~\cite{Sherpa} 进行模拟，
-最多两个喷注的矩阵元计算精确到次领头阶（Next-to-Leading Order，NLO），
-最多四个喷注的为 LO 精度，采用 \textsc{Comix}~\cite{Comix} 和 \OPENLOOPS~\cite{Open_Loops} 库计算，
-部分子簇射使用 \Sherpa 默认设置~\cite{parton_shower}。
-
-$t\bar{t}$ 事件的产生使用 \POWHEGBOX[v2]~\cite{POWHEG_BOX} 在 NLO 精度下模拟，
-使用 \NNPDF[3.0NLO] PDF 集，并将 \hdamp 参数设为 1.5 倍的顶夸克质量~\cite{ATL-PHYS-PUB-2016-020}。
-事件通过 \Pythia[8.230] 与 A14 参数调节集 和 \NNPDF[2.3LO] PDF 集进行部分子簇射和强子化。
-$t\bar{t}$ 包含产生的 NLO 截面被修正为 QCD 的 NNLO 理论预测，并包括通过 Top++2.0~\cite{Beneke:2011mq} 所计算的 NNLL 软胶子重求和。
-
-单顶夸克的产生使用 \POWHEGBOX[v2] 在五味方案下的 NLO QCD 精度模拟，使用 NNPDF3.0NLO PDF 集。
-为处理与 $t\bar{t}$ 产生的干涉，采用了图移除（diagram-removal）方案~\cite{Frixione:2008yi}。
-事件也使用 \Pythia{8.230} 进行簇射与强子化。
-其总截面被修正为带有 NNLL 软胶子修正的 NLO QCD 理论预测~\cite{Aliev:2010zk}。
 
 
 \section{数据处理}

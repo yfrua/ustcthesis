@@ -3,7 +3,14 @@
 \chapter{神经网络}
 \label{chap:NN}
 
-为了识别信号中的位移喷注（displaced jets）与类标准模型（SM-like）喷注以及由束流背景（BIB）产生的伪喷注，训练了一个逐喷注（per-jet）的神经网络（神经网络）。
+为了识别信号中的位移喷注（displaced jets）与类标准模型（SM-like）喷注以及由束流背景（BIB）产生的伪喷注，
+训练了一个逐喷注（per-jet）的神经网络（Neural Network, NN）。
+相较于同为分类器的 BDT，NN 作为高容量模型，当选取了合适的网络结构和超参数后，
+NN 具有更强的函数逼近能力（Universal Approximation Theorem）。\cite{BRISCOE20112}
+与之相对，BDT 依靠集成弱学习器（浅树）来降低分类的偏差和方差，
+但其单棵树的分裂方式和叶子统计无法像神经网络那样灵活地近似任意复杂函数，特别在数据量极大、
+特征空间高维时，深度网络往往能获得更优泛化性能。
+
 该神经网络在隐藏区域（Hidden Sector）模型信号、标准模型多喷注（SM Multi-jets）以及 BIB 的混合样本上进行训练。
 神经网络的输入变量为与喷注相关的低级特征，涵盖整个 ATLAS 探测器的信息，包括径迹、量能器以及 μ 子谱仪相关信息。
 训练前对每个变量进行了预处理，以确保神经网络训练的最优效果。
@@ -195,7 +202,7 @@ GNN 的输出为 $n$ 个节点对应的 $n$ 个向量表示，池化层用于将
     \hfill
     \subfloat[GNN 预测分数分布]{\includegraphics[width=0.33\textwidth]{GNN_CR_before.png}}
     \hfill
-    \subfloat[RNN KS 检验结果]{\includegraphics[width=0.33\textwidth]{RNN_ks.png}}
+    \subfloat[RNN 训练过程 KS 检验结果]{\includegraphics[width=0.33\textwidth]{RNN_ks.png}}
     \caption{NN 在控制区域 BIB 数据集上的表现}
     \label{fig:CR_BIB_before}
 \end{figure}
@@ -205,10 +212,10 @@ GNN 的输出为 $n$ 个节点对应的 $n$ 个向量表示，池化层用于将
 神经网络在控制区域的 BIB 预测分数分布如\autoref{fig:CR_BIB_before} 中的图(a)(b)所示，
 与 Run 2 分析\cite{ATLAS:2022zhj} 中加入对抗网络的 RNN 结果相比，
 GNN 的 BIB 预测分数分布在真实数据（data）和模拟数据（MC）上呈现较大差别。
-所以需要引入控制区域的数据和新的训练方法来改善这一问题。
+根据 Run 2 分析的经验，这样的差别将产生较大的系统误差，所以需要引入控制区域的数据和新的训练方法来改善这一问题。
 
 Run 2 分析\cite{ATLAS:2022zhj} 提出的训练方法为：在神经网络输出后添加一个对抗网络（adversarial network），
-该网络用于在控制区中学习区分模拟喷注与真实喷注的特征，并将此反馈至主网络以抑制数据与 MC 不一致性带来的影响。
+该网络用于在控制区域中学习区分模拟喷注与真实喷注的特征，并将此反馈至主网络以抑制数据与 MC 不一致性带来的影响。
 但该方法存在对抗网络训练不稳定的问题
 （见\autoref{fig:CR_BIB_before} 的图(c)，预期 KS 检验结果最终稳定在一个较小的值上，但实际得到的结果波动很大），
 同时分类性能较低（见\autoref{fig:ROC} 中与 GNN 的对比），
@@ -289,6 +296,9 @@ $p$值达到了无法拒绝原假设的显著性水平，说明 GNN 在控制区
 
 \autoref{fig:GNN_ks_compare} 为加入控制区域数据集前后 GNN 在对数坐标下的控制区域 BIB 预测分数分布，
 可以看到加入控制区域数据参与训练后，GNN 的 BIB 预测分数分布的一致性有了明显改善。
+尽管\autoref{fig:GNN_ks_compare}(b) 中的比值分布仍然存在一定偏差，
+但是从\autoref{fig:GNN_ks} 中得到的无法拒绝原假设的结论可以知道这样的偏差是可以接受的。
+并且同样的结论对于信号预测分数、QCD 预测分数也成立。
 
 \begin{figure}[ht]
     \centering
@@ -300,4 +310,6 @@ $p$值达到了无法拒绝原假设的显著性水平，说明 GNN 在控制区
 
 加入控制区域数据集前后的 GNN 和 Run 2 分析\cite{ATLAS:2022zhj} 中加入对抗网络的 RNN 的 ROC 曲线如\autoref{fig:ROC} 所示，
 可以看到加入控制区域数据并没有明显影响 GNN 在信号区域的背景区分能力，
-同时相较于 RNN 有大约三倍的分类性能提升。
+同时相较于 RNN 在 LLP 鉴别效率为 0.8 处有大约三倍的分类性能提升。
+由于分析使用了与 RNN 相同的输入变量和训练集，
+ROC 的结果说明改变网络架构使得 GNN 拥有比 RNN 更强的特征提取能力，能够更好地捕捉到信号与背景之间的差异。
