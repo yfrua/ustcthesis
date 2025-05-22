@@ -6,17 +6,17 @@
 }
 
 \begin{abstract}
-  本论文基于 ATLAS 探测器量能器信息，提出并实现了一种多阶段训练的神经网络分类架构，用以识别由长寿命粒子衰变产生的位移喷注。
-  所选取的事例除了要满足位移喷注的衰变顶点偏移初级顶点的要求外，还需满足喷注宽度窄、强子量能器能量沉积的比例显著等有别于信号与背景特征的要求。
+  长寿命粒子是指在探测器内衰变的时间尺度远大于标准模型粒子的寿命的粒子，它的存在是许多超越标准模型的新物理的预言，诸如隐藏区域模型、类轴子模型、暗光子模型。
+  本论文基于 ATLAS 探测器各子探测器信息，提出并实现了一种多阶段训练的神经网络分类架构，用以识别由长寿命粒子衰变产生的位移喷注。
   论文使用图神经网络对喷注产生的径迹、量能器、 μ 子谱仪信息进行特征提取，实现了对信号与背景的有效区分。
   同时网络训练过程中引入控制区域喷注信息，牺牲一定信号识别能力的同时有效减小了由真实数据与模拟数据之间的差异带来的网络预测分数分布差异。
-  该方法相较于 ATLAS 实验在 Run~2 分析中使用的一维卷积加上 LSTM 网络，将背景区分能力提升了三倍，同时有效减小了在真实数据与模拟数据之间的错误建模。
+  该方法相较于 ATLAS 实验在 Run~2 分析中使用的一维卷积加上 LSTM 网络，将背景区分能力提升了四倍，同时有效减小了在真实数据与模拟数据之间的错误建模。
 \end{abstract}
 
 \begin{abstract*}
-  This thesis proposes and implements a multi-stage neural network classifier based on calorimeter information from the ATLAS detector, aiming to identify displaced jets originating from the decays of long-lived particles.
-  In addition to meeting the requirement that the decay vertex of the displaced jet is offset from the primary vertex, the selected events must also meet the requirements that the jet width is narrow, the proportion of hadron calorimeter energy deposition is significant, and other requirements that differs the signal and background characteristics.
+  Long-lived particles are particles whose decay timescales within the detector are much longer than those of Standard Model particles. Their existence is predicted by many new physics beyond Standard Model, such as hidden sector model, axion-like particle model and dark photon model.
+  This thesis proposes and implements a multi-stage neural network classifier based on the information from all the sub-detector of the ATLAS detector, aiming to identify displaced jets originating from the decays of long-lived particles.
   A graphic neural network was implemented to perform feature extraction from track, calorimeter, and muon spectrometer information associated with jets, enabling effective discrimination between signal and background.
   During network training, information from control region jets was incorporated, which--despite sacrificing some signal identification performance--effectively reduced the discrepancy between the score distributions predicted on real data and those from simulation.
-  Compared with a architecture combining one-dimensional convolution and LSTM networks from the ATLAS Run 2 analysis, this method tripled the background rejection and significantly mitigated the mismodeling between data and simulation.
+  Compared with a architecture combining one-dimensional convolution and LSTM networks from the ATLAS Run 2 analysis, this method improved the background rejection by a factor of four and significantly mitigated the mismodeling between data and simulation.
 \end{abstract*}
