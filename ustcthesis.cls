@@ -11,8 +11,8 @@
 %
 
 \NeedsTeXFormat{LaTeX2e}[2017/04/15]
-\newcommand\ustcthesisversion{4.0.0-beta.8}
-\ProvidesClass{ustcthesis}[2025/04/16 v\ustcthesisversion\space USTC thesis template]
+\newcommand\ustcthesisversion{4.0.0-beta.9}
+\ProvidesClass{ustcthesis}[2025/05/25 v\ustcthesisversion\space USTC thesis template]
 
 % 报错和警告
 \newcommand\ustc@error[1]{%
@@ -386,7 +386,7 @@
 \DeclareComplementaryOption{openany}{openright}
 
 % 兼容旧版本的文档类选项。
-% Reserved for compatibility until 2020-07-01.
+% Deprecated since 2020-07-01.
 \DeclareVoidOption{doctor}{\ustcsetup{degree=doctor}}
 \DeclareVoidOption{master}{\ustcsetup{degree=master}}
 \DeclareVoidOption{bachelor}{\ustcsetup{degree=bachelor}}
@@ -521,17 +521,11 @@
 
 % 带圈数字和星号使用中文字体。
 \ifLuaTeX
-  % ctex 将带圈数字 U+2460–U+24FF 归入字符范围 3（ALchar），这里改回范围 6（JAchar）
-  \ltjdefcharrange{3}{%
-    "2000-"243F, "2500-"27BF, "2900-"29FF, "2B00-"2BFF}
-  \ltjdefcharrange{6}{%
-    "2460-"24FF, "2E80-"2EFF, "3000-"30FF, "3190-"319F, "31F0-"4DBF,
-    "4E00-"9FFF, "F900-"FAFF, "FE10-"FE1F, "FE30-"FE6F, "FF00-"FFEF,
-    "1B000-"1B16F, "1F100-"1F2FF, "20000-"3FFFF, "E0100-"E01EF}
+  % ctex 将带圈数字 U+2460–U+2473 归入字符范围 3（ALchar），这里改回范围 6（JAchar）
+  \ltjdefcharrange{6}{"2460-"2473, "2605}
 \else
   \ifXeTeX
-    \xeCJKDeclareCharClass{CJK}{"2460 -> "2473}
-    \xeCJKDeclareCharClass{CJK}{"2605}
+    \xeCJKDeclareCharClass{CJK}{"2460 -> "2473, "2605}
   \fi
 \fi
 
@@ -1808,7 +1802,7 @@
 
 % 版本 v3.2 开始使用 \cs{ustcsetup} 设置接口，
 % 兼容旧版本的命令式设置。
-% Reserved for compatibility until 2020-07-01.
+% Deprecated since 2020-07-01.
 \def\ustc@define@term#1#2{%
   \expandafter\gdef\csname #1\endcsname##1{%
     \ustc@deprecated{'\expandafter\protect\csname #1\endcsname' command}{2020-07-01}{'\protect\ustcsetup'}%
@@ -1930,7 +1924,11 @@
     \vspace{-7bp}%
     \begingroup
       \sffamily\fontsize{54bp}{70.2bp}\selectfont
-      \renewcommand\CJKglue{\hspace{-5.2bp}}%
+      \ifLuaTeX
+        \ltjsetparameter{kanjiskip = {-5.2bp}}%
+      \else
+        \renewcommand\CJKglue{\hspace{-5.2bp}}%
+      \fi
       \ustc@thesis@name\par
     \endgroup
     \parbox[t][0bp][t]{\textwidth}{%
@@ -2118,7 +2116,11 @@
     \vspace{0.8bp}%
     \begingroup
       \sffamily\fontsize{56bp}{72.8bp}\selectfont
-      \renewcommand\CJKglue{\hspace{6.2bp}}%
+      \ifLuaTeX
+        \ltjsetparameter{kanjiskip = {6.2bp}}%
+      \else
+        \renewcommand\CJKglue{\hspace{6.2bp}}%
+      \fi
       本科毕业论文\par
     \endgroup
     \vspace{52bp}%
@@ -2208,7 +2210,11 @@
       中国科学技术大学学位论文原创性声明\par}%
     \vspace{13bp}%
     \begingroup
-      \renewcommand\CJKglue{\hspace{0bp plus .1pt minus .1pt}}%
+      \ifLuaTeX
+        \ltjsetparameter{kanjiskip = {0bp plus .1pt minus .1pt}}%
+      \else
+        \renewcommand\CJKglue{\hspace{0bp plus .1pt minus .1pt}}%
+      \fi
       \ustc@originality\par
     \endgroup
     \vspace{37bp}%
@@ -2220,16 +2226,20 @@
       中国科学技术大学学位论文授权使用声明\par}%
     \vspace{13bp}%
     \begingroup
-      \renewcommand\CJKglue{\hspace{0bp plus .1pt minus .1pt}}%
+      \ifLuaTeX
+        \ltjsetparameter{kanjiskip = {0bp plus .1pt minus .1pt}}%
+      \else
+        \renewcommand\CJKglue{\hspace{0bp plus .1pt minus .1pt}}%
+      \fi
       \ustc@authorization\par
     \endgroup
     \vspace{12bp}%
     \ifx\ustc@secret@level\@empty
-      \ustc@checkbox{}公开\quad
-      $\square$ 控阅（\ustc@underline[0.85cm]{}年）\par
+      \ustc@checkbox{} 公开\quad
+      \hbox{$\square$} 控阅（\ustc@underline[2em]{}年）\par
     \else
-      $\square$公开\quad
-      \ustc@checkbox{} 控阅（\ustc@underline[2em]{\ustc@secret@year}年）\par
+      \hbox{$\square$} 公开\quad
+      \hbox{\ustc@checkbox{}} 控阅（\ustc@underline[2em]{\ustc@secret@year}年）\par
     \fi
     \vspace{29bp}%
     \noindent
@@ -2253,7 +2263,7 @@
 \ifustc@degree@bachelor
   \let\copyrightpage\relax
 \fi
-% Reserved for compatibility until 2020-07-01.
+% Deprecated since 2020-07-01.
 \newcommand\makestatement{%
   \ustc@deprecated{'\protect\makestatement' command}{2020-07-01}{'\protect\copyrightpage'}%
   \copyrightpage
@@ -2262,8 +2272,13 @@
 
 % \subsection{章节标题}
 
-% 标题最多允许使用五级。
-\setcounter{secnumdepth}{5}
+% 研究生一般不建议使用三级节标题，不得使用三级以下节标题。
+% 本科生允许至四级节标题。
+\ifustc@degree@bachelor
+  \setcounter{secnumdepth}{4}
+\else
+  \setcounter{secnumdepth}{3}
+\fi
 
 % 本科生章题为两字时中间空一字，三字时空半字，四字及以上不空。
 % 这里用 \LaTeX3 的 \cs{\str_count:N} 判断字数。
@@ -2370,7 +2385,7 @@
   % 正文中的标题分章、节、段三级；章、节标题居中，段标题居左，
   % 分别用三号（16 bp）黑体、小三（15 bp）黑体、四号（14 bp）黑体。
     chapter = {
-      format = {
+      format = {%
         \centering\sffamily
         \if@mainmatter
           \fontsize{16bp}{29.33bp}\selectfont
@@ -2473,7 +2488,7 @@
   \par\null\par
   \setlength\hangindent{4em}%
   \noindent
-  \textbf{关键词}：\ustc@keywords@text\par
+  \textbf{关键词：}\ustc@keywords@text\par
   \ustc@reset@main@language
 }
 
@@ -2481,8 +2496,6 @@
 \newlength\ustc@keywords@width
 
 % 英文摘要环境
-\newcommand\ustc@keywords@label{KEY WORDS}%
-
 \newenvironment{abstract*}{%
   \ustcsetup{language=english}%
   \ifustc@degree@graduate
@@ -2504,16 +2517,18 @@
   \fi
 }{
   \par\null\par
-  \ifustc@degree@bachelor
-    \renewcommand\ustc@keywords@label{Key Words}%
-  \fi
   \setlength\hangindent{6.5em}%
   \noindent
-  \textbf{\ustc@keywords@label}: \ustc@keywords@en@text\par
+  \ifustc@degree@bachelor
+    \textbf{Key Words:}\space
+  \else
+    \textbf{KEY WORDS}:\space
+  \fi
+  \ustc@keywords@en@text\par
   \ustc@reset@main@language
 }
 
-% Reserved for compatibility until 2020-07-01.
+% Deprecated since 2020-07-01.
 \newenvironment{enabstract}{%
   \ustc@deprecated{'enabsctract' environment}{2020-07-01}{'abstract*'}%
   \begin{abstract*}%
@@ -2743,13 +2758,13 @@
 % 表题置于表的上方，采用宋体，加粗，字号11pt，居中书写，单倍行距，段前6磅，段后0磅。
 % 表序与表名之间空一个汉字符。
 
-% 本科生：图全文要分别统一编号或按章编号，标题用小四宋体:
+% 本科生：表格、插图标题用小四宋体，Word 模板中行距为 22 pt。
 
 % 使用 \pkg{caption} 宏包设置图、表的格式：
 \DeclareCaptionFont{ustc}{\ustc@caption@font}
 \newcommand\ustc@caption@font{%
   \ifustc@degree@bachelor
-    \fontsize{12bp}{14.4bp}\selectfont
+    \fontsize{12bp}{22bp}\selectfont
   \else
     \ifustc@language@chinese
       \fontsize{11bp}{14.3bp}\selectfont
@@ -2791,14 +2806,16 @@
 % 对于英文，`\arraystretch` 需要设为 1 + (3pt + 3pt) / (11pt * 1.15) ~= 1.47。
 %
 % 本科生：表格内容用小四宋体或五号宋体选定某种样式后，全文应统一。
+% Word 示例中为 1.5 倍行距，段前段后 0 磅。
+% `\arraystretch` 需要设为 1。
 \newcommand\ustc@table@font{%
   \ifustc@degree@bachelor
     \ifustc@language@chinese
-      \fontsize{10.5bp}{13.65bp}\selectfont
-      \renewcommand\arraystretch{1.44}%
+      \fontsize{10.5bp}{20.475bp}\selectfont
+      \renewcommand\arraystretch{1}%
     \else
-      \fontsize{10.5bp}{12.075bp}\selectfont
-      \renewcommand\arraystretch{1.5}%
+      \fontsize{10.5bp}{18.1125bp}\selectfont
+      \renewcommand\arraystretch{1}%
     \fi
   \else
     \ifustc@language@chinese
@@ -2964,6 +2981,39 @@
   % 如果文献序号作为叙述文字的一部分，需要临时将文献序号与正文平排
   \DeclareRobustCommand\inlinecite{\@inlinecite}
   \def\@inlinecite#1{\begingroup\let\@cite\NAT@citenum\citep{#1}\endgroup}
+  %
+  % 参考文献列表格式：宋体 10.5 磅，行距 20 磅，续行缩进两字，左对齐。
+  % 本科生依然是小四宋体。
+  \renewcommand\bibfont{%
+    \ifustc@degree@graduate
+      \fontsize{10.5bp}{20bp}\selectfont
+    \else
+      \normalsize
+    \fi
+  }
+  \setlength{\bibsep}{0\p@ \@plus.2\p@}
+  % 参考文献表的编号居左。
+  \renewcommand\@biblabel[1]{[#1]\hfill}
+  % 顺序编码制悬挂缩进 2.5 字符
+  \renewcommand\NAT@bibsetnum[1]{%
+    % \settowidth\labelwidth{\@biblabel{#1}}%
+    % \setlength{\leftmargin}{\labelwidth}%
+    % \addtolength{\leftmargin}{\labelsep}%
+    \setlength{\leftmargin}{2.5em}%
+    \setlength{\itemindent}{0pt}%
+    \setlength{\labelsep}{0pt}%
+    \setlength{\labelwidth}{2.5em}%
+    \setlength{\itemsep}{\bibsep}
+    \setlength{\parsep}{\z@}%
+    \ifNAT@openbib
+      \addtolength{\leftmargin}{\bibindent}%
+      \setlength{\itemindent}{-\bibindent}%
+      \setlength{\listparindent}{\itemindent}%
+      \setlength{\parsep}{0pt}%
+    \fi
+  }
+  % 著者-出版年制悬挂缩进 2 字。注意这个宽度是加载时设置的，不能使用 em。
+  \setlength{\bibhang}{21bp}
   %
   % 修改引用的样式。
   % 这里在 filehook 中无法使用 \cs{patchcmd}，所以只能手动重定义。
@@ -3229,19 +3279,6 @@
       \let\bibsection\ustc@bib@section
     }%
   }%
-  %
-  % 参考文献列表格式：宋体 10.5 磅，行距 20 磅，续行缩进两字，左对齐。
-  % 本科生依然是小四宋体。
-  \renewcommand\bibfont{%
-    \ifustc@degree@graduate
-      \fontsize{10.5bp}{20bp}\selectfont
-    \else
-      \normalsize
-    \fi
-  }
-  \setlength{\bibsep}{0\p@ \@plus.2\p@}
-  \renewcommand\@biblabel[1]{[#1]\hfill}
-  \setlength{\bibhang}{2em}
 }
 
 
@@ -3261,7 +3298,7 @@
     \fi
   }
   \setlength{\bibitemsep}{0\p@ \@plus.2\p@}
-  \setlength{\bibhang}{2em}
+  \setlength{\bibhang}{21bp}
 }
 
 % \subsection{附录}
@@ -3283,7 +3320,7 @@
 
 
 % 兼容旧版本中“acknowledgments”的拼法。
-% Reserved for compatibility until 2020-07-01.
+% Deprecated since 2020-07-01.
 \newenvironment{acknowledgments}{%
   \begin{acknowledgements}%
 }{%

@@ -596,13 +596,10 @@ Completed box being shipped out [2]
 ....\TU/FandolSong(0)/b/n/12.045 键
 ....\glue 0.0 plus 0.61353
 ....\TU/FandolSong(0)/b/n/12.045 词
-....\kern 0.0
-....\kern -0.00017
-....\kern 0.00017
 ....\penalty 10000
-....\TU/FandolSong(0)/m/n/12.045 ：
-....\rule(0.0+0.0)x-8.39537
-....\glue 8.39537 minus 6.0225
+....\TU/FandolSong(0)/b/n/12.045 ：
+....\rule(0.0+0.0)x-8.09424
+....\glue 8.09424 minus 6.02249
 ....\glue 0.0 plus 0.61353
 ....\TU/FandolSong(0)/m/n/12.045 学
 ....\glue 0.0 plus 0.61353
@@ -5276,12 +5273,12 @@ Completed box being shipped out [5]
 ...\glue(\parskip) 0.0
 ...\glue(\parskip) 0.0
 ...\glue(\baselineskip) 9.85733
-...\hbox(7.1984+2.37135)x398.82861, glue set - 0.15509, shifted 18.28891
+...\hbox(7.1984+2.37135)x390.7691, glue set 0.7615, shifted 26.34842
 ....\hbox(7.12462+1.64412)x0.0
 .....\glue 0.0
-.....\glue -12.28891
-.....\glue -6.0
-.....\hbox(7.12462+1.64412)x12.28891
+.....\glue -26.34842
+.....\glue 0.0
+.....\hbox(7.12462+1.64412)x26.34842, glue set 14.05951fill
 ......\special{color push  Black}
 ......\glue 0.0 plus 1.0fil
 ......\glue 0.0 plus 1.0fil
@@ -5290,7 +5287,7 @@ Completed box being shipped out [5]
 ......\kern 0.0002
 ......\glue 0.0 plus 1.0fill
 ......\special{color pop}
-.....\glue 6.0
+.....\glue 0.0
 ....\penalty 0
 ....\TU/texgyretermes(0)/m/n/10.53937 KNUTH
 ....\kern -0.0002
@@ -5344,12 +5341,12 @@ Completed box being shipped out [5]
 ....\TU/texgyretermes(0)/m/n/10.53937 Reading,
 ....\glue 2.63484 plus 1.64676 minus 0.70262
 ....\TU/texgyretermes(0)/m/n/10.53937 MA,
-....\glue 2.63484 plus 1.31741 minus 0.87828
-....\TU/texgyretermes(0)/m/n/10.53937 USA:
 ....\glue(\rightskip) 0.0
 ...\penalty 14000
 ...\glue(\baselineskip) 10.49472
-...\hbox(7.20892+2.29756)x398.82861, glue set 301.6978fil, shifted 18.28891
+...\hbox(7.20892+2.29756)x390.7691, glue set 267.36365fil, shifted 26.34842
+....\TU/texgyretermes(0)/m/n/10.53937 USA:
+....\glue 2.63484 plus 1.31741 minus 0.87828
 ....\TU/texgyretermes(0)/m/n/10.53937 Addison-Wesley,
 ....\glue 2.63484 plus 1.64676 minus 0.70262
 ....\TU/texgyretermes(0)/m/n/10.53937 1986.
